@@ -1,0 +1,27 @@
+{
+	"name": "truman",
+	"age": 30,
+        "contact": {
+            "email" : "@com",
+            "phone" : "123456"
+        },
+        
+        "likes" : [
+           "Batman",
+           "Superman"
+        ],
+	"work_experience": [
+		"Eastsoft",
+		"Lucent",
+		"Ericsson",
+		"EMC"
+	],
+	"skills": {
+		"c++" : {
+		   "grade": 7
+                },
+		"R" : {
+		   "grade": 0
+                }
+	}
+}

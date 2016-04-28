@@ -78,7 +78,7 @@ public:
          Json::Value jv = json[name];
          if(!jv.isNull()) {
              T  e;
-             orm(name, e);
+             bind(name, e);
              v = boost::shared_ptr<T>(new T(e));
          } 
     }
@@ -120,7 +120,7 @@ private: //for std container type
 private: // for class type
     template<typename T>
     void decode(const Json::Value& json, T* e){
-         Mapper mapper(true, json);
+         Mapper mapper(false, json);
        e->setBind(mapper);
     } 
 private:  //for basic type

@@ -7,7 +7,7 @@
 #include <sstream>
 #include <fstream>      // std::ifstream
 #include <jsoncpp/json/json.h>
-#include "json.hpp"
+#include "cppbind_json.hpp"
 
 using namespace cppbind;
 
@@ -16,9 +16,9 @@ public:
     Contact(){}
     std::string email;
     std::string phone;
-    void setORM(Mapper &mapper){
-          mapper.orm("email", email);
-          mapper.orm("phone", phone);
+    void setBind(Mapper &mapper){
+          mapper.bind("email", email);
+          mapper.bind("phone", phone);
     }
 
 };
@@ -26,8 +26,8 @@ public:
 class Skill {
 public:
     int grade;
-    void setORM(Mapper &mapper) {
-          mapper.orm("grade", grade);
+    void setBind(Mapper &mapper) {
+          mapper.bind("grade", grade);
     }
 };
 
@@ -39,20 +39,20 @@ public:
     std::list<std::string>  likes;  // std list
     std::map<std::string, Skill>  skills; // class list
     boost::shared_ptr<int>  value_not_exist; //optional not exist
-    void setORM(Mapper &mapper){
-          mapper.orm("name", name);
-          mapper.orm("age", age);
-          mapper.orm("contact", contact);
-          mapper.orm("likes", likes);
-          mapper.orm("skills", skills);
-          mapper.orm("value_not_exist",  value_not_exist);
+    void setBind(Mapper &mapper){
+          mapper.bind("name", name);
+          mapper.bind("age", age);
+          mapper.bind("contact", contact);
+          mapper.bind("likes", likes);
+          mapper.bind("skills", skills);
+          mapper.bind("value_not_exist",  value_not_exist);
     }
 };
 
 TEST(JsonROM, baisc){
 
      std::ifstream ifs("./sample_data/me.json",  std::ifstream::in);
-     boost::shared_ptr<Me> me = JsonBind<Me>().get(ifs);
+     boost::shared_ptr<Me> me = JsonBind<Me>().decode(ifs);
      //basic type
      ASSERT_EQ(me->name ,"truman");
      ASSERT_EQ(me->age ,30);
@@ -81,8 +81,8 @@ TEST(JsonROM, baisc){
 class Me2 {
 public:
     int  not_existed;
-    void setORM(Mapper &mapper){
-          mapper.orm("not_existed", not_existed);
+    void setBind(Mapper &mapper){
+          mapper.bind("not_existed", not_existed);
     }
    
 };
@@ -91,7 +91,7 @@ TEST(JsonROM, child_not_exist_message){
      std::string message;
      try {
        std::ifstream ifs("./sample_data/me.json",  std::ifstream::in);
-       boost::shared_ptr<Me2> me = JsonBind<Me2>().get(ifs);
+       boost::shared_ptr<Me2> me = JsonBind<Me2>().decode(ifs);
      }  catch ( CppOrmException e) {
              message =  e.what();
      }
@@ -103,8 +103,8 @@ class Skill2 {
 public:
     std::string language;
     boost::shared_ptr<int> grade;
-    void setORM(Mapper &mapper) {
-          mapper.orm("language_not_exist", language);
+    void setBind(Mapper &mapper) {
+          mapper.bind("language_not_exist", language);
     }
 };
 
@@ -112,9 +112,9 @@ class Me3 {
 public:
     std::string name;
     std::map<std::string, Skill2>  skills;
-    void setORM(Mapper &mapper){
-          mapper.orm("name", name);
-          mapper.orm("skills", skills);
+    void setBind(Mapper &mapper){
+          mapper.bind("name", name);
+          mapper.bind("skills", skills);
     }
 };
 
@@ -123,7 +123,7 @@ TEST(JsonROM, child_child_not_exist_message){
      std::string message;
      try {
        std::ifstream ifs("./sample_data/me.json",  std::ifstream::in);
-       boost::shared_ptr<Me3> me = JsonBind<Me3>().get(ifs);
+       boost::shared_ptr<Me3> me = JsonBind<Me3>().decode(ifs);
      }  catch ( CppOrmException e) {
              message = e.what();
      }

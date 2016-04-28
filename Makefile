@@ -1,21 +1,17 @@
 CC = g++
 LD = $(CC)
-CFLAGS = -c  -g -O0 -I./  -Wall
-CFLAGS += -fopenmp
+CFLAGS =  -I./ 
+CFLAGS =  -I./cppbind/include
+CFLAGS += -c  -g -O0  -Wall
 
-LDFLAGS = -L./  -lgtest  -lpthread 
-LDFLAGS +=  -lmordor
-LDFLAGS +=  -lboost_system -lboost_thread  -lboost_regex 
-LDFLAGS +=  -lcrypto 
-LDFLAGS +=  -lsqlite3 
+LDFLAGS = -L./ 
+LDFLAGS = -lgtest  -lpthread 
 LDFLAGS +=  -ljsoncpp
-LDFLAGS +=  -lthrift
-LDFLAGS += -fopenmp
-
 
 TARGET = a.out
 
-SOURCES=$(shell find . -name "*.cpp")
+SOURCES = $(shell find ./cppbind -name "*.cpp")
+SOURCES += $(shell find ./test -name "*.cpp")
 OBJECTS= $(SOURCES:.cpp=.o)
 ##OBJECTS = $(patsubst %.c, %.o, $(shell find . -name "*.cpp"))
 

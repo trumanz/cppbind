@@ -13,7 +13,7 @@
 #include <list>
 #include <boost/shared_ptr.hpp>
 #include <stdexcept>
-#include "json_imp.hpp"
+#include "cppbind_json_imp.hpp"
 #include <jsoncpp/json/writer.h>
 namespace  cppbind {
 

@@ -92,7 +92,7 @@ TEST(JsonROM, child_not_exist_message){
      try {
        std::ifstream ifs("./sample_data/me.json",  std::ifstream::in);
        boost::shared_ptr<Me2> me = JsonBind<Me2>().decode(ifs);
-     }  catch ( CppOrmException e) {
+     }  catch ( CppBindException e) {
              message =  e.what();
      }
      ASSERT_EQ(".not_existed not found", message);
@@ -124,7 +124,7 @@ TEST(JsonROM, child_child_not_exist_message){
      try {
        std::ifstream ifs("./sample_data/me.json",  std::ifstream::in);
        boost::shared_ptr<Me3> me = JsonBind<Me3>().decode(ifs);
-     }  catch ( CppOrmException e) {
+     }  catch ( CppBindException e) {
              message = e.what();
      }
      ASSERT_EQ(".skills.R.language_not_exist not found", message);

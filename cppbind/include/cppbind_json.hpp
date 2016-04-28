@@ -28,7 +28,7 @@ public:
    
          if(!parsingSuccessful) {
            printf("Failed to parse, %s\n", reader.getFormatedErrorMessages().c_str());
-           throw  CppOrmException(reader.getFormatedErrorMessages());
+           throw  CppBindException(reader.getFormatedErrorMessages());
          }
 
          e = new T;

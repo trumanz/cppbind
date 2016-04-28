@@ -13,21 +13,22 @@
 #include <boost/shared_ptr.hpp>
 #include <stdexcept>
 #include <stdint.h>
+#include "cppbind_json_spec_type_base.hpp"
 
 namespace  cppbind {
 
 
-class CppOrmException : public std::runtime_error
+class CppBindException : public std::runtime_error
 {
    public:
-    CppOrmException(std::string const& node_name, const std::string base_msg)
+    CppBindException(std::string const& node_name, const std::string base_msg)
         : runtime_error(node_name + " "  + base_msg)
     { }
     
-    CppOrmException(const std::string base_msg)
+    CppBindException(const std::string base_msg)
         : runtime_error(std::string(" ")  + base_msg)
     { }
-    CppOrmException(const CppOrmException& e, std::string const& node_name)
+    CppBindException(const CppBindException& e, std::string const& node_name)
         : runtime_error(node_name + e.what())
 
     { }
@@ -64,11 +65,16 @@ public:
          if(!jv.isNull()) {
              try {
                 decode(jv, &v);
-             } catch (CppOrmException e) {
-                throw CppOrmException(e, std::string(".") + name);
+                //printf("name:%s , type: %s\n", name.c_str(), typeid(v).name());
+                //SpecTypeBase *specValue = dynamic_cast<SpecTypeBase *>(*v);
+                //if(specValue != NULL) {
+                //    printf("could cast to SpecTypeBase\n");
+               // }
+             } catch (CppBindException e) {
+                throw CppBindException(e, std::string(".") + name);
              }
          } else  {
-              throw CppOrmException(std::string(".") + name, "not found");
+              throw CppBindException(std::string(".") + name, "not found");
          }
     }
 
@@ -87,24 +93,24 @@ private: //for std container type
     template<typename T>
     void decode(const Json::Value& json, std::list<T>* e){
             if(!json.isArray()) {
-                throw CppOrmException("should be a list");
+                throw CppBindException("should be a list");
             }
             for(int i = 0; i  < json.size(); i++) {
                  try { 
                     T tmp;
                     decode(json[i], &tmp);
                     e->push_back(tmp);
-                 } catch  (CppOrmException e) {
+                 } catch  (CppBindException e) {
                     char buf[20];
                     sprintf(buf, "[%d]", i);
-                    throw CppOrmException(e, buf);
+                    throw CppBindException(e, buf);
                  }
             }
     }
     template<typename T>
     void decode(const Json::Value& json, std::map<std::string, T>* e){
             if(!json.isObject()) {
-                throw CppOrmException("shoulbe be a object");
+                throw CppBindException("shoulbe be a object");
             }
             Json::Value::Members keys = json.getMemberNames();
             for(Json::Value::Members::iterator it = keys.begin(); it != keys.end(); it++) {
@@ -112,8 +118,8 @@ private: //for std container type
                     T tmp;
                     decode(json[*it], &tmp);
                     (*e)[*it] = tmp;
-                } catch  (CppOrmException e) {
-                   throw CppOrmException(e, std::string(".") + *it);
+                } catch  (CppBindException e) {
+                   throw CppBindException(e, std::string(".") + *it);
                 }
             }
     }
@@ -130,6 +136,7 @@ private:  //for basic type
     void decode(const Json::Value& json, float *);
     void decode(const Json::Value& json, double *);
     void decode(const Json::Value& json, std::string *);
+    void decode(const Json::Value& json, SpecTypeBase *);
 private:
     Json::Value json;
 };

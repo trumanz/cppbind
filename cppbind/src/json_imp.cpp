@@ -51,6 +51,15 @@ void DecodeMapper::decode(const Json::Value& json, std::string* e){
       e[0] =  json.asString();
 }
 
+void DecodeMapper::decode(const Json::Value& json, SpecTypeBase * specValue){
+     std::string errmsg;
+     std::string str = json.toStyledString();
+     int ret = specValue->decode(str, &errmsg);
+     if(ret != 0){
+        throw CppBindException(errmsg);
+     }
+}
+
 Json::Value EncodeMapper::encode(  bool& e){
     return Json::Value(e);
 }

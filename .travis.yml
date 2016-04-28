@@ -1,0 +1,17 @@
+sudo: required
+dist: trusty
+
+language: cpp
+
+compiler: gcc
+
+before_script:
+-  sudo apt-get update
+-  sudo apt-get install -y  libtool  cmake  
+-  sudo apt-get install -y libboost-all-dev
+-  sudo apt-get install -y libjsoncpp-dev
+-  sudo apt-get install -y  bison flex
+-  ./prep-env.sh
+
+script:
+-  env  ./run-ci.sh

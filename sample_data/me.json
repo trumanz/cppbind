@@ -1,6 +1,7 @@
 {
 	"name": "truman",
 	"age": 30,
+	"born" : "1987-11-17 02:01:03",
         "contact": {
             "email" : "@com",
             "phone" : "123456"

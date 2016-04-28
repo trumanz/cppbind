@@ -13,7 +13,7 @@
 #include <boost/shared_ptr.hpp>
 #include <stdexcept>
 #include <stdint.h>
-#include "cppbind_json_spec_type_base.hpp"
+#include "cppbind_spec_type.hpp"
 
 namespace  cppbind {
 

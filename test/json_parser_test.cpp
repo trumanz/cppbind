@@ -8,7 +8,12 @@
 #include <fstream>      // std::ifstream
 #include <jsoncpp/json/json.h>
 #include "cppbind_json.hpp"
+#include "boost/date_time/posix_time/posix_time.hpp"
 
+
+
+
+using namespace boost::posix_time;
 using namespace cppbind;
 
 class Contact {
@@ -16,9 +21,11 @@ public:
     Contact(){}
     std::string email;
     std::string phone;
+    ptime pt;
     void setBind(Mapper &mapper){
           mapper.bind("email", email);
           mapper.bind("phone", phone);
+          //mapper.bind("born", pt);
     }
 
 };

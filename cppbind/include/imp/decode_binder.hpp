@@ -4,13 +4,13 @@
 namespace  cppbind {
 
 
-class DecodeBinder {
+class DecodeBinder : public JsonBinderBase {
 public:
     DecodeBinder(Json::Value json){
         //printf("%s\n", json.asCString());
         this->json = json;
      }
-    Json::Value getJson(){
+    const Json::Value& getJson() const{
         return this->json;
     }
     void setJson(const Json::Value& jv){
@@ -84,8 +84,8 @@ private: //for std container type
 private: // for class type
     template<typename T>
     void decode(const Json::Value& json, T* e){
-         Binder binder(false, json);
-         e->setBind(binder);
+         Binder binder(json);
+         e->setBind(&binder);
     } 
 private:  //for basic type
     void decode(const Json::Value& json, bool*);

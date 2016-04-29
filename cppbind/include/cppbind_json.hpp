@@ -32,14 +32,14 @@ public:
          }
 
          e = new T;
-         Binder binder(false, root);
-         e->setBind(binder);
+         Binder binder(root);
+         e->setBind(&binder);
          return boost::shared_ptr<T>(e);
     }
      
     void encode(std::ostream *out, T &e){
          //EncodeBinder binder;
-         Binder binder(true, Json::Value());
+         Binder binder(Json::Value());
          e.setBind(binder);
          Json::StyledStreamWriter writer;
          writer.write(*out, binder.getJson());

@@ -3,11 +3,11 @@
 
 namespace  cppbind {
 
-class EncodeBinder {
+class EncodeBinder : public JsonBinderBase {
 public:
     EncodeBinder(){
     }
-    Json::Value getJson(){
+    const Json::Value& getJson() const {
         return this->root;
     }
     void setJson(const Json::Value& jv){
@@ -49,8 +49,8 @@ private: //for std container type
 private: // for class type
     template<typename T>
     Json::Value encode(T& e){
-       Binder binder(true, Json::Value());
-       e.setBind(binder);
+       Binder binder;
+       e.setBind(&binder);
        return binder.getJson();
     } 
 private:  //for basic type

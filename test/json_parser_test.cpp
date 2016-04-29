@@ -8,9 +8,9 @@
 #include <fstream>      // std::ifstream
 #include <jsoncpp/json/json.h>
 #include "cppbind_json.hpp"
-#include "type/strtime.h"
+#include "type/timestr.h"
 #include "boost/date_time/posix_time/posix_time.hpp"
-#include "cppbind_spec_type.hpp"
+#include "type/spec_type.h"
 
 using namespace boost::posix_time;
 using namespace cppbind;
@@ -24,7 +24,7 @@ public:
 private:
       virtual int decode(const std::string &str, std::string *errmsg) {
         //printf("decode %s\n", str.c_str());
-        StrTime strTime(this->pattern.c_str());
+        TimeStr strTime(this->pattern.c_str());
         ptime pt;
         int ret = strTime.parser(str, &pt);
         //printf("ret = %d\n", ret);
@@ -38,7 +38,7 @@ private:
         }
     }
     virtual std::string encode() {
-        StrTime strTime(this->pattern.c_str());
+        TimeStr strTime(this->pattern.c_str());
         return strTime.format(*this);
     }
     std::string pattern;
@@ -91,7 +91,7 @@ TEST(JsonROM, baisc){
      //basic type
      ASSERT_EQ(me->name ,"truman");
      ASSERT_EQ(me->age ,30);
-     StrTime tf("%Y-%m-%d %H:%M:%S");
+     TimeStr tf("%Y-%m-%d %H:%M:%S");
      printf("born: %s\n",  tf.format(me->born).c_str());
 
      //optional 

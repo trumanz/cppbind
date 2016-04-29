@@ -113,4 +113,9 @@ TEST(JsonROM, baisc){
      ASSERT_EQ(skills.size(), 2);
      ASSERT_EQ(skills["c++"].grade, 7);
      ASSERT_EQ(skills["R"].grade, 0);
+
+     std::stringstream ss;
+     JsonBind<Me>().encode(*(me.get()), &ss);
+
+     printf("%s\n", ss.str().c_str());
 };

@@ -37,10 +37,10 @@ public:
          return boost::shared_ptr<T>(e);
     }
      
-    void encode(std::ostream *out, T &e){
+    void encode(T&e, std::ostream *out){
          //EncodeBinder binder;
-         Binder binder(Json::Value());
-         e.setBind(binder);
+         Binder binder;
+         e.setBind(&binder);
          Json::StyledStreamWriter writer;
          writer.write(*out, binder.getJson());
     }

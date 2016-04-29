@@ -7,15 +7,15 @@ namespace cppbind{
 class SpecTypeBase {
 
 public:
-    void setBind(cppbind::Mapper &mapper){
-        //printf("%s\n", mapper.getJson().toStyledString().c_str());
-        if(mapper.isEncode){
+    void setBind(cppbind::Binder &binder){
+        //printf("%s\n", binder.getJson().toStyledString().c_str());
+        if(binder.isEncode){
              std::string value = this->encode();
              Json::Value jv(value);
-             mapper.setJson(jv);
+             binder.setJson(jv);
         } else{
              std::string errmsg;
-             Json::Value jv = mapper.getJson();
+             Json::Value jv = binder.getJson();
              if(!jv.isString()) {
                   throw CppBindException("should be a string");
              } 

@@ -49,9 +49,9 @@ public:
     Contact(){}
     std::string email;
     std::string phone;
-    void setBind(Mapper &mapper){
-          mapper.bind("email", email);
-          mapper.bind("phone", phone);
+    void setBind(Binder &binder){
+          binder.bind("email", email);
+          binder.bind("phone", phone);
     }
 
 };
@@ -59,8 +59,8 @@ public:
 class Skill {
 public:
     int grade;
-    void setBind(Mapper &mapper) {
-          mapper.bind("grade", grade);
+    void setBind(Binder &binder) {
+          binder.bind("grade", grade);
     }
 };
 
@@ -73,14 +73,14 @@ public:
     std::list<std::string>  likes;  // std list
     std::map<std::string, Skill>  skills; // class list
     boost::shared_ptr<int>  value_not_exist; //optional not exist
-    void setBind(Mapper &mapper){
-          mapper.bind("name", name);
-          mapper.bind("age", age);
-          mapper.bind("born", born);
-          mapper.bind("contact", contact);
-          mapper.bind("likes", likes);
-          mapper.bind("skills", skills);
-          mapper.bind("value_not_exist",  value_not_exist);
+    void setBind(Binder &binder){
+          binder.bind("name", name);
+          binder.bind("age", age);
+          binder.bind("born", born);
+          binder.bind("contact", contact);
+          binder.bind("likes", likes);
+          binder.bind("skills", skills);
+          binder.bind("value_not_exist",  value_not_exist);
     }
 };
 

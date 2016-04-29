@@ -3,9 +3,9 @@
 
 namespace  cppbind {
 
-class EncodeMapper {
+class EncodeBinder {
 public:
-    EncodeMapper(){
+    EncodeBinder(){
     }
     Json::Value getJson(){
         return this->root;
@@ -49,9 +49,9 @@ private: //for std container type
 private: // for class type
     template<typename T>
     Json::Value encode(T& e){
-       Mapper mapper(true, Json::Value());
-       e.setBind(mapper);
-       return mapper.getJson();
+       Binder binder(true, Json::Value());
+       e.setBind(binder);
+       return binder.getJson();
     } 
 private:  //for basic type
     Json::Value encode( bool&);

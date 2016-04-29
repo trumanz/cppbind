@@ -35,19 +35,19 @@ class CppBindException : public std::runtime_error
     
 };
 
-class Mapper{
+class Binder{
 public:
-    Mapper(bool isEncode, Json::Value root);
-    virtual ~Mapper();
+    Binder(bool isEncode, Json::Value root);
+    virtual ~Binder();
     template<typename T>
     void bind(const std::string& name, T& v, const char *default_value = NULL);
     Json::Value getJson();
     void setJson(const Json::Value jv);
 public:
     bool isEncode;
-    void* mapper_imp;
-    //DecodeMapper decode_mapper;
-    //EncodeMapper encode_mapper;
+    void* binder_imp;
+    //DecodeBinder decode_binder;
+    //EncodeBinder encode_binder;
 };
 
 }
@@ -59,13 +59,13 @@ public:
 namespace cppbind {
 
 template<typename T>
-void Mapper::bind(const std::string& name, T& v, const char *default_value){
+void Binder::bind(const std::string& name, T& v, const char *default_value){
         if(this->isEncode) {
-            EncodeMapper* mapper = (EncodeMapper*)this->mapper_imp;
-            mapper->bind(name,v, default_value);
+            EncodeBinder* binder = (EncodeBinder*)this->binder_imp;
+            binder->bind(name,v, default_value);
         } else {
-            DecodeMapper* mapper = (DecodeMapper*)this->mapper_imp;
-            mapper->bind(name,v, default_value);
+            DecodeBinder* binder = (DecodeBinder*)this->binder_imp;
+            binder->bind(name,v, default_value);
         }
 }
 

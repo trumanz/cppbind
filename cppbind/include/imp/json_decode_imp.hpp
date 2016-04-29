@@ -4,9 +4,9 @@
 namespace  cppbind {
 
 
-class DecodeMapper {
+class DecodeBinder {
 public:
-    DecodeMapper(Json::Value json){
+    DecodeBinder(Json::Value json){
         //printf("%s\n", json.asCString());
         this->json = json;
      }
@@ -84,8 +84,8 @@ private: //for std container type
 private: // for class type
     template<typename T>
     void decode(const Json::Value& json, T* e){
-         Mapper mapper(false, json);
-         e->setBind(mapper);
+         Binder binder(false, json);
+         e->setBind(binder);
     } 
 private:  //for basic type
     void decode(const Json::Value& json, bool*);

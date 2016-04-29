@@ -52,8 +52,8 @@ public:
 
 }
 
-#include "imp/json_decode_imp.hpp"
-#include "imp/json_encode_imp.hpp"
+#include "imp/decode_binder.hpp"
+#include "imp/encode_binder.hpp"
 
 
 namespace cppbind {
@@ -69,8 +69,6 @@ void Binder::bind(const std::string& name, T& v, const char *default_value){
         }
 }
 
-
- 
 
 }
 

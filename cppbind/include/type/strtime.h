@@ -10,21 +10,25 @@ class StrTime {
 private:
    std::locale locale_input;
    std::locale locale_output;
+   std::string pattern;
 public:
     StrTime(const char *pattern = NULL) {
          if(pattern == NULL) {
              //"2005-10-15 13:14:15.003400"
-             pattern = "%Y-%m-%d %H:%M:%S.%f";
+             this->pattern = "%Y-%m-%d %H:%M:%S.%f";
+         } else {
+             this->pattern = pattern;
          }
-         locale_input = std::locale(std::locale::classic(),new boost::posix_time::time_input_facet(pattern));
-         locale_output = std::locale(std::locale::classic(),new boost::posix_time::time_facet(pattern));
+         locale_input = std::locale(std::locale::classic(),new boost::posix_time::time_input_facet(this->pattern.c_str()));
+         locale_output = std::locale(std::locale::classic(),new boost::posix_time::time_facet(this->pattern.c_str()));
     }
     int parser(const std::string& timeStr, boost::posix_time::ptime *ptOut){
          boost::posix_time::ptime pt;
          std::istringstream is(timeStr);
          is.imbue(locale_input);
-         //printf("%s\n", is.str().c_str());
+         //printf("strtime parser %s with pattern %s\n", is.str().c_str(), this->pattern.c_str());
          is >> pt;
+         std::cout << pt << std::endl;
          if(pt == boost::posix_time::ptime()) {
               return -1;
          }

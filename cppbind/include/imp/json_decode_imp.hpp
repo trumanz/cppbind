@@ -13,6 +13,9 @@ public:
     Json::Value getJson(){
         return this->json;
     }
+    void setJson(const Json::Value& jv){
+        this->json = jv;
+    }
     template<typename T>
     void bind(const std::string& name, T& v, const char *default_value = NULL){
          //printf("filed %s\n", name.c_str());
@@ -91,7 +94,7 @@ private:  //for basic type
     void decode(const Json::Value& json, float *);
     void decode(const Json::Value& json, double *);
     void decode(const Json::Value& json, std::string *);
-    void decode(const Json::Value& json, SpecTypeBase *);
+    //void decode(const Json::Value& json, SpecTypeBase *);
 private:
     Json::Value json;
 };

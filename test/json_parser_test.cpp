@@ -8,24 +8,50 @@
 #include <fstream>      // std::ifstream
 #include <jsoncpp/json/json.h>
 #include "cppbind_json.hpp"
+#include "type/strtime.h"
 #include "boost/date_time/posix_time/posix_time.hpp"
-
-
-
+#include "cppbind_spec_type.hpp"
 
 using namespace boost::posix_time;
 using namespace cppbind;
+
+
+class PosixTime : public ptime, public SpecTypeBase {
+public:
+      PosixTime(){
+          this->pattern = "%Y-%m-%d %H:%M:%S";
+      }
+private:
+      virtual int decode(const std::string &str, std::string *errmsg) {
+        //printf("decode %s\n", str.c_str());
+        StrTime strTime(this->pattern.c_str());
+        ptime pt;
+        int ret = strTime.parser(str, &pt);
+        //printf("ret = %d\n", ret);
+        if(ret != 0) {
+            errmsg[0] += " can not parser [" + str + "]"  + " with pattern "  + pattern;
+            return -1;
+        } else {
+            ptime *this_pt = dynamic_cast<ptime*>(this);
+            this_pt[0] = pt;
+            return 0;
+        }
+    }
+    virtual std::string encode() {
+        StrTime strTime(this->pattern.c_str());
+        return strTime.format(*this);
+    }
+    std::string pattern;
+};
 
 class Contact {
 public:
     Contact(){}
     std::string email;
     std::string phone;
-    ptime pt;
     void setBind(Mapper &mapper){
           mapper.bind("email", email);
           mapper.bind("phone", phone);
-          //mapper.bind("born", pt);
     }
 
 };
@@ -42,6 +68,7 @@ class Me {
 public:
     std::string name; //basic type
     int age;  //
+    PosixTime born;
     Contact contact; // class object
     std::list<std::string>  likes;  // std list
     std::map<std::string, Skill>  skills; // class list
@@ -49,6 +76,7 @@ public:
     void setBind(Mapper &mapper){
           mapper.bind("name", name);
           mapper.bind("age", age);
+          mapper.bind("born", born);
           mapper.bind("contact", contact);
           mapper.bind("likes", likes);
           mapper.bind("skills", skills);
@@ -63,6 +91,8 @@ TEST(JsonROM, baisc){
      //basic type
      ASSERT_EQ(me->name ,"truman");
      ASSERT_EQ(me->age ,30);
+     StrTime tf("%Y-%m-%d %H:%M:%S");
+     printf("born: %s\n",  tf.format(me->born).c_str());
 
      //optional 
      ASSERT_EQ(me->value_not_exist.get() , (int*)NULL);

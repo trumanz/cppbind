@@ -13,7 +13,7 @@
 #include <boost/shared_ptr.hpp>
 #include <stdexcept>
 #include <stdint.h>
-#include "cppbind_spec_type.hpp"
+
 
 namespace  cppbind {
 
@@ -42,7 +42,8 @@ public:
     template<typename T>
     void bind(const std::string& name, T& v, const char *default_value = NULL);
     Json::Value getJson();
-private:
+    void setJson(const Json::Value jv);
+public:
     bool isEncode;
     void* mapper_imp;
     //DecodeMapper decode_mapper;

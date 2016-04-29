@@ -11,7 +11,15 @@ using namespace cppbind;
         }
         
   }
-
+void Mapper::setJson(const Json::Value jv){
+     if(this->isEncode) {
+            EncodeMapper* mapper = (EncodeMapper*)this->mapper_imp;
+             mapper->setJson(jv);
+        } else {
+            DecodeMapper* mapper =  (DecodeMapper*)this->mapper_imp;
+              mapper->setJson(jv);
+        }
+}
 
  Mapper::Mapper(bool isEncode, Json::Value root){
         this->isEncode = isEncode;
@@ -51,6 +59,7 @@ void DecodeMapper::decode(const Json::Value& json, std::string* e){
       e[0] =  json.asString();
 }
 
+/*
 void DecodeMapper::decode(const Json::Value& json, SpecTypeBase * specValue){
      std::string errmsg;
      std::string str = json.toStyledString();
@@ -59,7 +68,7 @@ void DecodeMapper::decode(const Json::Value& json, SpecTypeBase * specValue){
         throw CppBindException(errmsg);
      }
 }
-
+*/
 Json::Value EncodeMapper::encode(  bool& e){
     return Json::Value(e);
 }

@@ -10,6 +10,9 @@ public:
     Json::Value getJson(){
         return this->root;
     }
+    void setJson(const Json::Value& jv){
+        this->root = jv;
+    }
     template<typename T>
     void bind(const std::string& name, T& v, const char *default_value = NULL){
           Json::Value jv =  encode(v);

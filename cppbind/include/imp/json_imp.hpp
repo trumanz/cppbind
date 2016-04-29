@@ -11,29 +11,11 @@
 #include <assert.h>
 #include <list>
 #include <boost/shared_ptr.hpp>
-#include <stdexcept>
 #include <stdint.h>
+#include "../cppbind_exception.h"
 
 
 namespace  cppbind {
-
-
-class CppBindException : public std::runtime_error
-{
-   public:
-    CppBindException(std::string const& node_name, const std::string base_msg)
-        : runtime_error(node_name + " "  + base_msg)
-    { }
-    
-    CppBindException(const std::string base_msg)
-        : runtime_error(std::string(" ")  + base_msg)
-    { }
-    CppBindException(const CppBindException& e, std::string const& node_name)
-        : runtime_error(node_name + e.what())
-
-    { }
-    
-};
 
 class Binder{
 public:

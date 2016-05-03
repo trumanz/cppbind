@@ -1,0 +1,26 @@
+1. chose member funciton  and   parser(T, json::value)
+
+
+
+template<typename T>
+boost_if< T has setBind ,  Jbinder<T>, JParser<T> >   JT;
+
+
+
+
+template<typename T>
+class JBinder 
+{
+public: 
+   parser(Json::value)
+   this->setBind  
+
+T* t;
+}
+
+template<typename T>
+class JParser 
+{
+   parser =  getParser(T);
+   parser->parser(json::value);
+} 

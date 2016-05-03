@@ -1,3 +1,6 @@
+#ifndef __CPPBIND_TIMESTR_H_
+#define __CPPBIND_TIMESTR_H_
+
 #include <string>
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,7 +14,7 @@ private:
    std::locale locale_output;
    std::string pattern;
 public:
-    TimeStr(const char *pattern = NULL);
+    TimeStr(const char *pattern_for_ptime = NULL);
     int parser(const std::string& timeStr, boost::posix_time::ptime *ptOut);
     std::string format(const boost::posix_time::ptime &pt);
 
@@ -20,3 +23,4 @@ public:
 };
 
 }
+#endif

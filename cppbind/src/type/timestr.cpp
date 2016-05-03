@@ -24,14 +24,37 @@ int TimeStr::parser(const std::string& timeStr, boost::posix_time::ptime *ptOut)
          is.imbue(locale_input);
          //printf("strtime parser %s with pattern %s\n", is.str().c_str(), this->pattern.c_str());
          is >> pt;
-         std::cout << pt << std::endl;
+         //std::cout << pt << std::endl;
          if(pt == boost::posix_time::ptime()) {
               return -1;
          }
          *ptOut = pt;
+         if(this->format(*ptOut) != timeStr) {
+              return -1;
+         }
          return 0;
 }
 std::string TimeStr::format(const boost::posix_time::ptime &pt){
+         std::ostringstream os;
+         os.imbue(locale_output);
+         os << pt;
+         return os.str();
+}
+
+int TimeStr::parser(const std::string& timeStr, boost::posix_time::time_duration *ptOut){
+         boost::posix_time::time_duration pt;
+         std::istringstream is(timeStr);
+         is.imbue(locale_input);
+         printf("strtime parser %s with pattern %s\n", is.str().c_str(), this->pattern.c_str());
+         is >> pt;
+         std::cout << pt << std::endl;
+         *ptOut = pt;
+         if(this->format(*ptOut) != timeStr) {
+              return -1;
+         }
+         return 0;
+}
+std::string TimeStr::format(const boost::posix_time::time_duration &pt){
          std::ostringstream os;
          os.imbue(locale_output);
          os << pt;

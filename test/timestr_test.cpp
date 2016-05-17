@@ -76,8 +76,10 @@ TEST(boost_datetime, duration_parse_format) {
    str =  tf.format(td);
    EXPECT_EQ("12:45:33", str);
 
-   
-   
 
+    td = minutes(100);   
+  
+      
+    std::cout << "minutes(100): "<< td << "\n";
 }
 

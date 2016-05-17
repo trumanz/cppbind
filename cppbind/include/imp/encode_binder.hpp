@@ -28,6 +28,16 @@ public:
     }
 
 private: //for std container type
+    
+    template<typename T>
+    Json::Value encode(std::vector<T>& e){
+        Json::Value jv;
+        for(typename std::vector<T>::iterator  it  = e.begin(); it != e.end(); it++) {
+             Json::Value je = encode(*it);
+             jv.append(je);
+        }
+        return jv;
+    }
     template<typename T>
     Json::Value encode(std::list<T>& e){
         Json::Value jv;

@@ -71,7 +71,8 @@ public:
     PosixTime born;
     Contact contact; // class object
     std::list<std::string>  likes;  // std list
-    std::map<std::string, Skill>  skills; // class list
+    std::vector<std::string>  hates;  // std vector
+    std::map<std::string, Skill>  skills; // std map
     boost::shared_ptr<int>  value_not_exist; //optional not exist
     void setBind(Binder *binder){
           binder->bind("name", name);
@@ -79,6 +80,7 @@ public:
           binder->bind("born", born);
           binder->bind("contact", contact);
           binder->bind("likes", likes);
+          binder->bind("hates", hates);
           binder->bind("skills", skills);
           binder->bind("value_not_exist",  value_not_exist);
     }
@@ -103,12 +105,18 @@ TEST(JsonROM, baisc){
      ASSERT_EQ(likes.front(), "Batman");
      ASSERT_EQ(likes.back(), "Superman");
 
+     std::vector<std::string>  hates = me->hates;
+     ASSERT_EQ(hates.size(), 2);
+     ASSERT_EQ(hates[0], "war");
+     ASSERT_EQ(hates[1], "dictator");
+     
+
       //  class  object
      Contact contact = me->contact;
      ASSERT_EQ(contact.email, "@com");
      ASSERT_EQ(contact.phone, "123456");
 
-     // class list
+     // std map 
      std::map<std::string,  Skill>  skills = me->skills;
      ASSERT_EQ(skills.size(), 2);
      ASSERT_EQ(skills["c++"].grade, 7);

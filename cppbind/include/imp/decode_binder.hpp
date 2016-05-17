@@ -49,6 +49,12 @@ public:
 
 private: //for std container type
     template<typename T>
+    void decode(const Json::Value& json, std::vector<T>* e){
+         std::list<T> v;
+         decode(json, &v);
+         e->insert(e->begin(), v.begin(), v.end());
+    }
+    template<typename T>
     void decode(const Json::Value& json, std::list<T>* e){
             if(!json.isArray()) {
                 throw CppBindException("should be a list");

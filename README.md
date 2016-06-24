@@ -1,5 +1,5 @@
 # cppbind
-## A solution for conversion between c++ class object and JSON string
+## A library for conversion between c++ class object and JSON string
 ### Feature
 1. Serialize a c++ object to JSON string.
 2. Deserialize a JSON string to c++ object.

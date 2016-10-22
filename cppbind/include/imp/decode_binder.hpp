@@ -7,7 +7,6 @@ namespace  cppbind {
 class DecodeBinder : public JsonBinderBase {
 public:
     DecodeBinder(Json::Value json){
-        //printf("%s\n", json.asCString());
         this->json = json;
      }
     const Json::Value& getJson() const{
@@ -17,17 +16,12 @@ public:
         this->json = jv;
     }
     template<typename T>
-    void bind(const std::string& name, T& v, const char *default_value = NULL){
+    void bind(const std::string& name, T& v){
          //printf("filed %s\n", name.c_str());
          Json::Value jv = json[name];
          if(!jv.isNull()) {
              try {
                 decode(jv, &v);
-                //printf("name:%s , type: %s\n", name.c_str(), typeid(v).name());
-                //SpecTypeBase *specValue = dynamic_cast<SpecTypeBase *>(*v);
-                //if(specValue != NULL) {
-                //    printf("could cast to SpecTypeBase\n");
-               // }
              } catch (CppBindException e) {
                 throw CppBindException(e, std::string(".") + name);
              }
@@ -37,8 +31,7 @@ public:
     }
 
     template<typename T>
-    void bind(const std::string& name, boost::shared_ptr<T>& v, const char *default_value = NULL){
-        //printf("filed %s\n", name.c_str());
+    void bind(const std::string& name, boost::shared_ptr<T>& v){
          Json::Value jv = json[name];
          if(!jv.isNull()) {
              T  e;
@@ -94,14 +87,25 @@ private: // for class type
          e->setBind(&binder);
     } 
 private:  //for basic type
-    void decode(const Json::Value& json, bool*);
-    void decode(const Json::Value& json, int32_t *);
-    void decode(const Json::Value& json, int64_t *);
-    void decode(const Json::Value& json, float *);
-    void decode(const Json::Value& json, double *);
-    void decode(const Json::Value& json, std::string *);
-    //void decode(const Json::Value& json, SpecTypeBase *);
-private:
+    void decode(const Json::Value& json, bool*e){
+         e[0] =  json.asBool();
+    }
+    void decode(const Json::Value& json, int32_t *e){
+         e[0] =  json.asInt();
+    }
+    void decode(const Json::Value& json, int64_t *e){
+         e[0] =  json.asInt64();
+    }
+    void decode(const Json::Value& json, float *e){
+        e[0] =  json.asFloat();
+    }
+    void decode(const Json::Value& json, double *e){
+        e[0] =  json.asDouble();
+    }
+    void decode(const Json::Value& json, std::string *e){
+        e[0] =  json.asString();
+    }
+ private:
     Json::Value json;
 };
 

@@ -37,7 +37,7 @@ public:
     *and this will use EncodeBinder or DecodeBinder  to do the real work.
     */
     template<typename T>
-    void bind(const std::string& name, T& v, const char *default_value = NULL);
+    void bind(const std::string& name, T& v);
     Json::Value getJson();
     void setJson(const Json::Value jv);
     bool isEncode();
@@ -54,14 +54,14 @@ public:
 namespace cppbind {
 
 template<typename T>
-void Binder::bind(const std::string& name, T& v, const char *default_value){
+void Binder::bind(const std::string& name, T& v){
         //CALL the real bind fucntion, must change to the real type of binder, then comile could instantiate the tempate funciton
         EncodeBinder* encoder = NULL;
         DecodeBinder* decoder = NULL;
         if( NULL != (decoder = dynamic_cast<DecodeBinder*>(this->binder_imp.get())) ) {
-            decoder->bind(name,v, default_value);
+            decoder->bind(name,v);
         } else if( NULL != (encoder = dynamic_cast<EncodeBinder*>(this->binder_imp.get()))) {
-            encoder->bind(name,v, default_value);
+            encoder->bind(name,v);
         } else {
             assert("bug" == NULL);
         }

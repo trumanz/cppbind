@@ -64,12 +64,12 @@ private: // for class type
        return binder.getJson();
     } 
 private:  //for basic type
-    Json::Value encode( bool&);
-    Json::Value encode( int32_t&);
-    Json::Value encode( int64_t&);
-    Json::Value encode( float&);
-    Json::Value encode( double&);
-    Json::Value encode( std::string &);
+    Json::Value encode( bool&e) {return Json::Value(e);}
+    Json::Value encode( int32_t&e) { Json::Int x = e; return Json::Value(x); }
+    Json::Value encode( int64_t&e) {Json::Int64 x = e; return Json::Value(x); }
+    Json::Value encode( float&e){  return Json::Value(e); }
+    Json::Value encode( double&e) { return Json::Value(e); }
+    Json::Value encode( std::string &e) { return Json::Value(e);}
  private:
     Json::Value root;
 };

@@ -3,4 +3,4 @@ cat /proc/cpuinfo
 cat /proc/meminfo
 
 source source.env
-make  test
+make  all && make -f Makefile.test

@@ -2,16 +2,17 @@ CC = g++
 LD = $(CC)
 CFLAGS =  -I./ 
 CFLAGS =  -I./cppbind/include
-CFLAGS += -c  -g -O0  -Wall
+CFLAGS += -c  -g -O0  -Wall 
+CFLAGS +=  -fPIC
 
 LDFLAGS = -L./ 
 LDFLAGS = -lgtest  -lpthread 
-LDFLAGS +=  -ljsoncpp
+LDFLAGS +=  -ljsoncpp 
+LDFLAGS +=  -shared
 
-TARGET = a.out
+TARGET = libcppbind.so
 
 SOURCES = $(shell find ./cppbind -name "*.cpp")
-SOURCES += $(shell find ./test -name "*.cpp")
 OBJECTS= $(SOURCES:.cpp=.o)
 ##OBJECTS = $(patsubst %.c, %.o, $(shell find . -name "*.cpp"))
 
@@ -28,5 +29,4 @@ $(TARGET): $(OBJECTS)
 clean:
 	rm $(TARGET) $(OBJECTS)
 
-test: all
-	./$(TARGET)
+

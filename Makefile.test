@@ -15,7 +15,11 @@ OBJECTS= $(SOURCES:.cpp=.o)
 ##OBJECTS = $(patsubst %.c, %.o, $(shell find . -name "*.cpp"))
 
 all: $(TARGET)
+
+test: $(TARGET)
 	./$(TARGET)
+      
+
 $(TARGET): $(OBJECTS)
 	$(LD) -o $@ $^ $(LDFLAGS)
 

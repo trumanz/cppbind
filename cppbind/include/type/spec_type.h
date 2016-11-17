@@ -9,13 +9,18 @@ class SpecTypeBase {
 public:
     void setBind(cppbind::Binder *binder){
         //printf("%s\n", binder.getJson().toStyledString().c_str());
-        if(binder->isEncode()){
+
+        JsonEncodeBinder* json_encode_binder = dynamic_cast<JsonEncodeBinder*>(binder->binder_imp.get());
+        JsonDecodeBinder* json_decode_binder = dynamic_cast<JsonDecodeBinder*>(binder->binder_imp.get());
+        CSVDecodeBinder*  csv_decode_binder  = dynamic_cast<CSVDecodeBinder*>(binder->binder_imp.get());
+
+        if(json_encode_binder){
              std::string value = this->encode();
              Json::Value jv(value);
-             binder->setJson(jv);
-        } else{
+             json_encode_binder->setJson(jv);
+        } else if (json_decode_binder){
              std::string errmsg;
-             Json::Value jv = binder->getJson();
+             Json::Value jv = json_decode_binder->json;
              if(!jv.isString()) {
                   throw CppBindException("should be a string");
              } 
@@ -24,6 +29,10 @@ public:
             if(ret != 0){
                 throw CppBindException(errmsg);
             }
+        } else if(csv_decode_binder) {
+            assert("TODO" == NULL);
+        } else {
+            assert("TODO" == NULL);
         }
     }
     virtual int decode(const std::string &, std::string *errmsg) = 0;

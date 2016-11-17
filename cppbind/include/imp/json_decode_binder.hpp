@@ -9,9 +9,6 @@ public:
     JsonDecodeBinder(Json::Value json){
         this->json = json;
      }
-    const Json::Value& getJson() const{
-        return this->json;
-    }
     void setJson(const Json::Value& jv){
         this->json = jv;
     }
@@ -105,7 +102,7 @@ private:  //for basic type
     void decode(const Json::Value& json, std::string *e){
         e[0] =  json.asString();
     }
- private:
+public:
     Json::Value json;
 };
 

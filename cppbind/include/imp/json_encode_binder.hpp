@@ -7,9 +7,6 @@ class JsonEncodeBinder : public BinderImpBase {
 public:
     JsonEncodeBinder(){
     }
-    const Json::Value& getJson() const {
-        return this->root;
-    }
     void setJson(const Json::Value& jv){
         this->root = jv;
     }
@@ -61,7 +58,10 @@ private: // for class type
     Json::Value encode(T& e){
        Binder binder;
        e.setBind(&binder);
-       return binder.getJson();
+       //return binder.getJson();
+       JsonEncodeBinder* json_encoder_binder = dynamic_cast<JsonEncodeBinder*>(binder.binder_imp.get());
+       return json_encoder_binder->root;
+
     } 
 private:  //for basic type
     Json::Value encode( bool&e) {return Json::Value(e);}
@@ -70,7 +70,7 @@ private:  //for basic type
     Json::Value encode( float&e){  return Json::Value(e); }
     Json::Value encode( double&e) { return Json::Value(e); }
     Json::Value encode( std::string &e) { return Json::Value(e);}
- private:
+public:
     Json::Value root;
 };
 

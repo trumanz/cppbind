@@ -42,7 +42,8 @@ public:
          Binder binder;
          e.setBind(&binder);
          Json::StyledStreamWriter writer;
-         writer.write(*out, binder.getJson());
+         JsonEncodeBinder* json_encoder_binder = dynamic_cast<JsonEncodeBinder*>(binder.binder_imp.get());
+         writer.write(*out, json_encoder_binder->root);
     }
 
 };

@@ -20,8 +20,6 @@ namespace  cppbind {
 class BinderImpBase {
 public:
      virtual ~BinderImpBase() {}
-     virtual const Json::Value& getJson() const = 0;
-     virtual void setJson(const Json::Value &jv) = 0;
 };
 
 class Binder{
@@ -39,11 +37,7 @@ public:
     */
     template<typename T>
     void bind(const std::string& name, T& v);
-    Json::Value getJson();
-    void setJson(const Json::Value jv);
-    bool isEncode();
-    size_t getCSVUsed();
-public:
+ public:
     boost::shared_ptr<BinderImpBase> binder_imp;
 };
 

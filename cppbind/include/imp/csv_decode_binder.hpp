@@ -9,9 +9,6 @@ public:
     CSVDecodeBinder(Json::Value json){
         //this->json = json;
      }
-    const Json::Value& getJson() const{
-        return Json::Value();
-    }
     void setJson(const Json::Value& jv){
      }
     CSVDecodeBinder(const std::vector<std::string>& row){
@@ -59,8 +56,9 @@ private: // for class type
            std::vector<std::string> x;
            x.insert(x.begin(),  begin, end);
            Binder binder(x);
-            e->setBind(&binder);
-           return binder.getCSVUsed();
+           e->setBind(&binder);
+           CSVDecodeBinder*  csv_decode_binder  = dynamic_cast<CSVDecodeBinder*>(binder.binder_imp.get());
+          return  csv_decode_binder->used;
     } 
 private:  //for basic type
     size_t decode(std::vector<std::string>::iterator begin, std::vector<std::string>::iterator end, bool*e){

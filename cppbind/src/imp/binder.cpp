@@ -3,10 +3,10 @@ using namespace cppbind;
 
 
 Binder::Binder(){
-    this->binder_imp =  boost::shared_ptr<JsonBinderBase>(new EncodeBinder());
+    this->binder_imp =  boost::shared_ptr<BinderImpBase>(new JsonEncodeBinder());
 }
 Binder::Binder(const Json::Value& root){
-    this->binder_imp =  boost::shared_ptr<JsonBinderBase>(new DecodeBinder(root));
+    this->binder_imp =  boost::shared_ptr<BinderImpBase>(new JsonDecodeBinder(root));
 }
 
 Json::Value Binder::getJson(){
@@ -19,5 +19,5 @@ void Binder::setJson(const Json::Value jv){
 
 bool Binder::isEncode()
 {
-   return NULL != dynamic_cast<EncodeBinder*>(this->binder_imp.get());
+   return NULL != dynamic_cast<JsonEncodeBinder*>(this->binder_imp.get());
 }

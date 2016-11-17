@@ -1,12 +1,12 @@
-#ifndef __CPPBIND__JSONDECODE_IMP__
-#define __CPPBIND__JSONDECODE_IMP__
+#ifndef __JSON_DECODE_BINDER_H__
+#define __JSON_DECODE_BINDER_H__
 
 namespace  cppbind {
 
 
-class DecodeBinder : public JsonBinderBase {
+class JsonDecodeBinder : public BinderImpBase {
 public:
-    DecodeBinder(Json::Value json){
+    JsonDecodeBinder(Json::Value json){
         this->json = json;
      }
     const Json::Value& getJson() const{

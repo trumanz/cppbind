@@ -14,6 +14,7 @@
 #include <boost/shared_ptr.hpp>
 #include <stdexcept>
 #include "imp/binder.hpp"
+#include "imp/csvcpp.h"
 #include <jsoncpp/json/writer.h>
 namespace  cppbind {
 

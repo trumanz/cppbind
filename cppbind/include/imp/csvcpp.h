@@ -30,9 +30,9 @@ public:
 public:
     CSVCPP();
 public:
-     std::vector<CSVRow> get_rows(std::istream& csv_content) const;
-private:
-    CSVRow get_row(const std::string &line) const;
+   virtual std::vector<CSVRow> get_rows(std::istream& csv_content) const;
+protected:
+    virtual CSVRow get_row(const std::string &line) const;
 
 };
 

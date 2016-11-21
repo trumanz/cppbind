@@ -20,8 +20,11 @@ namespace  cppbind {
 template<typename T>
 class CSVBind{
 public:
-     CSVCPP csv_cpp;
+     boost::shared_ptr<CSVCPP> csv_cpp;
 public:
+    CSVBind(){
+         csv_cpp =  boost::shared_ptr<CSVCPP>(new CSVCPP());
+    }
     //Decode string content
     std::vector<T> decode(const std::string& csv_content){
         std::stringstream ss;
@@ -31,7 +34,7 @@ public:
     //Decoee istream content
     std::vector<T> decode(std::istream& csv_content){
         std::vector<T> es;
-        std::vector<CSVRow> rows =  csv_cpp.get_rows(csv_content);
+        std::vector<CSVRow> rows =  csv_cpp->get_rows(csv_content);
         for(std::vector<CSVRow>::iterator it = rows.begin(); it !=  rows.end(); it++) {
              T e = this->decode_row(*it);
              es.push_back(e);

@@ -41,6 +41,15 @@ public:
         }
         return es;
     }
+    std::vector<T> decode_file(const char *filename){
+         std::ifstream  fs(filename);
+         if(!fs){
+             assert("TODO, throw exception" == NULL);
+         } 
+         std::vector<T> rc = this->decode(fs);
+         fs.close();
+         return rc;
+    }
 private:
     T decode_row(const CSVRow &row) const{
          T e;

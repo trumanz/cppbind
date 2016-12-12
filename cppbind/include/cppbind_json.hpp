@@ -46,6 +46,11 @@ public:
          JsonEncodeBinder* json_encoder_binder = dynamic_cast<JsonEncodeBinder*>(binder.binder_imp.get());
          writer.write(*out, json_encoder_binder->root);
     }
+    std::string encode(T&e){
+         std::stringstream ss;
+         encode(e, &ss);
+         return ss.str();
+    }
 
 };
 

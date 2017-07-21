@@ -42,7 +42,8 @@ public:
     void encode(T&e, std::ostream *out){
          //EncodeBinder binder;
          JsonEncodeBinder encoder;
-         Json::Value jv = encoder.encode(e);
+         bool dummy;
+         Json::Value jv = encoder.encode(e, &dummy);
          Json::StyledStreamWriter writer;
          writer.write(*out, jv);
     }

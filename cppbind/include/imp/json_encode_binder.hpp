@@ -115,19 +115,14 @@ public: // for class type
 private:  //for basic type
     // bool 
     Json::Value encode(const bool e, bool* is_basic_type) {*is_basic_type = true; return Json::Value(e);}
-    Json::Value encode(      bool e, bool* is_basic_type) {*is_basic_type = true; return Json::Value(e);}
     //int32_t
     Json::Value encode(const int32_t e, bool* is_basic_type) {*is_basic_type = true; Json::Int x = e; return Json::Value(x); }
-    Json::Value encode(      int32_t e, bool* is_basic_type) {*is_basic_type = true; Json::Int x = e; return Json::Value(x); }
     //int64_t 
     Json::Value encode(const int64_t e, bool* is_basic_type) {*is_basic_type = true;Json::Int64 x = e; return Json::Value(x); }
-    Json::Value encode(      int64_t e, bool* is_basic_type) {*is_basic_type = true;Json::Int64 x = e; return Json::Value(x); }
     //float 
     Json::Value encode(const float e, bool* is_basic_type){*is_basic_type = true;  return Json::Value(e); }
-    Json::Value encode(      float e, bool* is_basic_type) {*is_basic_type = true; return Json::Value(e); }
     //double 
     Json::Value encode(const double e, bool* is_basic_type){*is_basic_type = true;  return Json::Value(e); }
-    Json::Value encode(      double e, bool* is_basic_type) {*is_basic_type = true; return Json::Value(e); }
     //string
     Json::Value encode(const std::string& e, bool* is_basic_type) {*is_basic_type = true; return Json::Value(e);}
     Json::Value encode(      std::string& e, bool* is_basic_type) {*is_basic_type = true; return Json::Value(e);}

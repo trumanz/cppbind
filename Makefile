@@ -6,7 +6,8 @@ CFLAGS += -c  -g -O0  -Wall
 CFLAGS +=  -fPIC
 
 LDFLAGS = -L./ 
-LDFLAGS = -lgtest  -lpthread 
+#LDFLAGS = -lgtest  -lpthread 
+LDFLAGS = -lpthread 
 LDFLAGS +=  -ljsoncpp 
 LDFLAGS +=  -shared
 

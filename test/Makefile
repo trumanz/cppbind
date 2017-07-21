@@ -4,13 +4,13 @@ CFLAGS =  -I./
 CFLAGS =  -I./cppbind/include
 CFLAGS += -c  -g -O0  -Wall 
 
-LDFLAGS = -L./  -lcppbind
+LDFLAGS = -L../  -lcppbind
 LDFLAGS += -lgtest  -lpthread 
 LDFLAGS +=  -ljsoncpp 
 
 TARGET = gtest.bin
 
-SOURCES = $(shell find ./test -name "*.cpp")
+SOURCES = $(shell find ./src -name "*.cpp")
 OBJECTS= $(SOURCES:.cpp=.o)
 ##OBJECTS = $(patsubst %.c, %.o, $(shell find . -name "*.cpp"))
 

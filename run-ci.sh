@@ -1,6 +1,6 @@
 #!/bin/bash
-cat /proc/cpuinfo
-cat /proc/meminfo
-
+#cat /proc/cpuinfo
+#cat /proc/meminfo
 source source.env
-make clean; make  all && make -f Makefile.test clean; make -f Makefile.test test
+make clean
+make  all && cd test && make clean; make test

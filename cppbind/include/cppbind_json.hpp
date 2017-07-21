@@ -18,9 +18,9 @@
 #include <jsoncpp/json/writer.h>
 namespace  cppbind {
 
-template<typename T>
 class JsonBind{
 public:
+    template<typename T>
     boost::shared_ptr<T> decode(std::istream &is){
          T* e = NULL;
          Json::Value root;
@@ -38,15 +38,16 @@ public:
          return boost::shared_ptr<T>(e);
     }
      
+    template<typename T>
     void encode(T&e, std::ostream *out){
          //EncodeBinder binder;
-         Binder binder;
-         e.setBind(&binder);
+         JsonEncodeBinder encoder;
+         Json::Value jv = encoder.encode(e);
          Json::StyledStreamWriter writer;
-         JsonEncodeBinder* json_encoder_binder = dynamic_cast<JsonEncodeBinder*>(binder.binder_imp.get());
-         writer.write(*out, json_encoder_binder->root);
+         writer.write(*out, jv);
     }
-    std::string encode(T&e){
+    template<typename T>
+    std::string toJsonStr(T&e){
          std::stringstream ss;
          encode(e, &ss);
          return ss.str();

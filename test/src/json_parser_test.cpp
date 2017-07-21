@@ -89,7 +89,7 @@ public:
 TEST(JsonROM, baisc){
 
      std::ifstream ifs("./sample_data/me.json",  std::ifstream::in);
-     boost::shared_ptr<Me> me = JsonBind<Me>().decode(ifs);
+     boost::shared_ptr<Me> me = JsonBind().decode<Me>(ifs);
      //basic type
      ASSERT_EQ(me->name ,"truman");
      ASSERT_EQ(me->age ,30);
@@ -123,7 +123,7 @@ TEST(JsonROM, baisc){
      ASSERT_EQ(skills["R"].grade, 0);
 
      std::stringstream ss;
-     JsonBind<Me>().encode(*(me.get()), &ss);
+     JsonBind().encode(*(me.get()), &ss);
 
      printf("%s\n", ss.str().c_str());
 };

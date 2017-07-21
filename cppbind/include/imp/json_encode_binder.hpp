@@ -23,14 +23,23 @@ public:
                root[name] = jv;
           }
     }
-
-private: //for std container type
+public: //for std container type
     
     template<typename T>
     Json::Value encode(std::vector<T>& e){
         Json::Value jv;
         for(typename std::vector<T>::iterator  it  = e.begin(); it != e.end(); it++) {
              Json::Value je = encode(*it);
+             jv.append(je);
+        }
+        return jv;
+    }
+    template<typename T>
+    Json::Value encode(std::list<T*>& e){
+        Json::Value jv;
+        for(typename std::list<T*>::iterator  it  = e.begin(); it != e.end(); it++) {
+             T& e_x = *(*it);
+             Json::Value je = encode(e_x);
              jv.append(je);
         }
         return jv;
@@ -53,7 +62,7 @@ private: //for std container type
             }
             return jv;
     }
-private: // for class type
+public: // for class type
     template<typename T>
     Json::Value encode(T& e){
        Binder binder;

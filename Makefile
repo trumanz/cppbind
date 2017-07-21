@@ -11,7 +11,7 @@ LDFLAGS = -lpthread
 LDFLAGS +=  -ljsoncpp 
 LDFLAGS +=  -shared
 
-TARGET = libcppbind.so
+TARGET = ./cppbind/lib/libcppbind.so
 
 SOURCES = $(shell find ./cppbind -name "*.cpp")
 OBJECTS= $(SOURCES:.cpp=.o)

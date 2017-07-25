@@ -86,7 +86,11 @@ public: //for std container type
             Json::Value k_jv = encode(k, &is_basic_type);
             Json::Value v_jv = encode(it->second, &dummy);
             if(is_basic_type) {
-                 jv[k_jv.toStyledString()] = v_jv;
+                std::string x = k_jv.toStyledString();
+                if(x[x.length()-1] == '\n') {
+                    x = x.substr(0, x.length()-1);
+                }
+                 jv[x] = v_jv;
             } 
             else {
                 Json::Value je;

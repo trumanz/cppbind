@@ -13,6 +13,10 @@ public:
         this->json = jv;
     }
     template<typename T>
+    void decode(T* e){
+        this->decode(this->json, e);
+    }
+    template<typename T>
     void bind(const std::string& name, T& v){
          //printf("filed %s\n", name.c_str());
          Json::Value jv = json[name];
@@ -80,7 +84,7 @@ private: //for std container type
 private: // for class type
     template<typename T>
     void decode(const Json::Value& json, T* e){
-         Binder binder(json);
+         Binder binder(boost::shared_ptr<BinderImpBase>(new JsonDecodeBinder(json)));
          e->setBind(&binder);
     } 
 private:  //for basic type

@@ -33,8 +33,10 @@ public:
          }
 
          e = new T;
-         Binder binder(root);
-         e->setBind(&binder);
+         //Binder binder(root);
+         //e->setBind(&binder);
+         JsonDecodeBinder decoder(root);
+         decoder.decode(e);
          return boost::shared_ptr<T>(e);
     }
      

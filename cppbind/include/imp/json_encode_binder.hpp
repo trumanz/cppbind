@@ -105,7 +105,7 @@ public: // for class type
     template<typename T>
     Json::Value encode(T& e, bool* is_basic_type){
        *is_basic_type = false;
-       Binder binder;
+       Binder binder(boost::shared_ptr<BinderImpBase>(new JsonEncodeBinder()));
        e.setBind(&binder);
        //return binder.getJson();
        JsonEncodeBinder* json_encoder_binder = dynamic_cast<JsonEncodeBinder*>(binder.binder_imp.get());

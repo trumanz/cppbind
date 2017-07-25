@@ -24,12 +24,16 @@ public:
 
 class Binder{
 public:
+    /*  
     //default is encoder
     Binder();
     //decoder
     Binder(const Json::Value& root);
-    Binder(const std::vector<std::string>& csv_row);
-
+    Binder(const std::vector<std::string>& csv_row); 
+    */ 
+    Binder(boost::shared_ptr<BinderImpBase> binder_imp){
+        this->binder_imp = binder_imp;
+    }
     /*
     *User code will call bind to build the attibute and name relation. 
     *Because the user code is not template functon, so we must tranfer a fixed type, This Binder type!!

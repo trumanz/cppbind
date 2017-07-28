@@ -1,4 +1,9 @@
 # cppbind
+
+| build | status                                                                                        |
+|-------|-----------------------------------------------------------------------------------------------|
+| Travis-CI   | ![alt text](https://travis-ci.org/trumanz/cpp-learning.svg?branch=master "Logo Title Text 1") |
+
 ## A library for conversion between c++ class object and JSON string
 ### Feature
 1. Serialize a c++ object to JSON string.
@@ -65,4 +70,3 @@ printf("%s\n", ss.str().c_str());
 std::ifstream ifs("./sample_data/me.json",  std::ifstream::in);
 boost::shared_ptr<Me> me = JsonBind<Me>().decode(ifs);
 ```
-

@@ -47,9 +47,9 @@ public:
 
 }
 
-#include "imp/json_decode_binder.hpp"
-#include "imp/json_encode_binder.hpp"
-#include "imp/csv_decode_binder.hpp"
+#include "cppbind/imp/json_decode_binder.hpp"
+#include "cppbind/imp/json_encode_binder.hpp"
+#include "cppbind/imp/csv_decode_binder.hpp"
 
 
 namespace cppbind {

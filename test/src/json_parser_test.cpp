@@ -7,10 +7,10 @@
 #include <sstream>
 #include <fstream>      // std::ifstream
 #include <jsoncpp/json/json.h>
-#include "cppbind_json.hpp"
-#include "type/timestr.h"
+#include <cppbind/cppbind_json.hpp>
+#include <cppbind/type/timestr.h>
 #include "boost/date_time/posix_time/posix_time.hpp"
-#include "type/spec_type.h"
+#include <cppbind/type/spec_type.h>
 
 using namespace boost::posix_time;
 using namespace cppbind;

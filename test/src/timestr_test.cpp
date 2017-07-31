@@ -4,7 +4,7 @@
 #include <iostream>
 #include "gtest/gtest.h"
 #include "boost/date_time/posix_time/posix_time.hpp" 
-#include "type/timestr.h"
+#include "cppbind/type/timestr.h"
 
 using namespace cppbind;
 

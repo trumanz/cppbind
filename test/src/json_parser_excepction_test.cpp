@@ -7,7 +7,7 @@
 #include <sstream>
 #include <fstream>      // std::ifstream
 #include <jsoncpp/json/json.h>
-#include "cppbind_json.hpp"
+#include "cppbind/cppbind_json.hpp"
 
 using namespace cppbind;
 

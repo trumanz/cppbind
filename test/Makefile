@@ -1,7 +1,7 @@
 CC = g++
 LD = $(CC)
-CFLAGS =  -I./ 
-CFLAGS =  -I./cppbind/include
+CFLAGS =   -I./ 
+CFLAGS +=  -I../include
 CFLAGS += -c  -g -O0  -Wall 
 
 LDFLAGS = -L../  -lcppbind

@@ -1,6 +1,6 @@
 #ifndef __CPPBIND_SPEC_TYPE_BASE__H_
 #define __CPPBIND_SPEC_TYPE_BASE__H_
-#include "cppbind_json.hpp"
+#include "cppbind/cppbind_json.hpp"
 
 namespace cppbind{
 

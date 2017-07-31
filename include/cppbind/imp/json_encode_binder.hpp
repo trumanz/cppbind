@@ -61,19 +61,19 @@ public: //for std container type
         }
         return jv;
     }
-    /*
     template<typename T>
-    Json::Value encode(std::map<std::string, T>& e,bool* is_basic_type){
-        *is_basic_type = false;
-            Json::Value jv;
-            for(typename std::map<std::string, T>::iterator it =  e.begin(); it != e.end(); it++) {
-                bool dummy;
-                Json::Value je = encode(it->second, &dummy);
-                jv[it->first] = je;
-            }
-            return jv;
+    Json::Value encode(std::set<T>& e,bool* is_basic_type){
+        Json::Value jv;
+        is_basic_type[0] = false;
+        if(e.empty()) return Json::arrayValue;
+        for(typename std::set<T>::iterator  it  = e.begin(); it != e.end(); it++) {
+            bool dummy;
+             Json::Value je = encode(*(T*)(&(*it)), &dummy);
+             jv.append(je);
+        }
+        return jv;
     }
-    */
+
    
     template<typename KeyT, typename ValueT>
     Json::Value encode(std::map<KeyT, ValueT>& e,bool* is_basic_type){

@@ -40,14 +40,16 @@ public:
              v = boost::shared_ptr<T>(new T(e));
          } 
     }
-
-private: //for std container type
+//std container type
+private: 
+    //vector
     template<typename T>
     void decode(const Json::Value& json, std::vector<T>* e){
          std::list<T> v;
          decode(json, &v);
          e->insert(e->begin(), v.begin(), v.end());
     }
+    //list
     template<typename T>
     void decode(const Json::Value& json, std::list<T>* e){
             if(!json.isArray()) {
@@ -65,6 +67,16 @@ private: //for std container type
                  }
             }
     }
+    //set
+    template<typename T>
+    void decode(const Json::Value& json, std::set<T>* e){
+         std::list<T> v;
+         decode(json, &v);
+         for(typename std::list<T>::iterator it = v.begin(); it != v.end(); it++) {
+             e->insert(*it);
+         }
+    }
+    //map
     template<typename T>
     void decode(const Json::Value& json, std::map<std::string, T>* e){
             if(!json.isObject()) {

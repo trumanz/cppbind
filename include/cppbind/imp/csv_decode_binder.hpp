@@ -46,6 +46,11 @@ private: //for std container type
         return 0;
     }
     template<typename T>
+    size_t decode(std::vector<std::string>::iterator begin, std::vector<std::string>::iterator end, std::set<T>* e){
+        throw CppBindException("csv not support  set");
+        return 0;
+    }
+    template<typename T>
     size_t decode(std::vector<std::string>::iterator begin, std::vector<std::string>::iterator end, std::map<std::string, T>* e){
              throw CppBindException("csv not support map");
              return 0;

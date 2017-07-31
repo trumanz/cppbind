@@ -4,13 +4,15 @@
 #include <string>
 #include <stdio.h>
 #include <stdlib.h>
+#include <vector>
+#include <list>
 #include <map>
+#include <set>
 #include <string>
 #include <sstream>
 #include <fstream>      // std::ifstream
 #include <jsoncpp/json/json.h>
 #include <assert.h>
-#include <list>
 #include <boost/shared_ptr.hpp>
 #include <stdexcept>
 #include "imp/binder.hpp"

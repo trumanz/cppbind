@@ -20,21 +20,23 @@ namespace  cppbind {
 
 class JsonBind{
 public:
+
     template<typename T>
     boost::shared_ptr<T> decode(std::istream &is){
-         T* e = NULL;
          Json::Value root;
          Json::Reader reader;
          bool parsingSuccessful = reader.parse(is, root);
-   
          if(!parsingSuccessful) {
            printf("Failed to parse, %s\n", reader.getFormatedErrorMessages().c_str());
            throw  CppBindException(reader.getFormatedErrorMessages());
          }
+         return this->decode<T>(root);
+    }
 
+    template<typename T>
+    boost::shared_ptr<T> decode(const Json::Value& root){
+         T* e = NULL;
          e = new T;
-         //Binder binder(root);
-         //e->setBind(&binder);
          JsonDecodeBinder decoder(root);
          decoder.decode(e);
          return boost::shared_ptr<T>(e);

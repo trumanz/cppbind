@@ -13,9 +13,11 @@
 #include <boost/shared_ptr.hpp>
 #include <stdint.h>
 #include "../cppbind_exception.h"
-
-
+#include "cppbind/type/StringConverter.h"
+#include "cppbind/type/BoostPTimeConverter.h"
 namespace  cppbind {
+
+BOOST_TTI_HAS_MEMBER_FUNCTION(setBind)
 
 class BinderImpBase {
 public:
@@ -33,6 +35,7 @@ public:
     */ 
     Binder(boost::shared_ptr<BinderImpBase> binder_imp){
         this->binder_imp = binder_imp;
+        str_convert_mgmt.addStringConverter<boost::posix_time::ptime,BoostPTimeConverter>();
     }
     /*
     *User code will call bind to build the attibute and name relation. 
@@ -43,6 +46,7 @@ public:
     void bind(const std::string& name, T& v);
  public:
     boost::shared_ptr<BinderImpBase> binder_imp;
+    StringConverterManager str_convert_mgmt;
 };
 
 }
@@ -59,14 +63,16 @@ void Binder::bind(const std::string& name, T& v){
         //CALL the real bind fucntion, must change to the real type of binder, then comile could instantiate the tempate funciton
         JsonEncodeBinder* json_encode_binder = dynamic_cast<JsonEncodeBinder*>(this->binder_imp.get());
         JsonDecodeBinder* json_decode_binder = dynamic_cast<JsonDecodeBinder*>(this->binder_imp.get());
-        CSVDecodeBinder*  csv_decode_binder  = dynamic_cast<CSVDecodeBinder*>(this->binder_imp.get());
+        //CSVDecodeBinder*  csv_decode_binder  = dynamic_cast<CSVDecodeBinder*>(this->binder_imp.get());
         if( json_encode_binder ) {
             json_encode_binder->bind(name,v);
         } else if(json_decode_binder ) {
             json_decode_binder->bind(name,v);
-        } else if(csv_decode_binder) {
-            csv_decode_binder->bind(name,v);
-        } else {
+        } 
+        //else if(csv_decode_binder) {
+        //    csv_decode_binder->bind(name,v);
+        //}
+         else {
             assert("bug" == NULL);
         }
 }

@@ -101,16 +101,43 @@ public: //for std container type
         }
         return jv;
     }
-public: // for class type
+//CLASS&STRUCT type
+public:
+    
+    class MemberFunctionCaller{
+    public:
+        template<typename T>
+        void call(T&e, Binder* binder){
+            e.setBind(binder);
+        }
+    };
+
+    class RunTimeBinderCaller{
+    public:
+        template<typename T>
+        void call(T&e, Binder* binder){
+            std::string x = binder->str_convert_mgmt.toString(e);
+            JsonEncodeBinder* json_encoder_binder = dynamic_cast<JsonEncodeBinder*>(binder->binder_imp.get());
+            json_encoder_binder->setJson(Json::Value(x));
+        }
+    };
+    
+     
     template<typename T>
     Json::Value encode(T& e, bool* is_basic_type){
        *is_basic_type = false;
        Binder binder(boost::shared_ptr<BinderImpBase>(new JsonEncodeBinder()));
-       e.setBind(&binder);
-       //return binder.getJson();
+
+       typedef typename boost::mpl::if_c<has_member_function_setBind<void (T::*) (Binder*)>::value, 
+           MemberFunctionCaller, RunTimeBinderCaller>::type CallerT;
+
+       CallerT().call(e, &binder);
+
+       //e.setBind(&binder);
        JsonEncodeBinder* json_encoder_binder = dynamic_cast<JsonEncodeBinder*>(binder.binder_imp.get());
        return json_encoder_binder->root;
     }
+
     template<typename T>
     Json::Value encode(T* e, bool* is_basic_type){
         T& _e = *e;

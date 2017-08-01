@@ -68,7 +68,7 @@ class Me {
 public:
     std::string name; //basic type
     int age;  //
-    PosixTime born;
+    ptime born;
     Contact contact; // class object
     std::list<std::string>  likes;  // std list
     std::vector<std::string>  hates;  // std vector

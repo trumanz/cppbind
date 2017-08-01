@@ -94,10 +94,43 @@ private:
             }
     }
 private: // for class type
+
+
+    class MemberFunctionCaller{
+    public:
+        template<typename T>
+        void call(T*e, Binder* binder){
+            e->setBind(binder);
+        }
+    };
+
+    class RunTimeBinderCaller{
+    public:
+        template<typename T>
+        void call(T*e, Binder* binder){
+            JsonDecodeBinder* json_decode_binder = dynamic_cast<JsonDecodeBinder*>(binder->binder_imp.get());
+            Json::Value jv = json_decode_binder->json;
+            if(!jv.isString()) {
+                assert("bug" == NULL);
+            }
+            std::string str = jv.asString();
+            e[0] = binder->str_convert_mgmt.fromString<T>(str);
+         }
+
+    };
+
     template<typename T>
     void decode(const Json::Value& json, T* e){
          Binder binder(boost::shared_ptr<BinderImpBase>(new JsonDecodeBinder(json)));
-         e->setBind(&binder);
+
+        
+          typedef typename boost::mpl::if_c<has_member_function_setBind<void (T::*) (Binder*)>::value, 
+           MemberFunctionCaller, RunTimeBinderCaller>::type CallerT;
+
+          CallerT().call(e, &binder);
+
+         //CallerT().call(e, &binder);
+         //e->setBind(&binder);
     } 
 private:  //for basic type
     void decode(const Json::Value& json, bool*e){

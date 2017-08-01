@@ -11,15 +11,19 @@
 #include <string>
 #include <sstream>
 #include <fstream>      // std::ifstream
-#include <jsoncpp/json/json.h>
 #include <assert.h>
-#include <boost/shared_ptr.hpp>
 #include <stdexcept>
+
+#include <jsoncpp/json/writer.h>
+#include <jsoncpp/json/json.h>
+#include <boost/tti/has_member_function.hpp>
+#include <boost/mpl/if.hpp>
+#include <boost/shared_ptr.hpp>
+
 #include "imp/binder.hpp"
 #include "imp/csvcpp.h"
-#include <jsoncpp/json/writer.h>
-namespace  cppbind {
 
+namespace  cppbind {
 class JsonBind{
 public:
 

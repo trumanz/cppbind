@@ -5,9 +5,12 @@ namespace  cppbind {
 
 
 class JsonDecodeBinder : public BinderImpBase {
+private:
+    bool basic_wrapper_as_string;
 public:
-    JsonDecodeBinder(Json::Value json){
+    JsonDecodeBinder(Json::Value json, bool basic_wrapper_as_string){
         this->json = json;
+        this->basic_wrapper_as_string = basic_wrapper_as_string;
      }
     void setJson(const Json::Value& jv){
         this->json = jv;
@@ -121,7 +124,7 @@ private: // for class type
 
     template<typename T>
     void decode(const Json::Value& json, T* e){
-         Binder binder(boost::shared_ptr<BinderImpBase>(new JsonDecodeBinder(json)));
+         Binder binder(boost::shared_ptr<BinderImpBase>(new JsonDecodeBinder(json, this->basic_wrapper_as_string)));
 
         
           typedef typename boost::mpl::if_c<has_member_function_setBind<void (T::*) (Binder*)>::value, 
@@ -134,22 +137,52 @@ private: // for class type
     } 
 private:  //for basic type
     void decode(const Json::Value& json, bool*e){
-         e[0] =  json.asBool();
+        if(basic_wrapper_as_string) {
+           JsonStrToBasicType(json,e);
+           return;
+        }
+        e[0] =  json.asBool();
     }
     void decode(const Json::Value& json, int32_t *e){
-         e[0] =  json.asInt();
+         if(basic_wrapper_as_string) {
+           JsonStrToBasicType(json,e);
+           return;
+         }
+         e[0] =  json.asInt();   
     }
     void decode(const Json::Value& json, int64_t *e){
+         if(basic_wrapper_as_string) {
+           JsonStrToBasicType(json,e);
+           return;
+         }
          e[0] =  json.asInt64();
     }
     void decode(const Json::Value& json, float *e){
+        if(basic_wrapper_as_string) {
+           JsonStrToBasicType(json,e);
+           return;
+         }
         e[0] =  json.asFloat();
     }
     void decode(const Json::Value& json, double *e){
+        if(basic_wrapper_as_string) {
+           JsonStrToBasicType(json,e);
+           return;
+         }
         e[0] =  json.asDouble();
     }
     void decode(const Json::Value& json, std::string *e){
+        if(basic_wrapper_as_string) {
+           JsonStrToBasicType(json,e);
+           return;
+         }
         e[0] =  json.asString();
+    }
+    template<typename T>
+    void  JsonStrToBasicType(const Json::Value& json, T*e){
+        std::stringstream ss;
+        ss << json.asString();
+        ss >>  *e;
     }
 public:
     Json::Value json;

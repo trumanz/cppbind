@@ -6,15 +6,17 @@ namespace  cppbind {
 
 class CSVDecodeBinder : public BinderImpBase {
 public:
-    CSVDecodeBinder(Json::Value json){
-        //this->json = json;
-     }
-    void setJson(const Json::Value& jv){
-     }
+    
     CSVDecodeBinder(const std::vector<std::string>& row){
         this->csv_row = row;
         this->used = 0;
     }
+
+    template<typename T>
+    void decode(T* e){
+        this->decode(this->csv_row.begin(), this->csv_row.end(), e);
+    }
+
     template<typename T>
     void bind(const std::string& name, T& v){
         if(this->csv_row.begin() + used ==  this->csv_row.end()) {
@@ -26,13 +28,13 @@ public:
 
     template<typename T>
     void bind(const std::string& name, boost::shared_ptr<T>& v){
-        if(used+1 ==  this->csv_row.size()) {
-            return;
-        }
-        T  e;
+        if(used+1 ==  this->csv_row.size()) { return; }
+        T e;
         bind(name,e);
         v = boost::shared_ptr<T>(new T(e));
     }
+
+    
 
 private: //for std container type
     template<typename T>
@@ -56,6 +58,31 @@ private: //for std container type
              return 0;
     }
 private: // for class type
+
+
+    class MemberFunctionCaller{
+    public:
+        template<typename T>
+        void call(T*e, Binder* binder){
+            e->setBind(binder);
+        }
+    };
+
+    class RunTimeBinderCaller{
+    public:
+        template<typename T>
+        void call(T*e, Binder* binder){
+            JsonDecodeBinder* json_decode_binder = dynamic_cast<JsonDecodeBinder*>(binder->binder_imp.get());
+            Json::Value jv = json_decode_binder->json;
+            if(!jv.isString()) {
+                assert("bug" == NULL);
+            }
+            std::string str = jv.asString();
+            e[0] = binder->str_convert_mgmt.fromString<T>(str);
+         }
+
+    };
+
     template<typename T>
     size_t decode(std::vector<std::string>::iterator begin, std::vector<std::string>::iterator end, T* e){
            std::vector<std::string> x;

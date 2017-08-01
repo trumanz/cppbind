@@ -21,7 +21,6 @@
 #include <boost/shared_ptr.hpp>
 
 #include "imp/binder.hpp"
-#include "imp/csvcpp.h"
 
 namespace  cppbind {
 class JsonBind{
@@ -43,9 +42,18 @@ public:
     boost::shared_ptr<T> decode(const Json::Value& root){
          T* e = NULL;
          e = new T;
-         JsonDecodeBinder decoder(root);
+         JsonDecodeBinder decoder(root,false);
          decoder.decode(e);
          return boost::shared_ptr<T>(e);
+    }
+
+    template<typename T>
+    T* decode2(const Json::Value& root, bool basic_wrapper_string){
+         T* e = NULL;
+         e = new T;
+         JsonDecodeBinder decoder(root, basic_wrapper_string);
+         decoder.decode(e);
+         return e;
     }
      
     template<typename T>

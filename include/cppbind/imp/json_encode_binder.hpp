@@ -39,6 +39,17 @@ public: //for std container type
         return jv;
     }
     template<typename T>
+    Json::Value encode(std::vector<T*>& e,bool* is_basic_type){
+        *is_basic_type = false;
+        Json::Value jv;
+        for(typename std::vector<T*>::iterator  it  = e.begin(); it != e.end(); it++) {
+            bool dummy;
+             Json::Value je = encode(*(*it), &dummy);
+             jv.append(je);
+        }
+        return jv;
+    }
+    template<typename T>
     Json::Value encode(std::list<T*>& e,bool* is_basic_type){
         *is_basic_type = false;
         Json::Value jv;

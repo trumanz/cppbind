@@ -49,9 +49,9 @@ public:
          boost::posix_time::time_duration pt;
          std::istringstream is(timeStr);
          is.imbue(locale_input);
-         printf("strtime parser %s with pattern %s\n", is.str().c_str(), this->pattern.c_str());
+         //printf("strtime parser %s with pattern %s\n", is.str().c_str(), this->pattern.c_str());
          is >> pt;
-         std::cout << pt << std::endl;
+         //std::cout << pt << std::endl;
          *ptOut = pt;
          if(this->format(*ptOut) != timeStr) {
               return -1;

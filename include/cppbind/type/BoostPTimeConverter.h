@@ -20,6 +20,21 @@ public:
     }
 };
 
+class BoostTimeDurationConverter {
+    public:
+    std::string toString(const boost::posix_time::time_duration& dur) const{
+        TimeStr strTime("%H:%M:%S");
+        return strTime.format(dur);
+    }
+    boost::posix_time::time_duration fromString(const std::string& str) const{
+        TimeStr strTime("%H:%M:%S");
+        boost::posix_time::time_duration dur;
+        int rc = strTime.parser(str, &dur);
+        assert(rc == 0);
+        return dur;
+    }
+};
+
 }
 
 #endif

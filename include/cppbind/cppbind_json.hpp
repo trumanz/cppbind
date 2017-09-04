@@ -24,10 +24,19 @@
 
 namespace  cppbind {
 class JsonBind{
-public:
+private:
 
     template<typename T>
-    boost::shared_ptr<T> decode(std::istream &is){
+    T* decodeJV2Point(const Json::Value& root, bool basic_wrapper_string = false){
+         T* e = NULL;
+         e = new T;
+         JsonDecodeBinder decoder(root,basic_wrapper_string);
+         decoder.decode(e);
+         return e;
+    }
+
+    template<typename T>
+    T* decodeIStream2Point(std::istream &is, bool basic_wrapper_string = false){
          Json::Value root;
          Json::Reader reader;
          bool parsingSuccessful = reader.parse(is, root);
@@ -35,26 +44,35 @@ public:
            printf("Failed to parse, %s\n", reader.getFormatedErrorMessages().c_str());
            throw  CppBindException(reader.getFormatedErrorMessages());
          }
-         return this->decode<T>(root);
+         return decodeJV2Point<T>(root, basic_wrapper_string);
+    }
+
+public:
+
+    template<typename T>
+    boost::shared_ptr<T> decode(std::istream &is){
+        T* e = this->decodeIStream2Point<T>(is);
+        return boost::shared_ptr<T>(e);
     }
 
     template<typename T>
     boost::shared_ptr<T> decode(const Json::Value& root){
-         T* e = NULL;
-         e = new T;
-         JsonDecodeBinder decoder(root,false);
-         decoder.decode(e);
+         T* e = this->decodeJV2Point<T>(root);
          return boost::shared_ptr<T>(e);
     }
 
     template<typename T>
     T* decode2(const Json::Value& root, bool basic_wrapper_string){
-         T* e = NULL;
-         e = new T;
-         JsonDecodeBinder decoder(root, basic_wrapper_string);
-         decoder.decode(e);
-         return e;
+        return this->decodeJV2Point<T>(root,basic_wrapper_string);
     }
+
+    template<typename T>
+    T* decodeFile(const char * file_name){
+        std::fstream fs (file_name, std::fstream::in);
+        assert(fs.good());
+        return this->decodeIStream2Point<T>(fs);
+    }
+
      
     template<typename T>
     void encode(T&e, std::ostream *out){

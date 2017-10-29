@@ -60,10 +60,10 @@ public:
          is.imbue(locale_input_4_date);
          //printf("strtime parser %s with pattern %s\n", is.str().c_str(), this->pattern.c_str());
          is >> gd;
-         std::cout << timeStr << std::endl;
-         std::cout << gd << std::endl;
+         //std::cout << timeStr << std::endl;
+         //std::cout << gd << std::endl;
          *gdOut = gd;
-         std::cout  <<"\n" << this->format(*gdOut)  << "\n";
+         //std::cout  <<"\n" << this->format(*gdOut)  << "\n";
          if(this->format(*gdOut) != timeStr) {
               return -1;
          }

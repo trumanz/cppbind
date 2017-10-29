@@ -20,6 +20,23 @@ public:
     }
 };
 
+
+class BoostGDateConverter{
+public:
+    std::string toString(const boost::gregorian::date& gd) const{
+        TimeStr strTime("%Y-%m-%d");
+        return strTime.format(gd);
+    }
+    boost::gregorian::date fromString(const std::string& str) const{
+        TimeStr strTime("%Y-%m-%d");
+        boost::gregorian::date gd;
+        int rc = strTime.parser(str, &gd);
+        assert(rc == 0);
+        return gd;
+    }
+};
+
+
 class BoostTimeDurationConverter {
     public:
     std::string toString(const boost::posix_time::time_duration& dur) const{

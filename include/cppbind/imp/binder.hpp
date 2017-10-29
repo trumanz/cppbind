@@ -37,6 +37,7 @@ public:
         this->binder_imp = binder_imp;
         str_convert_mgmt.addStringConverter<boost::posix_time::ptime,BoostPTimeConverter>();
         str_convert_mgmt.addStringConverter<boost::posix_time::time_duration,BoostTimeDurationConverter>();
+        str_convert_mgmt.addStringConverter<boost::gregorian::date,BoostGDateConverter>();
     }
     /*
     *User code will call bind to build the attibute and name relation. 

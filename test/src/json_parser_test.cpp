@@ -69,6 +69,8 @@ public:
     std::string name; //basic type
     int age;  //
     ptime born;
+    boost::gregorian::date born_date;
+    time_duration  born_time_of_day;
     Contact contact; // class object
     std::list<std::string>  likes;  // std list
     std::vector<std::string>  hates;  // std vector
@@ -78,6 +80,8 @@ public:
           binder->bind("name", name);
           binder->bind("age", age);
           binder->bind("born", born);
+          binder->bind("born_date", born_date);
+          binder->bind("born_time_of_day", born_time_of_day);
           binder->bind("contact", contact);
           binder->bind("likes", likes);
           binder->bind("hates", hates);

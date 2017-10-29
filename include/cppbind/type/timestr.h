@@ -9,18 +9,28 @@
 namespace cppbind {
 class TimeStr {
 private:
+
    std::locale locale_input;
    std::locale locale_output;
-   std::string pattern;
+
+   std::locale locale_input_4_date;
+   std::locale locale_output_4_date;
+
+
+   std::string pattern_4_ptime;
+   std::string pattern_4_date;
 public:
-    TimeStr(const char *pattern_for_ptime = NULL){
-        if(pattern_for_ptime == NULL) {
-            this->pattern = "%Y-%m-%d %H:%M:%S.%f";// "2005-10-15 13:14:15.003400"
-        } else {
-            this->pattern = pattern_for_ptime;
-        }
-        locale_input = std::locale(std::locale::classic(),new boost::posix_time::time_input_facet(this->pattern.c_str()));
-        locale_output = std::locale(std::locale::classic(),new boost::posix_time::time_facet(this->pattern.c_str()));
+    TimeStr(const char *_pattern_4_ptime = NULL, const char* _pattern_4_date = NULL){
+        //default "2005-10-15 13:14:15.003400"
+        this->pattern_4_ptime = _pattern_4_ptime != NULL ?  _pattern_4_ptime :  "%Y-%m-%d %H:%M:%S.%f";
+        this->pattern_4_date  = _pattern_4_date  != NULL ?  _pattern_4_date  :  "%Y-%m-%d";
+
+        locale_input = std::locale(std::locale::classic(),new boost::posix_time::time_input_facet(this->pattern_4_ptime.c_str()));
+        locale_output = std::locale(std::locale::classic(),new boost::posix_time::time_facet(this->pattern_4_ptime.c_str()));
+
+        locale_input_4_date  = std::locale(std::locale::classic(),new boost::gregorian::date_input_facet(this->pattern_4_date.c_str()));
+        locale_output_4_date = std::locale(std::locale::classic(),new boost::gregorian::date_facet(this->pattern_4_date.c_str()));
+
     }
     int parser(const std::string& timeStr, boost::posix_time::ptime *ptOut){
          boost::posix_time::ptime pt;
@@ -42,6 +52,28 @@ public:
          std::ostringstream os;
          os.imbue(locale_output);
          os << pt;
+         return os.str();
+    }
+    int parser(const std::string& timeStr, boost::gregorian::date *gdOut){
+         boost::gregorian::date gd;
+         std::istringstream is(timeStr);
+         is.imbue(locale_input_4_date);
+         //printf("strtime parser %s with pattern %s\n", is.str().c_str(), this->pattern.c_str());
+         is >> gd;
+         std::cout << timeStr << std::endl;
+         std::cout << gd << std::endl;
+         *gdOut = gd;
+         std::cout  <<"\n" << this->format(*gdOut)  << "\n";
+         if(this->format(*gdOut) != timeStr) {
+              return -1;
+         }
+         return 0;
+    }
+
+    std::string format(const boost::gregorian::date &gd){
+         std::ostringstream os;
+         os.imbue(locale_output_4_date);
+         os << gd;
          return os.str();
     }
 

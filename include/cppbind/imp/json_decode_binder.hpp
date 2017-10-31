@@ -96,6 +96,23 @@ private:
                 }
             }
     }
+    //map point
+    template<typename T>
+    void decode(const Json::Value& json, std::map<std::string, T*>* e){
+            if(!json.isObject()) {
+                throw CppBindException("shoulbe be a object");
+            }
+            Json::Value::Members keys = json.getMemberNames();
+            for(Json::Value::Members::iterator it = keys.begin(); it != keys.end(); it++) {
+                try { 
+                    T* tmp = new T();
+                    decode(json[*it], tmp);
+                    (*e)[*it] = tmp;
+                } catch  (CppBindException e) {
+                   throw CppBindException(e, std::string(".") + *it);
+                }
+            }
+    }
 private: // for class type
 
 

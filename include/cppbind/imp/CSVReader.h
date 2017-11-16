@@ -43,7 +43,7 @@ public:
          if(this->headers.size() == 0) {
              this->headers = row.cells;
          } else {
-             rows.push_back(getRow(line));
+             rows.push_back(row);
          }
      }
    }

@@ -201,6 +201,13 @@ private:  //for basic type
         ss << json.asString();
         ss >>  *e;
     }
+    void  JsonStrToBasicType(const Json::Value& json, bool*e){
+        if (json.asString() == "TRUE" || json.asString() == "true") {
+            *e = true;
+        } else {
+            *e = false;
+        }
+    }
 public:
     Json::Value json;
 };

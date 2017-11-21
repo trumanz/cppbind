@@ -76,6 +76,7 @@ public:
     std::vector<std::string>  hates;  // std vector
     std::map<std::string, Skill>  skills; // std map
     boost::shared_ptr<int>  value_not_exist; //optional not exist
+    Json::Value jv; //optional not exist
     void setBind(Binder *binder){
           binder->bind("name", name);
           binder->bind("age", age);
@@ -87,6 +88,7 @@ public:
           binder->bind("hates", hates);
           binder->bind("skills", skills);
           binder->bind("value_not_exist",  value_not_exist);
+          binder->bind("jv", jv);
     }
 };
 

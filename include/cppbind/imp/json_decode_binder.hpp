@@ -152,6 +152,10 @@ private: // for class type
          //CallerT().call(e, &binder);
          //e->setBind(&binder);
     } 
+private:  //for Json type
+    void decode(const Json::Value& json, Json::Value *e){
+        e[0] =  json;
+    }
 private:  //for basic type
     void decode(const Json::Value& json, bool*e){
         if(basic_wrapper_as_string) {

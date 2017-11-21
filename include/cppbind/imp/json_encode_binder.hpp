@@ -153,7 +153,11 @@ public:
     Json::Value encode(T* e, bool* is_basic_type){
         T& _e = *e;
         return this->encode(_e, is_basic_type);
-    }  
+    } 
+private:
+    Json::Value encode(const Json::Value e, bool* is_basic_type){
+        return e;
+    }
 private:  //for basic type
     // bool 
     Json::Value encode(const bool e, bool* is_basic_type) {*is_basic_type = true; return Json::Value(e);}

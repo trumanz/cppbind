@@ -85,7 +85,13 @@ public:
          is >> pt;
          //std::cout << pt << std::endl;
          *ptOut = pt;
-         if(this->format(*ptOut) != timeStr) {
+         //format back and check again; timeStr might 1:01:01; and str4check might be 01:01:01
+         std::string str4check = this->format(*ptOut) ;
+         if(timeStr[1] == ':') {
+             std::string x = "0";
+             x+=timeStr;
+             if(str4check != x) return -1;
+         } else if(str4check != timeStr) {
               return -1;
          }
          return 0;

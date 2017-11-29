@@ -62,6 +62,14 @@ private:
 
     Json::Value createJsonObject(const std::vector<std::string>& headers, const std::vector<std::string>& data){
         Json::Value jv;
+        if(headers.size() != data.size()) {
+            for(size_t i = 0; i < headers.size(); i++) {
+                printf("header, %lu, %s\n", i, headers[i].c_str());
+            }
+            for(size_t i = 0; i < data.size(); i++) {
+                printf("data, %lu, %s\n", i, data[i].c_str());
+            }
+        }
         assert(headers.size() == data.size());
         for(size_t i = 0; i < headers.size(); i++) {
             jv[headers[i]] = data[i];

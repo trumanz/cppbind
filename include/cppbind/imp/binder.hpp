@@ -46,6 +46,8 @@ public:
     */
     template<typename T>
     void bind(const std::string& name, T& v);
+    template<typename T>
+    void bind(const std::string& name, T& v, const T& default_value);
  public:
     boost::shared_ptr<BinderImpBase> binder_imp;
     StringConverterManager str_convert_mgmt;
@@ -65,15 +67,27 @@ void Binder::bind(const std::string& name, T& v){
         //CALL the real bind fucntion, must change to the real type of binder, then comile could instantiate the tempate funciton
         JsonEncodeBinder* json_encode_binder = dynamic_cast<JsonEncodeBinder*>(this->binder_imp.get());
         JsonDecodeBinder* json_decode_binder = dynamic_cast<JsonDecodeBinder*>(this->binder_imp.get());
-       // CSVDecodeBinder*  csv_decode_binder  = dynamic_cast<CSVDecodeBinder*>(this->binder_imp.get());
         if( json_encode_binder ) {
             json_encode_binder->bind(name,v);
         } else if(json_decode_binder ) {
             json_decode_binder->bind(name,v);
         } 
-       //lse if(csv_decode_binder) {
-       //   csv_decode_binder->bind(name,v);
-       //
+         else {
+            assert("bug" == NULL);
+        }
+}
+
+
+template<typename T>
+void Binder::bind(const std::string& name, T& v, const T& default_value){
+        //CALL the real bind fucntion, must change to the real type of binder, then comile could instantiate the tempate funciton
+        JsonEncodeBinder* json_encode_binder = dynamic_cast<JsonEncodeBinder*>(this->binder_imp.get());
+        JsonDecodeBinder* json_decode_binder = dynamic_cast<JsonDecodeBinder*>(this->binder_imp.get());
+        if( json_encode_binder ) {
+            json_encode_binder->bind(name,v, default_value);
+        } else if(json_decode_binder ) {
+            json_decode_binder->bind(name,v, default_value);
+        } 
          else {
             assert("bug" == NULL);
         }

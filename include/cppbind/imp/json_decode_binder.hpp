@@ -33,7 +33,20 @@ public:
               throw CppBindException(std::string(".") + name, "not found");
          }
     }
+    template<typename T>
+    void bind(const std::string& name, T& v, const T& default_vaule){
+        Json::Value jv = json[name];
+        if(!jv.isNull()) {
+            try {
+               decode(jv, &v);
+            } catch (CppBindException e) {
+               throw CppBindException(e, std::string(".") + name);
+            }
+        } else  {
+             v = default_vaule;
+        }
 
+    }
     template<typename T>
     void bind(const std::string& name, boost::shared_ptr<T>& v){
          Json::Value jv = json[name];

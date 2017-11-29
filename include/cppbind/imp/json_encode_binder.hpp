@@ -11,14 +11,22 @@ public:
         this->root = jv;
     }
     template<typename T>
-    void bind(const std::string& name, T& v, const char *default_value = NULL){
+    void bind(const std::string& name, T& v){
           bool dummy;
           Json::Value jv =  encode(v, &dummy);
           root[name] = jv;
     }
 
     template<typename T>
-    void bind(const std::string& name, boost::shared_ptr<T>& v, const char *default_value = NULL){
+    void bind(const std::string& name, T& v, const T& default_value){
+          bool dummy;
+          Json::Value jv =  encode(v, &dummy);
+          root[name] = jv;
+    }
+
+
+    template<typename T>
+    void bind(const std::string& name, boost::shared_ptr<T>& v){
           if(v.get() != NULL) {
                bool dummy;
                Json::Value jv =  encode(*(v.get()), &dummy);

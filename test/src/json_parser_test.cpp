@@ -44,6 +44,21 @@ private:
     std::string pattern;
 };
 
+class Music {
+public:
+    const std::string& getKeyStr(){
+        return this->name;
+    }
+    std::string name;
+    std::string singer;
+    void setBind(Binder *binder){
+          binder->bind("name", name);
+          binder->bind("singer",singer);
+    }
+
+};
+
+
 class Contact {
 public:
     Contact(){}
@@ -77,6 +92,7 @@ public:
     std::map<std::string, Skill>  skills; // std map
     boost::shared_ptr<int>  value_not_exist; //optional not exist
     Json::Value jv; //optional not exist
+    std::vector<Music*> liked_music;
     void setBind(Binder *binder){
           binder->bind("name", name);
           binder->bind("age", age);
@@ -89,13 +105,23 @@ public:
           binder->bind("skills", skills);
           binder->bind("value_not_exist",  value_not_exist);
           binder->bind("jv", jv);
+          binder->bindWithForeginKey("liked_music", liked_music);
     }
 };
 
 TEST(JsonROM, baisc){
 
      std::ifstream ifs("./sample_data/me.json",  std::ifstream::in);
-     boost::shared_ptr<Me> me = JsonBind().decode<Me>(ifs);
+     std::ifstream ifs2("./sample_data/music.json",  std::ifstream::in);
+
+     boost::shared_ptr<std::map<std::string, Music*> > all_songs = JsonBind().decode<std::map<std::string, Music*> >(ifs2);
+
+     printf("%s\n", JsonBind().toJsonStr(*all_songs.get()).c_str());
+
+     JsonBind binder;
+     binder.regTable(all_songs.get());
+
+     boost::shared_ptr<Me> me = binder.decode<Me>(ifs);
      //basic type
      ASSERT_EQ(me->name ,"truman");
      ASSERT_EQ(me->age ,30);

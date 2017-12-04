@@ -48,6 +48,8 @@ public:
     void bind(const std::string& name, T& v);
     template<typename T>
     void bind(const std::string& name, T& v, const T& default_value);
+    template<typename T>
+    void bindWithForeginKey(const std::string& name, T& v);
  public:
     boost::shared_ptr<BinderImpBase> binder_imp;
     StringConverterManager str_convert_mgmt;
@@ -93,6 +95,20 @@ void Binder::bind(const std::string& name, T& v, const T& default_value){
         }
 }
 
+template<typename T>
+void Binder::bindWithForeginKey(const std::string& name, T& v){
+        //CALL the real bind fucntion, must change to the real type of binder, then comile could instantiate the tempate funciton
+        JsonEncodeBinder* json_encode_binder = dynamic_cast<JsonEncodeBinder*>(this->binder_imp.get());
+        JsonDecodeBinder* json_decode_binder = dynamic_cast<JsonDecodeBinder*>(this->binder_imp.get());
+        if( json_encode_binder ) {
+            json_encode_binder->bindWithForeginKey(name,v);
+        } else if(json_decode_binder ) {
+            json_decode_binder->bindWithForeginKey(name,v);
+        } 
+         else {
+            assert("bug" == NULL);
+        }
+}
 
 }
 

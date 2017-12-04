@@ -25,9 +25,12 @@ public:
     CSVBind(){}
 
     template<typename T>
-    std::vector<T*> decode(std::istream& csv_content){
+    std::vector<T*> decode(std::istream& csv_content, std::istream*  header_stream = NULL){
 
         std::vector<T*> rc;
+        if(header_stream != NULL) {
+           csv.readRows(csv_content);
+        }
         csv.readRows(csv_content);
         for(size_t i = 0; i < csv.rows.size(); i++) {
             Json::Value jv = this->createJsonObject(csv.headers,csv.rows[i].cells);
@@ -44,10 +47,17 @@ public:
     }
     
     template<typename T>
-    std::vector<T*> decodeFile(const char *filename){
-         std::ifstream  fs(filename);
+    std::vector<T*> decodeFile(const char *data_file, const char* header_file = NULL){
+         std::vector<T*> rc;
+         std::ifstream  fs(data_file);
          if(!fs)  assert("TODO, throw exception" == NULL);
-         std::vector<T*> rc = this->decode<T>(fs);
+         if(header_file != NULL) {
+             std::ifstream  fs_header(header_file);
+             if(!fs_header)  assert("TODO, throw exception" == NULL);
+             rc = this->decode<T>(fs, &fs_header);
+         } else {
+             rc = this->decode<T>(fs, NULL);
+         }
          fs.close();
          return rc;
     }

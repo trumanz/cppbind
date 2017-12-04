@@ -33,6 +33,14 @@ public:
                root[name] = jv;
           }
     }
+
+    template<typename T>
+    void bindWithForeginKey(const std::string& name, T& v){
+          bool dummy;
+          Json::Value jv =  encodeWithForeginKey(v, &dummy);
+          root[name] = jv;
+    }
+    
 public: //for std container type
     
     template<typename T>
@@ -53,6 +61,19 @@ public: //for std container type
         for(typename std::vector<T*>::iterator  it  = e.begin(); it != e.end(); it++) {
             bool dummy;
              Json::Value je = encode(*(*it), &dummy);
+             jv.append(je);
+        }
+        return jv;
+    }
+    template<typename T>
+    Json::Value encodeWithForeginKey(std::vector<T*>& e,bool* is_basic_type){
+        *is_basic_type = false;
+        Json::Value jv;
+        for(typename std::vector<T*>::iterator  it  = e.begin(); it != e.end(); it++) {
+             bool dummy;
+             T* x = *it;
+             std::string key = x->getKeyStr();
+             Json::Value je = encode(key, &dummy);
              jv.append(je);
         }
         return jv;

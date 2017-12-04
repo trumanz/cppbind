@@ -21,6 +21,9 @@ namespace  cppbind {
 class CSVRow{
 public:
     std::vector<std::string> cells;
+    unsigned int line_no;
+    std::string original_line;
+
 };
 
 class CSVReader{
@@ -34,12 +37,14 @@ public:
        _in.close();
    }
    virtual void readRows(std::istream& csv_content) {
+      unsigned int line_no = 0;
       while(!csv_content.eof()) {
          std::string  line;
          if(csv_content.fail()) assert("TODO" == NULL);
          std::getline(csv_content, line);
+         line_no++;
          if(line.length() == 0) continue;
-         CSVRow row = getRow(line);
+         CSVRow row = getRow(line, line_no);
          if(this->headers.size() == 0) {
              this->headers = row.cells;
          } else {
@@ -48,8 +53,10 @@ public:
      }
    }
 protected:
-    virtual CSVRow getRow(const std::string &line) const{
+    virtual CSVRow getRow(const std::string &line, unsigned int line_no) const{
     CSVRow row;
+    row.line_no = line_no;
+    row.original_line = line;
     boost::tokenizer< boost::escaped_list_separator<char> > tok(line);
     row.cells.assign(tok.begin(), tok.end());
     return row;

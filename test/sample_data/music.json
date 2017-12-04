@@ -1,0 +1,10 @@
+{
+  "music_1" : {
+	"name": "Dirty Diana",
+	"singer" : "Michael Jackson"
+  }, 
+  "music_2" : {
+	"name": "I Feel It Coming",
+	"singer" : "The Weeknd"
+  }
+}

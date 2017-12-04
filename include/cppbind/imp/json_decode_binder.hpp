@@ -7,10 +7,12 @@ namespace  cppbind {
 class JsonDecodeBinder : public BinderImpBase {
 private:
     bool basic_wrapper_as_string;
+    std::map<std::string, boost::any>* type_tables;
 public:
-    JsonDecodeBinder(Json::Value json, bool basic_wrapper_as_string){
+    JsonDecodeBinder(Json::Value json, bool basic_wrapper_as_string, std::map<std::string, boost::any>* type_tables){
         this->json = json;
         this->basic_wrapper_as_string = basic_wrapper_as_string;
+        this->type_tables = type_tables;
      }
     void setJson(const Json::Value& jv){
         this->json = jv;
@@ -56,6 +58,23 @@ public:
              v = boost::shared_ptr<T>(new T(e));
          } 
     }
+
+    
+    template<typename T>
+    void bindWithForeginKey(const std::string& name, T& v){
+         //printf("filed %s\n", name.c_str());
+         Json::Value jv = json[name];
+         if(!jv.isNull()) {
+             try {
+                decodeWithForeginKey(jv, &v);
+             } catch (CppBindException e) {
+                throw CppBindException(e, std::string(".") + name);
+             }
+         } else  {
+              throw CppBindException(std::string(".") + name, "not found");
+         }
+    }
+
 //std container type
 private: 
     //vector
@@ -64,6 +83,28 @@ private:
          std::list<T> v;
          decode(json, &v);
          e->insert(e->begin(), v.begin(), v.end());
+    }
+
+    //vector
+    template<typename T>
+    void decode(const Json::Value& json, std::vector<T*>* e){
+         std::list<T*> v;
+         decode(json, &v);
+         e->insert(e->begin(), v.begin(), v.end());
+    }
+    template<typename T>
+    void decodeWithForeginKey(const Json::Value& json, std::vector<T*>* e){
+         std::map<std::string, boost::any>::iterator it = type_tables->find(typeid(T).name());
+         assert(it != type_tables->end());
+         const std::map<std::string, T*>* table= boost::any_cast<std::map<std::string, T*>*>(it->second);
+         std::vector<std::string> keys;
+         decode(json, &keys);
+         for(size_t i = 0; i < keys.size(); i++) {
+             typename std::map<std::string, T*>::const_iterator it = table->find(keys[i]);
+             assert(it != table->end());
+             T* x = it->second;
+             e->push_back(x);
+         }
     }
     //list
     template<typename T>
@@ -75,6 +116,24 @@ private:
                  try { 
                     T tmp;
                     decode(json[i], &tmp);
+                    e->push_back(tmp);
+                 } catch  (CppBindException e) {
+                    char buf[20];
+                    sprintf(buf, "[%d]", i);
+                    throw CppBindException(e, buf);
+                 }
+            }
+    }
+    //list
+    template<typename T>
+    void decode(const Json::Value& json, std::list<T*>* e){
+            if(!json.isArray()) {
+                throw CppBindException("should be a list");
+            }
+            for(int i = 0; i  < json.size(); i++) {
+                 try { 
+                    T*  tmp = new T();
+                    decode(json[i], tmp);
                     e->push_back(tmp);
                  } catch  (CppBindException e) {
                     char buf[20];
@@ -154,7 +213,7 @@ private: // for class type
 
     template<typename T>
     void decode(const Json::Value& json, T* e){
-         Binder binder(boost::shared_ptr<BinderImpBase>(new JsonDecodeBinder(json, this->basic_wrapper_as_string)));
+         Binder binder(boost::shared_ptr<BinderImpBase>(new JsonDecodeBinder(json, this->basic_wrapper_as_string, this->type_tables)));
 
         
           typedef typename boost::mpl::if_c<has_member_function_setBind<void (T::*) (Binder*)>::value, 

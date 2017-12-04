@@ -30,7 +30,7 @@ private:
     T* decodeJV2Point(const Json::Value& root, bool basic_wrapper_string = false){
          T* e = NULL;
          e = new T;
-         JsonDecodeBinder decoder(root,basic_wrapper_string);
+         JsonDecodeBinder decoder(root,basic_wrapper_string, &type_tables);
          decoder.decode(e);
          return e;
     }
@@ -47,7 +47,14 @@ private:
          return decodeJV2Point<T>(root, basic_wrapper_string);
     }
 
+    std::map<std::string, boost::any> type_tables;
+
 public:
+    template<typename T>
+    void regTable(std::map<std::string, T*> *table)
+    {
+        type_tables[typeid(T).name()] = table;
+    }
 
     template<typename T>
     boost::shared_ptr<T> decode(std::istream &is){

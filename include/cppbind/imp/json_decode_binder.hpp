@@ -94,15 +94,13 @@ private:
     }
     template<typename T>
     void decodeWithForeginKey(const Json::Value& json, std::vector<T*>* e){
-         std::map<std::string, boost::any>::iterator it = type_tables->find(typeid(T).name());
-         assert(it != type_tables->end());
-         const std::map<std::string, T*>* table= boost::any_cast<std::map<std::string, T*>*>(it->second);
          std::vector<std::string> keys;
-         decode(json, &keys);
-         for(size_t i = 0; i < keys.size(); i++) {
-             typename std::map<std::string, T*>::const_iterator it = table->find(keys[i]);
-             assert(it != table->end());
-             T* x = it->second;
+         if(!json.isArray()) {
+                throw CppBindException("should be a list");
+         }
+         for(int i = 0; i  < json.size(); i++) {
+             T* x = NULL;
+             decodeWithForeginKey(json[i], &x);
              e->push_back(x);
          }
     }
@@ -220,10 +218,23 @@ private: // for class type
            MemberFunctionCaller, RunTimeBinderCaller>::type CallerT;
 
           CallerT().call(e, &binder);
-
-         //CallerT().call(e, &binder);
-         //e->setBind(&binder);
     } 
+
+    
+    template<typename T>
+    void decodeWithForeginKey(const Json::Value& json, T** e){
+         std::map<std::string, boost::any>::iterator it = type_tables->find(typeid(T).name());
+         assert(it != type_tables->end());
+         const std::map<std::string, T*>* table= boost::any_cast<std::map<std::string, T*>*>(it->second);
+         std::string key;
+         decode(json, &key);
+         typename std::map<std::string, T*>::const_iterator it2 = table->find(key);
+         assert(it2 != table->end());
+         T* x = it2->second;
+         e[0] = x;
+        
+    } 
+
 private:  //for Json type
     void decode(const Json::Value& json, Json::Value *e){
         e[0] =  json;

@@ -1,4 +1,8 @@
 {
+  "music_0" : {
+	"name": "Bille Jean",
+	"singer" : "Michael Jackson"
+  }, 
   "music_1" : {
 	"name": "Dirty Diana",
 	"singer" : "Michael Jackson"

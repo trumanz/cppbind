@@ -92,7 +92,8 @@ public:
     std::map<std::string, Skill>  skills; // std map
     boost::shared_ptr<int>  value_not_exist; //optional not exist
     Json::Value jv; //optional not exist
-    std::vector<Music*> liked_music;
+    std::vector<Music*> liked_music_list;
+    Music* favorite_music;
     void setBind(Binder *binder){
           binder->bind("name", name);
           binder->bind("age", age);
@@ -105,7 +106,8 @@ public:
           binder->bind("skills", skills);
           binder->bind("value_not_exist",  value_not_exist);
           binder->bind("jv", jv);
-          binder->bindWithForeginKey("liked_music", liked_music);
+          binder->bindWithForeginKey("liked_music", liked_music_list);
+          binder->bindWithForeginKey("favorite_music", favorite_music);
     }
 };
 
@@ -122,6 +124,8 @@ TEST(JsonROM, baisc){
      binder.regTable(all_songs.get());
 
      boost::shared_ptr<Me> me = binder.decode<Me>(ifs);
+
+     printf("decode ME sucess");
      //basic type
      ASSERT_EQ(me->name ,"truman");
      ASSERT_EQ(me->age ,30);
@@ -153,6 +157,12 @@ TEST(JsonROM, baisc){
      ASSERT_EQ(skills.size(), 2);
      ASSERT_EQ(skills["c++"].grade, 7);
      ASSERT_EQ(skills["R"].grade, 0);
+
+     //foreginkey
+     ASSERT_EQ(me->favorite_music, all_songs->find("music_0")->second);
+     ASSERT_EQ(me->liked_music_list.size(), 2);
+     ASSERT_EQ(me->liked_music_list[0], all_songs->find("music_1")->second);
+     ASSERT_EQ(me->liked_music_list[1], all_songs->find("music_2")->second);
 
      std::stringstream ss;
      JsonBind().encode(*(me.get()), &ss);

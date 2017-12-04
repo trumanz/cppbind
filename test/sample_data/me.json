@@ -32,5 +32,6 @@
         "jv" : {
              "name1" : [ "vaule1", "value2" ]
         },
-	"liked_music" : [ "music_1", "music_2" ]
+	"liked_music" : [ "music_1", "music_2" ],
+	"favorite_music" :  "music_0"
 }

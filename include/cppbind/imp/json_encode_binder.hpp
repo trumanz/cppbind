@@ -179,6 +179,15 @@ public:
     }
 
     template<typename T>
+    Json::Value encodeWithForeginKey(T& e, bool* is_basic_type){
+        *is_basic_type = false;
+        bool dummy;
+        std::string key = e->getKeyStr();
+        Json::Value jv = encode(key, &dummy);
+        return jv;
+    }
+
+    template<typename T>
     Json::Value encode(T* e, bool* is_basic_type){
         T& _e = *e;
         return this->encode(_e, is_basic_type);

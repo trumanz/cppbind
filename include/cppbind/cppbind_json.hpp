@@ -78,7 +78,7 @@ public:
     T* decodeFile(const char * file_name){
         std::fstream fs (file_name, std::fstream::in);
         if(!fs) {
-            printf("Can not open file %s", file_name);
+            printf("ERROR Can not open file %s\n", file_name);
             assert("TODO throw exception" == NULL);
         }
         return this->decodeIStream2Point<T>(fs);

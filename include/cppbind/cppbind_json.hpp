@@ -25,7 +25,7 @@
 namespace  cppbind {
 class JsonBind{
 private:
-
+   
     template<typename T>
     T* decodeJV2Point(const Json::Value& root, bool basic_wrapper_string = false){
          T* e = NULL;
@@ -50,8 +50,9 @@ private:
     std::map<std::string, boost::any> type_tables;
 
 public:
+    JsonBind(){}
     template<typename T>
-    void regTable(std::map<std::string, T*> *table)
+    void regTable(const std::map<std::string, T*> *table)
     {
         type_tables[typeid(T).name()] = table;
     }
@@ -76,7 +77,10 @@ public:
     template<typename T>
     T* decodeFile(const char * file_name){
         std::fstream fs (file_name, std::fstream::in);
-        assert(fs.good());
+        if(!fs) {
+            printf("Can not open file %s", file_name);
+            assert("TODO throw exception" == NULL);
+        }
         return this->decodeIStream2Point<T>(fs);
     }
 

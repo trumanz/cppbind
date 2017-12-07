@@ -18,9 +18,10 @@
 namespace  cppbind {
 
 
-class CSVBind{
+class CSVBind {
 public:
      CSVReader csv;
+     JsonBind json_binder;
 public:
     CSVBind(){}
 
@@ -34,9 +35,15 @@ public:
         csv.readRows(csv_content);
         for(size_t i = 0; i < csv.rows.size(); i++) {
             Json::Value jv = this->createJsonObject(csv.headers,csv.rows[i].cells);
-            rc.push_back(JsonBind().decode2<T>(jv, true));
+            rc.push_back(json_binder.decode2<T>(jv, true));
         }
         return rc;
+    }
+
+    template<typename T>
+    void regTable(const std::map<std::string, T*> *table)
+    {
+        json_binder.regTable(table);
     }
 
     template<typename T>
@@ -50,7 +57,10 @@ public:
     std::vector<T*> decodeFile(const char *data_file, const char* header_file = NULL){
          std::vector<T*> rc;
          std::ifstream  fs(data_file);
-         if(!fs)  assert("TODO, throw exception" == NULL);
+         if(!fs) {
+             printf("Can not open %s\n", data_file);
+             assert("TODO, throw exception" == NULL);
+         }
          if(header_file != NULL) {
              std::ifstream  fs_header(header_file);
              if(!fs_header)  assert("TODO, throw exception" == NULL);

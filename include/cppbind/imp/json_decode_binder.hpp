@@ -223,13 +223,22 @@ private: // for class type
     
     template<typename T>
     void decodeWithForeginKey(const Json::Value& json, T** e){
-         std::map<std::string, boost::any>::iterator it = type_tables->find(typeid(T).name());
-         assert(it != type_tables->end());
-         const std::map<std::string, T*>* table= boost::any_cast<std::map<std::string, T*>*>(it->second);
+         std::string type_name = typeid(T).name();
+         std::map<std::string, boost::any>::iterator it = type_tables->find(type_name);
+         if(it == type_tables->end()) {
+             printf("ERROR, Please register table for %s\n", type_name.c_str());
+             assert(false); 
+         }
+         boost::any any_table = it->second;
+         const std::map<std::string, T*>* table= boost::any_cast<const std::map<std::string, T*>*>(it->second);
+         assert(table != NULL);
          std::string key;
          decode(json, &key);
          typename std::map<std::string, T*>::const_iterator it2 = table->find(key);
-         assert(it2 != table->end());
+         if(it2 == table->end()) {
+             printf("ERROR, Can not found %s in table for %s", key.c_str(), type_name.c_str());
+             assert(false);
+         }
          T* x = it2->second;
          e[0] = x;
         

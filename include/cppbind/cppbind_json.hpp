@@ -84,6 +84,14 @@ public:
         return this->decodeIStream2Point<T>(fs);
     }
 
+    template<typename T>
+    Json::Value  encodeToJsonValue(T&e){
+         //EncodeBinder binder;
+         JsonEncodeBinder encoder;
+         bool dummy;
+         Json::Value jv = encoder.encode(e, &dummy);
+        return jv;
+    }
      
     template<typename T>
     void encode(T&e, std::ostream *out){

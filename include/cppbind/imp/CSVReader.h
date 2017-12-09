@@ -57,7 +57,8 @@ protected:
     CSVRow row;
     row.line_no = line_no;
     row.original_line = line;
-    boost::tokenizer< boost::escaped_list_separator<char> > tok(line);
+    boost::char_separator<char> sep(",");
+    boost::tokenizer< boost::char_separator<char> > tok(line,sep);
     row.cells.assign(tok.begin(), tok.end());
     return row;
 }

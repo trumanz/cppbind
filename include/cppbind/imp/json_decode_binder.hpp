@@ -27,8 +27,8 @@ public:
     }
     template<typename T>
     void bind(const std::string& name, T& v){
-         //printf("filed %s\n", name.c_str());
          Json::Value jv = json[name];
+         //printf("name=%s, jv=%s\n", name.c_str(), jv.asString().c_str());
          if(!jv.isNull()) {
              try {
                 decode(jv, &v);
@@ -314,17 +314,13 @@ private:  //for basic type
         e[0] =  json.asDouble();
     }
     void decode(const Json::Value& json, std::string *e){
-        if(basic_wrapper_as_string) {
-           JsonStrToBasicType(json,e);
-           return;
-         }
         e[0] =  json.asString();
     }
     template<typename T>
     void  JsonStrToBasicType(const Json::Value& json, T*e){
         std::stringstream ss;
         ss << json.asString();
-        ss >>  *e;
+        ss >>  *e; //TODO wrong 
     }
     void  JsonStrToBasicType(const Json::Value& json, bool*e){
         if (json.asString() == "TRUE" || json.asString() == "true") {

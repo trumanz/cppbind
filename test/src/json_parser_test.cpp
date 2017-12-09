@@ -8,6 +8,7 @@
 #include <fstream>      // std::ifstream
 #include <jsoncpp/json/json.h>
 #include <cppbind/cppbind_json.hpp>
+#include <cppbind/CSVBind.hpp>
 #include <cppbind/type/timestr.h>
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include <cppbind/type/spec_type.h>
@@ -75,11 +76,13 @@ public:
 class Music {
 public:
     const std::string& getKeyStr(){
-        return this->name;
+        return this->id;
     }
+    std::string id;
     std::string name;
     std::string singer;
     void setBind(Binder *binder){
+          binder->bind("id", id);
           binder->bind("name", name);
           binder->bind("singer",singer);
     }
@@ -118,6 +121,7 @@ public:
     Contact contact; // class object
     std::list<std::string>  likes;  // std list
     std::vector<std::string>  hates;  // std vector
+    std::vector<std::string>  work_experience;  // std vector
     std::map<std::string, Skill>  skills; // std map
     boost::shared_ptr<int>  value_not_exist; //optional not exist
     Json::Value jv; //optional not exist
@@ -133,6 +137,7 @@ public:
           binder->bind("contact", contact);
           binder->bind("likes", likes);
           binder->bind("hates", hates);
+          binder->bind("work_experience", work_experience);
           binder->bind("skills", skills);
           binder->bind("value_not_exist",  value_not_exist);
           binder->bind("jv", jv);
@@ -144,14 +149,23 @@ public:
 TEST(JsonROM, baisc){
 
      std::ifstream ifs("./sample_data/me.json",  std::ifstream::in);
-     std::ifstream ifs2("./sample_data/music.json",  std::ifstream::in);
+     std::ifstream ifs2("./sample_data/music.csv",  std::ifstream::in);
 
-     boost::shared_ptr<std::map<std::string, Music*> > all_songs = JsonBind().decode<std::map<std::string, Music*> >(ifs2);
+     cppbind::CSVBind music_csv_binder;
+     std::vector<Music*> all_musics =music_csv_binder.decode<Music>(ifs2);
+     std::map<std::string, Music*> music_table;
+     for(size_t i = 0; i < all_musics.size(); i++) {
+          music_table[all_musics[i]->id] = all_musics[i];
+     }
+     ASSERT_EQ(music_table["music_1"]->name, "Dirty Diana");
 
-     printf("%s\n", JsonBind().toJsonStr(*all_songs.get()).c_str());
+     std::string csv_str = music_csv_binder.encodeToStr<Music>(all_musics);
+     printf("csv_str=\n[%s]\n", csv_str.c_str());
+
+     printf("%s\n", JsonBind().toJsonStr(all_musics).c_str());
 
      JsonBind binder;
-     binder.regTable(all_songs.get());
+     binder.regTable(&music_table);
 
      boost::shared_ptr<Me> me = binder.decode<Me>(ifs);
 
@@ -190,10 +204,10 @@ TEST(JsonROM, baisc){
      ASSERT_EQ(skills["R"].grade, 0);
 
      //foreginkey
-     ASSERT_EQ(me->favorite_music, all_songs->find("music_0")->second);
+     ASSERT_EQ(me->favorite_music, music_table.find("music_0")->second);
      ASSERT_EQ(me->liked_music_list.size(), 2);
-     ASSERT_EQ(me->liked_music_list[0], all_songs->find("music_1")->second);
-     ASSERT_EQ(me->liked_music_list[1], all_songs->find("music_2")->second);
+     ASSERT_EQ(me->liked_music_list[0], music_table.find("music_1")->second);
+     ASSERT_EQ(me->liked_music_list[1], music_table.find("music_2")->second);
 
      std::stringstream ss;
      JsonBind().encode(*(me.get()), &ss);

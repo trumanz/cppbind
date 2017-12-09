@@ -41,6 +41,35 @@ public:
     }
 
     template<typename T>
+    std::string encodeToStr(std::vector<T*> data){
+         std::stringstream csv_all;
+
+         for(size_t j = 0; j < csv.headers.size(); j++) {
+             std::string& header = csv.headers[j];
+             if(j > 0) {
+                     csv_all << ",";
+             }
+             csv_all << header;
+         }
+
+         for(size_t i = 0; i < data.size(); i++) {
+             std::stringstream csv_row;
+             T* e = data[i];
+             Json::Value jv = json_binder.encodeToJsonValue(*e);
+             for(size_t j = 0; j < csv.headers.size(); j++) {
+                 std::string& header = csv.headers[j];
+                 if(j > 0) {
+                     csv_row << ",";
+                 }
+                 csv_row << jv[header].asString();
+             }
+             csv_all << "\n";
+             csv_all << csv_row.str();
+         }
+         return csv_all.str();
+    }
+
+    template<typename T>
     void regTable(const std::map<std::string, T*> *table)
     {
         json_binder.regTable(table);
@@ -92,7 +121,8 @@ private:
         }
         assert(headers.size() == data.size());
         for(size_t i = 0; i < headers.size(); i++) {
-            jv[headers[i]] = data[i];
+             jv[headers[i]] = data[i];
+             assert(jv[headers[i]].asString() == data[i]);
         }
         return jv;
     }

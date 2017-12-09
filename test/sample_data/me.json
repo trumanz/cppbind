@@ -16,10 +16,10 @@
         ],
         "hates" : [ "war", "dictator" ],
 	"work_experience": [
-		"Eastsoft",
-		"Lucent",
-		"Ericsson",
-		"EMC"
+		"Eastsoft Developer",
+		"Lucent Developer",
+		"Ericsson  Developer",
+		"EMC DevOps"
 	],
 	"skills": {
 		"c++" : {

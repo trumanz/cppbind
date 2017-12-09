@@ -19,7 +19,11 @@ public:
     }
     template<typename T>
     void decode(T* e){
-        this->decode(this->json, e);
+        try{
+            this->decode(this->json, e);
+        }catch(CppBindException e){
+            throw CppBindException(e, typeid(T).name());
+        }
     }
     template<typename T>
     void bind(const std::string& name, T& v){
@@ -32,7 +36,7 @@ public:
                 throw CppBindException(e, std::string(".") + name);
              }
          } else  {
-              throw CppBindException(std::string(".") + name, "not found");
+              throw CppBindException(std::string(".") + name, std::string("not found"));
          }
     }
     template<typename T>
@@ -186,11 +190,25 @@ private:
 private: // for class type
 
 
-    class MemberFunctionCaller{
+    class SetBindMemberFunctionCaller{
     public:
         template<typename T>
         void call(T*e, Binder* binder){
             e->setBind(binder);
+        }
+    };
+
+    class FromStr4BindMemberFunctionCaller{
+    public:
+        template<typename T>
+        void call(T*e, Binder* binder){
+           JsonDecodeBinder* json_decode_binder = dynamic_cast<JsonDecodeBinder*>(binder->binder_imp.get());
+           Json::Value jv = json_decode_binder->json;
+           if(!jv.isString()) {
+               assert("bug" == NULL);
+           }
+           std::string str = jv.asString();
+            e->fromStr4Bind(str);
         }
     };
 
@@ -209,13 +227,29 @@ private: // for class type
 
     };
 
+
+    class Option2MemberFunctionCaller{
+    public:
+        template<typename T>
+        void call(T*e, Binder* binder){
+          //if have "void fromStr4Bind(const std::string&)" then call setbind; else call otheres
+          typedef typename boost::mpl::if_c<has_member_function_fromStr4Bind<void (T::*) (const std::string&)>::value, 
+              FromStr4BindMemberFunctionCaller, RunTimeBinderCaller>::type CallerT;
+
+          CallerT().call(e, binder); 
+        }
+    };
+
+
     template<typename T>
     void decode(const Json::Value& json, T* e){
+
          Binder binder(boost::shared_ptr<BinderImpBase>(new JsonDecodeBinder(json, this->basic_wrapper_as_string, this->type_tables)));
 
         
+         //if have "void setBind(Binder*)" then call setbind; else call otheres
           typedef typename boost::mpl::if_c<has_member_function_setBind<void (T::*) (Binder*)>::value, 
-           MemberFunctionCaller, RunTimeBinderCaller>::type CallerT;
+           SetBindMemberFunctionCaller, Option2MemberFunctionCaller>::type CallerT;
 
           CallerT().call(e, &binder);
     } 

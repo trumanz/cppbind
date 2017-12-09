@@ -44,6 +44,32 @@ private:
     std::string pattern;
 };
 
+
+class SexEnum{
+public:
+enum Type {
+    MALE,
+    FEMALE
+};
+Type value;
+public:
+    std::string toStr4Bind(){  
+         if(value == MALE) return "male";
+         else if(value == FEMALE) return "female";
+         assert(false);
+         return "NULL";
+    } 
+    void fromStr4Bind(const std::string& str){
+         if(str == "male") {
+              this->value = MALE;
+         } else if(str ==  "female") {
+              this->value = FEMALE;
+         } else {
+              assert(false);
+         }
+    }
+};
+
 class Music {
 public:
     const std::string& getKeyStr(){
@@ -83,6 +109,7 @@ class Me {
 public:
     std::string name; //basic type
     int age;  //
+    SexEnum sex;
     ptime born;
     boost::gregorian::date born_date;
     time_duration  born_time_of_day;
@@ -97,6 +124,7 @@ public:
     void setBind(Binder *binder){
           binder->bind("name", name);
           binder->bind("age", age);
+          binder->bind("sex", sex);
           binder->bind("born", born);
           binder->bind("born_date", born_date);
           binder->bind("born_time_of_day", born_time_of_day);
@@ -129,6 +157,7 @@ TEST(JsonROM, baisc){
      //basic type
      ASSERT_EQ(me->name ,"truman");
      ASSERT_EQ(me->age ,30);
+     ASSERT_EQ(me->sex.value , SexEnum::MALE );
      TimeStr tf("%Y-%m-%d %H:%M:%S");
      printf("born: %s\n",  tf.format(me->born).c_str());
 

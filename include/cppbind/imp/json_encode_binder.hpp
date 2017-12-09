@@ -144,11 +144,21 @@ public: //for std container type
 //CLASS&STRUCT type
 public:
     
-    class MemberFunctionCaller{
+    class SetBindMemberFunctionCaller{
     public:
         template<typename T>
         void call(T&e, Binder* binder){
             e.setBind(binder);
+        }
+    };
+
+    class ToStr4BindMemberFunctionCaller{
+    public:
+        template<typename T>
+        void call(T&e, Binder* binder){
+            std::string x = e.toStr4Bind();
+            JsonEncodeBinder* json_encoder_binder = dynamic_cast<JsonEncodeBinder*>(binder->binder_imp.get());
+            json_encoder_binder->setJson(Json::Value(x));
         }
     };
 
@@ -161,7 +171,17 @@ public:
             json_encoder_binder->setJson(Json::Value(x));
         }
     };
-    
+    class Option2MemberFunctionCaller{
+    public:
+        template<typename T>
+        void call(T&e, Binder* binder){
+          //if have "std::string toStr4Bind()" then call setbind; else call otheres
+          typedef typename boost::mpl::if_c<has_member_function_toStr4Bind<std::string (T::*) ()>::value, 
+              ToStr4BindMemberFunctionCaller, RunTimeBinderCaller>::type CallerT;
+
+          CallerT().call(e, binder); 
+        }
+    };
      
     template<typename T>
     Json::Value encode(T& e, bool* is_basic_type){
@@ -169,7 +189,7 @@ public:
        Binder binder(boost::shared_ptr<BinderImpBase>(new JsonEncodeBinder()));
 
        typedef typename boost::mpl::if_c<has_member_function_setBind<void (T::*) (Binder*)>::value, 
-           MemberFunctionCaller, RunTimeBinderCaller>::type CallerT;
+           SetBindMemberFunctionCaller, Option2MemberFunctionCaller>::type CallerT;
 
        CallerT().call(e, &binder);
 

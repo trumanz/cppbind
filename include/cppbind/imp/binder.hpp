@@ -18,6 +18,8 @@
 namespace  cppbind {
 
 BOOST_TTI_HAS_MEMBER_FUNCTION(setBind)
+BOOST_TTI_HAS_MEMBER_FUNCTION(fromStr4Bind)
+BOOST_TTI_HAS_MEMBER_FUNCTION(toStr4Bind)
 
 class BinderImpBase {
 public:

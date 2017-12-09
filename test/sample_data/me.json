@@ -1,6 +1,7 @@
 {
 	"name": "truman",
 	"age": 30,
+	"sex": "male",
 	"born" : "1987-11-17 02:01:03",
 	"born_date" : "1987-11-17",
 	"born_time_of_day" : "02:01:03",

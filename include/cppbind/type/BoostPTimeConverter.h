@@ -48,7 +48,7 @@ class BoostTimeDurationConverter {
         boost::posix_time::time_duration dur;
         int rc = strTime.parser(str, &dur);
         if( rc != 0){ 
-            printf("%s, can not parse as %H:%M:%S\n", str.c_str());
+            printf("%s, can not parse as %%H:%%M:%%S\n", str.c_str());
         }
         assert(rc == 0);
         return dur;

@@ -40,16 +40,16 @@ public:
         return rc;
     }
 
+
     template<typename T>
-    std::string encodeToStr(std::vector<T*> data){
-         std::stringstream csv_all;
+    void encodeToStream(std::vector<T*> data, std::stringstream* output){
 
          for(size_t j = 0; j < csv.headers.size(); j++) {
              std::string& header = csv.headers[j];
              if(j > 0) {
-                     csv_all << ",";
+                     output[0] << ",";
              }
-             csv_all << header;
+             output[0] << header;
          }
 
          for(size_t i = 0; i < data.size(); i++) {
@@ -63,10 +63,16 @@ public:
                  }
                  csv_row << jv[header].asString();
              }
-             csv_all << "\n";
-             csv_all << csv_row.str();
+             output[0] << "\n";
+             output[0] << csv_row.str();
          }
-         return csv_all.str();
+    }
+
+    template<typename T>
+    std::string encodeToStr(std::vector<T*> data){
+         std::stringstream ss;
+         this->encodeToStream<T>(data, &ss);
+         return ss.str();
     }
 
     template<typename T>

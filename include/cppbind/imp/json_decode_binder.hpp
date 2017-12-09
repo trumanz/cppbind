@@ -198,17 +198,12 @@ private: // for class type
         }
     };
 
-    class FromStr4BindMemberFunctionCaller{
+    class FromJsonValue4BindMemberFunctionCaller{
     public:
         template<typename T>
         void call(T*e, Binder* binder){
            JsonDecodeBinder* json_decode_binder = dynamic_cast<JsonDecodeBinder*>(binder->binder_imp.get());
-           Json::Value jv = json_decode_binder->json;
-           if(!jv.isString()) {
-               assert("bug" == NULL);
-           }
-           std::string str = jv.asString();
-            e->fromStr4Bind(str);
+           e->fromJsonValue4Bind(json_decode_binder->json);
         }
     };
 
@@ -232,9 +227,9 @@ private: // for class type
     public:
         template<typename T>
         void call(T*e, Binder* binder){
-          //if have "void fromStr4Bind(const std::string&)" then call setbind; else call otheres
-          typedef typename boost::mpl::if_c<has_member_function_fromStr4Bind<void (T::*) (const std::string&)>::value, 
-              FromStr4BindMemberFunctionCaller, RunTimeBinderCaller>::type CallerT;
+          //if have "void fromStr4Bind(const Json::Value&)" then call setbind; else call otheres
+          typedef typename boost::mpl::if_c<has_member_function_fromJsonValue4Bind<void (T::*) (const Json::Value&)>::value, 
+              FromJsonValue4BindMemberFunctionCaller, RunTimeBinderCaller>::type CallerT;
 
           CallerT().call(e, binder); 
         }

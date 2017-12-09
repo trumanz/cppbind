@@ -53,13 +53,15 @@ enum Type {
 };
 Type value;
 public:
-    std::string toStr4Bind(){  
-         if(value == MALE) return "male";
-         else if(value == FEMALE) return "female";
+    Json::Value toJsonValue4Bind(){  
+         if(value == MALE) return Json::Value("male");
+         else if(value == FEMALE) return Json::Value("female");
          assert(false);
          return "NULL";
     } 
-    void fromStr4Bind(const std::string& str){
+    void fromJsonValue4Bind(const Json::Value& jv){
+         assert(jv.isString());
+         std::string str = jv.asString();
          if(str == "male") {
               this->value = MALE;
          } else if(str ==  "female") {

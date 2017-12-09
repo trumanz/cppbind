@@ -152,13 +152,13 @@ public:
         }
     };
 
-    class ToStr4BindMemberFunctionCaller{
+    class ToJsonValue4BindMemberFunctionCaller{
     public:
         template<typename T>
         void call(T&e, Binder* binder){
-            std::string x = e.toStr4Bind();
+            Json::Value jv = e.toJsonValue4Bind();
             JsonEncodeBinder* json_encoder_binder = dynamic_cast<JsonEncodeBinder*>(binder->binder_imp.get());
-            json_encoder_binder->setJson(Json::Value(x));
+            json_encoder_binder->setJson(jv);
         }
     };
 
@@ -176,8 +176,8 @@ public:
         template<typename T>
         void call(T&e, Binder* binder){
           //if have "std::string toStr4Bind()" then call setbind; else call otheres
-          typedef typename boost::mpl::if_c<has_member_function_toStr4Bind<std::string (T::*) ()>::value, 
-              ToStr4BindMemberFunctionCaller, RunTimeBinderCaller>::type CallerT;
+          typedef typename boost::mpl::if_c<has_member_function_toJsonValue4Bind<Json::Value (T::*) ()>::value, 
+              ToJsonValue4BindMemberFunctionCaller, RunTimeBinderCaller>::type CallerT;
 
           CallerT().call(e, binder); 
         }

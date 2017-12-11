@@ -29,6 +29,10 @@ public:
          assert(x != -1);
          this->value = (typename T::Type)x;
    }
+
+   bool operator==(const typename T::Type& _enum){
+       return this->value == _enum;
+   }
 };
 
 }

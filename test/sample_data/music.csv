@@ -1,4 +1,4 @@
-id,name,singer
-music_0,Bille Jean,Michael Jackson
-music_1,Dirty Diana,Michael Jackson
-music_2,I Feel It Coming,The Weeknd
+id,name,singer,grade
+music_0,Bille Jean,Michael Jackson,9.0
+music_1,Dirty Diana,Michael Jackson,8.0
+music_2,I Feel It Coming,The Weeknd,8.5

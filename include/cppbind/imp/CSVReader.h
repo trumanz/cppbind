@@ -57,7 +57,7 @@ protected:
     CSVRow row;
     row.line_no = line_no;
     row.original_line = line;
-    boost::char_separator<char> sep(",");
+    boost::char_separator<char> sep(",", "",boost::keep_empty_tokens);
     boost::tokenizer< boost::char_separator<char> > tok(line,sep);
     row.cells.assign(tok.begin(), tok.end());
     return row;

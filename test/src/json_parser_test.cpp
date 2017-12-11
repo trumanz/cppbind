@@ -71,10 +71,12 @@ public:
     std::string id;
     std::string name;
     std::string singer;
+    float grade;
     void setBind(Binder *binder){
           binder->bind("id", id);
           binder->bind("name", name);
           binder->bind("singer",singer);
+          binder->bind("grade",grade);
     }
 
 };

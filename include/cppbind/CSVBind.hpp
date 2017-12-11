@@ -61,7 +61,18 @@ public:
                  if(j > 0) {
                      csv_row << ",";
                  }
-                 csv_row << jv[header].asString();
+                 std::string cell_str = jv[header].toStyledString();
+                 std::size_t x = cell_str.find_last_not_of("\r\n");
+                 if(x!= std::string::npos) {
+                     cell_str = cell_str.substr(0, x+1);
+                 }
+                 if(jv[header].isString()) {
+                     assert(cell_str.length() >= 2);
+                     assert(cell_str[0] == '\"');
+                     assert(cell_str[cell_str.length()-1] == '\"');
+                     cell_str = cell_str.substr(1, cell_str.length()-2);
+                 }
+                 csv_row << cell_str;
              }
              output[0] << "\n";
              output[0] << csv_row.str();

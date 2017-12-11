@@ -11,6 +11,7 @@
 #include <cppbind/CSVBind.hpp>
 #include <cppbind/type/timestr.h>
 #include "boost/date_time/posix_time/posix_time.hpp"
+#include <cppbind/utility/EnumHelper.hpp>
 #include <cppbind/type/spec_type.h>
 
 using namespace boost::posix_time;
@@ -48,30 +49,19 @@ private:
 
 class SexEnum{
 public:
-enum Type {
-    MALE,
-    FEMALE
+   enum Type {
+       MALE,
+       FEMALE
+   };
+   static const char* enum_str_info[];
+   static const size_t enum_str_info_len;
 };
-Type value;
-public:
-    Json::Value toJsonValue4Bind(){  
-         if(value == MALE) return Json::Value("male");
-         else if(value == FEMALE) return Json::Value("female");
-         assert(false);
-         return "NULL";
-    } 
-    void fromJsonValue4Bind(const Json::Value& jv){
-         assert(jv.isString());
-         std::string str = jv.asString();
-         if(str == "male") {
-              this->value = MALE;
-         } else if(str ==  "female") {
-              this->value = FEMALE;
-         } else {
-              assert(false);
-         }
-    }
-};
+
+const char* SexEnum::enum_str_info[] = {"male", "female"};
+const size_t SexEnum::enum_str_info_len = sizeof(SexEnum::enum_str_info)/sizeof(SexEnum::enum_str_info[0]);
+
+typedef EnumHelper<SexEnum> SexType;
+
 
 class Music {
 public:
@@ -114,7 +104,7 @@ class Me {
 public:
     std::string name; //basic type
     int age;  //
-    SexEnum sex;
+    SexType sex;
     ptime born;
     boost::gregorian::date born_date;
     time_duration  born_time_of_day;

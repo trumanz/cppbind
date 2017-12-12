@@ -61,6 +61,7 @@ public:
                  if(j > 0) {
                      csv_row << ",";
                  }
+                 assert(jv.isMember(header));
                  std::string cell_str = jv[header].toStyledString();
                  std::size_t x = cell_str.find_last_not_of("\r\n");
                  if(x!= std::string::npos) {

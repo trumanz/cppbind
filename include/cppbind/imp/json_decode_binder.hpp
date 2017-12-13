@@ -8,11 +8,11 @@ class JsonDecodeBinder : public BinderImpBase {
 private:
     bool basic_wrapper_as_string;
     std::map<std::string, boost::any>* type_tables;
-    ClassRegister* class_reg;
+    ClassRegisterBase* class_reg;
 public:
     JsonDecodeBinder(Json::Value json, bool basic_wrapper_as_string, 
                      std::map<std::string, boost::any>* type_tables,
-                     ClassRegister* _class_reg){
+                     ClassRegisterBase* _class_reg){
         this->json = json;
         this->basic_wrapper_as_string = basic_wrapper_as_string;
         this->type_tables = type_tables;

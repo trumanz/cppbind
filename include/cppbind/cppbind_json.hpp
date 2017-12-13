@@ -19,7 +19,7 @@
 #include <boost/tti/has_member_function.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/shared_ptr.hpp>
-#include "ClassRegister.h"
+#include "ClassRegisterBase.h"
 #include "imp/binder.hpp"
 
 namespace  cppbind {
@@ -48,7 +48,7 @@ private:
     }
 
     std::map<std::string, boost::any> type_tables;
-    ClassRegister* class_reg;
+    ClassRegisterBase* class_reg;
 public:
     JsonBind(){ class_reg = NULL;}
     template<typename T>
@@ -56,7 +56,7 @@ public:
     {
         type_tables[typeid(T).name()] = table;
     }
-    void regClassRegister(ClassRegister* _class_reg){
+    void regClassRegister(ClassRegisterBase* _class_reg){
         assert(class_reg == NULL);
         this->class_reg = _class_reg;
     }

@@ -5,9 +5,9 @@ namespace  cppbind {
 
 class JsonEncodeBinder : public BinderImpBase {
 private:
-    ClassRegister* class_reg;
+    ClassRegisterBase* class_reg;
 public:
-    JsonEncodeBinder(ClassRegister* _class_reg){
+    JsonEncodeBinder(ClassRegisterBase* _class_reg){
         this->class_reg = _class_reg;
     }
     void setJson(const Json::Value& jv){

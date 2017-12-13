@@ -14,6 +14,7 @@
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include <cppbind/utility/EnumHelper.hpp>
 #include <cppbind/type/spec_type.h>
+#include <cppbind/ClassRegister.h>
 
 using namespace boost::posix_time;
 using namespace cppbind;
@@ -181,10 +182,7 @@ TEST(JsonROM, baisc){
 
 
      ClassRegister class_register;
-     //class_register.regClass<Metro>("Metro");
-
-     ObjFactory* of = new ObjFactoryT<Metro>();
-     class_register.regClass("Metro", of);
+     class_register.regClass<Metro>("Metro");
 
      JsonBind binder;
      binder.regTable(&music_table);

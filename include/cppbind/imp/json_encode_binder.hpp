@@ -4,8 +4,11 @@
 namespace  cppbind {
 
 class JsonEncodeBinder : public BinderImpBase {
+private:
+    ClassRegister* class_reg;
 public:
-    JsonEncodeBinder(){
+    JsonEncodeBinder(ClassRegister* _class_reg){
+        this->class_reg = _class_reg;
     }
     void setJson(const Json::Value& jv){
         this->root = jv;
@@ -39,6 +42,15 @@ public:
           bool dummy;
           Json::Value jv =  encodeWithForeginKey(v, &dummy);
           root[name] = jv;
+    }
+    template<typename T>
+    void bindWithDynamicType(const std::string& name, T*& v){
+        //printf("name=%s\n", name.c_str());
+        std::string typid_name = typeid(*v).name();
+        std::string reg_name = this->class_reg->getRegName(typid_name.c_str());
+        Json::Value jv;
+        jv[reg_name] = v->getJsonValue4Bind();
+        root[name] = jv;
     }
     
 public: //for std container type
@@ -186,7 +198,7 @@ public:
     template<typename T>
     Json::Value encode(T& e, bool* is_basic_type){
        *is_basic_type = false;
-       Binder binder(boost::shared_ptr<BinderImpBase>(new JsonEncodeBinder()));
+       Binder binder(boost::shared_ptr<BinderImpBase>(new JsonEncodeBinder(this->class_reg)));
 
        typedef typename boost::mpl::if_c<has_member_function_setBind<void (T::*) (Binder*)>::value, 
            SetBindMemberFunctionCaller, Option2MemberFunctionCaller>::type CallerT;

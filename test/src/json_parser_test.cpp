@@ -9,6 +9,7 @@
 #include <jsoncpp/json/json.h>
 #include <cppbind/cppbind_json.hpp>
 #include <cppbind/CSVBind.hpp>
+#include <cppbind/ObjFactoryT.h>
 #include <cppbind/type/timestr.h>
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include <cppbind/utility/EnumHelper.hpp>
@@ -62,6 +63,26 @@ const size_t SexEnum::enum_str_info_len = sizeof(SexEnum::enum_str_info)/sizeof(
 
 typedef EnumHelper<SexEnum> SexType;
 
+class Vehicle : public Object{
+public:
+    virtual ~Vehicle(){}
+
+};
+class Metro : public Vehicle{
+
+public:
+    class Data4Bind{
+    public:
+        int line;
+         void setBind(Binder *binder){
+             binder->bind("line", line);
+          }
+    };
+    Metro(Data4Bind& d){this->data = d;}
+    Json::Value getJsonValue4Bind() { return cppbind::JsonBind().encodeToJsonValue(data);}
+public:
+    Data4Bind data;
+};
 
 class Music {
 public:
@@ -119,6 +140,7 @@ public:
     Json::Value jv; //optional not exist
     std::vector<Music*> liked_music_list;
     Music* favorite_music;
+    Vehicle* vehicle;
     void setBind(Binder *binder){
           binder->bind("name", name);
           binder->bind("age", age);
@@ -135,6 +157,7 @@ public:
           binder->bind("jv", jv);
           binder->bindWithForeginKey("liked_music", liked_music_list);
           binder->bindWithForeginKey("favorite_music", favorite_music);
+          binder->bindWithDynamicType("vehicle", vehicle);
     }
 };
 
@@ -156,8 +179,16 @@ TEST(JsonROM, baisc){
 
      printf("%s\n", JsonBind().toJsonStr(all_musics).c_str());
 
+
+     ClassRegister class_register;
+     //class_register.regClass<Metro>("Metro");
+
+     ObjFactory* of = new ObjFactoryT<Metro>();
+     class_register.regClass("Metro", of);
+
      JsonBind binder;
      binder.regTable(&music_table);
+     binder.regClassRegister(&class_register);
 
      boost::shared_ptr<Me> me = binder.decode<Me>(ifs);
 
@@ -201,8 +232,13 @@ TEST(JsonROM, baisc){
      ASSERT_EQ(me->liked_music_list[0], music_table.find("music_1")->second);
      ASSERT_EQ(me->liked_music_list[1], music_table.find("music_2")->second);
 
+     //dynamicType
+     Metro* metro = dynamic_cast<Metro*>(me->vehicle);
+     ASSERT_TRUE(metro != NULL);
+     ASSERT_EQ(3, metro->data.line);
+
      std::stringstream ss;
-     JsonBind().encode(*(me.get()), &ss);
+     binder.encode(*(me.get()), &ss);
 
      printf("%s\n", ss.str().c_str());
 };

@@ -8,11 +8,15 @@ class JsonDecodeBinder : public BinderImpBase {
 private:
     bool basic_wrapper_as_string;
     std::map<std::string, boost::any>* type_tables;
+    ClassRegister* class_reg;
 public:
-    JsonDecodeBinder(Json::Value json, bool basic_wrapper_as_string, std::map<std::string, boost::any>* type_tables){
+    JsonDecodeBinder(Json::Value json, bool basic_wrapper_as_string, 
+                     std::map<std::string, boost::any>* type_tables,
+                     ClassRegister* _class_reg){
         this->json = json;
         this->basic_wrapper_as_string = basic_wrapper_as_string;
         this->type_tables = type_tables;
+        this->class_reg = _class_reg;
      }
     void setJson(const Json::Value& jv){
         this->json = jv;
@@ -77,6 +81,16 @@ public:
          } else  {
               throw CppBindException(std::string(".") + name, "not found");
          }
+    }
+
+    template<typename T>
+    void bindWithDynamicType(const std::string& name, T*& v){
+        Json::Value jv = this->json[name];
+        Json::Value::Members  members = jv.getMemberNames();
+        assert(members.size() == 1);
+        std::string class_name = members[0];
+        Json::Value class_data = jv[class_name];
+        v = this->class_reg->createObj<T>(class_name.c_str(), class_data);
     }
 
 //std container type
@@ -239,7 +253,7 @@ private: // for class type
     template<typename T>
     void decode(const Json::Value& json, T* e){
 
-         Binder binder(boost::shared_ptr<BinderImpBase>(new JsonDecodeBinder(json, this->basic_wrapper_as_string, this->type_tables)));
+         Binder binder(boost::shared_ptr<BinderImpBase>(new JsonDecodeBinder(json, this->basic_wrapper_as_string, this->type_tables, this->class_reg)));
 
         
          //if have "void setBind(Binder*)" then call setbind; else call otheres

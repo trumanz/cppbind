@@ -19,7 +19,7 @@
 #include <boost/tti/has_member_function.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/shared_ptr.hpp>
-
+#include "ClassRegister.h"
 #include "imp/binder.hpp"
 
 namespace  cppbind {
@@ -30,7 +30,7 @@ private:
     T* decodeJV2Point(const Json::Value& root, bool basic_wrapper_string = false){
          T* e = NULL;
          e = new T;
-         JsonDecodeBinder decoder(root,basic_wrapper_string, &type_tables);
+         JsonDecodeBinder decoder(root,basic_wrapper_string, &type_tables, class_reg);
          decoder.decode(e);
          return e;
     }
@@ -48,13 +48,17 @@ private:
     }
 
     std::map<std::string, boost::any> type_tables;
-
+    ClassRegister* class_reg;
 public:
-    JsonBind(){}
+    JsonBind(){ class_reg = NULL;}
     template<typename T>
     void regTable(const std::map<std::string, T*> *table)
     {
         type_tables[typeid(T).name()] = table;
+    }
+    void regClassRegister(ClassRegister* _class_reg){
+        assert(class_reg == NULL);
+        this->class_reg = _class_reg;
     }
 
     template<typename T>
@@ -87,7 +91,7 @@ public:
     template<typename T>
     Json::Value  encodeToJsonValue(T&e){
          //EncodeBinder binder;
-         JsonEncodeBinder encoder;
+         JsonEncodeBinder encoder(class_reg);
          bool dummy;
          Json::Value jv = encoder.encode(e, &dummy);
         return jv;
@@ -96,7 +100,7 @@ public:
     template<typename T>
     void encode(T&e, std::ostream *out){
          //EncodeBinder binder;
-         JsonEncodeBinder encoder;
+         JsonEncodeBinder encoder(class_reg);
          bool dummy;
          Json::Value jv = encoder.encode(e, &dummy);
          Json::StyledStreamWriter writer;

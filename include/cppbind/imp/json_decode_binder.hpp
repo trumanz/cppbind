@@ -249,6 +249,13 @@ private: // for class type
           CallerT().call(e, &binder);
     } 
 
+    template<typename T>
+    void decode(const Json::Value& json, T** e){
+
+         *e  = new T();
+         decode(json, *e);
+    } 
+ 
     
     template<typename T>
     void decodeWithForeginKey(const Json::Value& json, T** e){

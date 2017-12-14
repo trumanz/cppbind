@@ -90,6 +90,9 @@ public:
         assert(members.size() == 1);
         std::string class_name = members[0];
         Json::Value class_data = jv[class_name];
+        if(this->class_reg == NULL) {
+            printf("ERROR, please register classRegister first");
+        }
         v = this->class_reg->createObj<T>(class_name.c_str(), class_data);
     }
 

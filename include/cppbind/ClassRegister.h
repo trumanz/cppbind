@@ -3,6 +3,7 @@
 #include <typeinfo>
 #include <boost/noncopyable.hpp>
 #include "ObjFactory.h"
+#include "ObjFactoryT.h"
 #include "ClassRegisterBase.h"
 
 namespace cppbind{

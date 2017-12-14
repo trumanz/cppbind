@@ -8,7 +8,7 @@ namespace cppbind{
 class Object{
 public:
     virtual ~Object(){}
-    virtual Json::Value getJsonValue4Bind() = 0; 
+    virtual Json::Value getJsonValue4Bind() const = 0; 
 };
 
 

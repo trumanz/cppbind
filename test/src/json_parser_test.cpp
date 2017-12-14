@@ -79,8 +79,8 @@ public:
              binder->bind("line", line);
           }
     };
-    Metro(Data4Bind& d){this->data = d;}
-    Json::Value getJsonValue4Bind() { return cppbind::JsonBind().encodeToJsonValue(data);}
+    Metro(const Data4Bind& d){this->data = d;}
+    const Data4Bind& getData4Bind() const { return data;}
 public:
     Data4Bind data;
 };

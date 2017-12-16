@@ -134,22 +134,23 @@ public: //for std container type
         for(typename std::map<KeyT, ValueT>::iterator it =  e.begin(); it != e.end(); it++) {
             bool is_basic_type;
             bool dummy;
-            const KeyT& k = it->first;
+            KeyT k = it->first;
             Json::Value k_jv = encode(k, &is_basic_type);
             Json::Value v_jv = encode(it->second, &dummy);
-            if(is_basic_type) {
-                std::string x = k_jv.toStyledString();
-                if(x[x.length()-1] == '\n') {
-                    x = x.substr(0, x.length()-1);
-                }
-                 jv[x] = v_jv;
-            } 
-            else {
-                Json::Value je;
-                je["_key"] = k_jv;
-                je["_value"] = v_jv;
-                je.append(je);
+            
+            std::string str_key = k_jv.toStyledString();
+            std::size_t x = str_key.find_last_not_of("\r\n");
+            if(x!= std::string::npos) {
+                str_key = str_key.substr(0, x+1);
             }
+            if(k_jv.isString()) {
+                assert(str_key.length() >= 2);
+                assert(str_key[0] == '\"');
+                assert(str_key[str_key.length()-1] == '\"');
+                str_key = str_key.substr(1, str_key.length()-2);
+            }
+            jv[str_key] = v_jv;
+            
         }
         return jv;
     }
@@ -187,7 +188,7 @@ public:
     public:
         template<typename T>
         void call(T&e, Binder* binder){
-          //if have "std::string toStr4Bind()" then call setbind; else call otheres
+          //if have "Json::Value toJsonValue4Bind()" then call setbind; else call otheres
           typedef typename boost::mpl::if_c<has_member_function_toJsonValue4Bind<Json::Value (T::*) ()>::value, 
               ToJsonValue4BindMemberFunctionCaller, RunTimeBinderCaller>::type CallerT;
 

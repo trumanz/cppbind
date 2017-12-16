@@ -142,6 +142,7 @@ public:
     std::vector<Music*> liked_music_list;
     Music* favorite_music;
     Vehicle* vehicle;
+    std::map<SexType, std::string> favorite_singer;
     void setBind(Binder *binder){
           binder->bind("name", name);
           binder->bind("age", age);
@@ -159,6 +160,7 @@ public:
           binder->bindWithForeginKey("liked_music", liked_music_list);
           binder->bindWithForeginKey("favorite_music", favorite_music);
           binder->bindWithDynamicType("vehicle", vehicle);
+          binder->bind("favorite_singer", favorite_singer);
     }
 };
 

@@ -35,5 +35,7 @@
         },
 	"liked_music" : [ "music_1", "music_2" ],
 	"favorite_music" :  "music_0",
-	"vehicle" : { "Metro" : { "line" : 3 }  }
+	"vehicle" : { "Metro" : { "line" : 3 }  },
+	"favorite_singer" : { "male" : "Michael Jackson",
+	                      "female" : "Selena Gomez" }
 }

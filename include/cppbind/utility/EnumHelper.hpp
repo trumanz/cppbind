@@ -44,8 +44,11 @@ private:
    }
 public:
 
-   bool operator==(const typename T::Type& _enum){
+   bool operator==(const typename T::Type& _enum) const{
        return this->value == _enum;
+   }
+   bool operator==(const EnumHelper& r) const{
+       return this->value == r.value;
    }
    bool operator<(const EnumHelper& right)const{
        return this->value <  right.value;

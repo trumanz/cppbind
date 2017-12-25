@@ -131,10 +131,10 @@ private:
         Json::Value jv;
         if(headers.size() != data.size()) {
             for(size_t i = 0; i < headers.size(); i++) {
-                printf("header, %lu, %s\n", i, headers[i].c_str());
+                printf("header, %lu, [%s]\n", i, headers[i].c_str());
             }
             for(size_t i = 0; i < data.size(); i++) {
-                printf("data, %lu, %s\n", i, data[i].c_str());
+                printf("data, %lu, [%s]\n", i, data[i].c_str());
             }
         }
         assert(headers.size() == data.size());

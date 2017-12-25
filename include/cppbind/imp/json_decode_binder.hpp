@@ -71,8 +71,8 @@ public:
     template<typename T>
     void bindWithForeginKey(const std::string& name, T& v){
          //printf("filed %s\n", name.c_str());
-         Json::Value jv = json[name];
-         if(!jv.isNull()) {
+         if(json.isMember(name)) {
+             Json::Value jv = json[name];
              try {
                 decodeWithForeginKey(jv, &v);
              } catch (CppBindException e) {
@@ -317,6 +317,9 @@ private: // for class type
          decode(json, &key);
          typename std::map<std::string, T*>::const_iterator it2 = table->find(key);
          if(it2 == table->end()) {
+             for(typename std::map<std::string, T*>::const_iterator it3 = table->begin(); it3 != table->end(); it3++) {
+                 printf("%s\n", it3->first.c_str());
+             }
              printf("ERROR, Can not found %s in table for %s", key.c_str(), type_name.c_str());
              assert(false);
          }

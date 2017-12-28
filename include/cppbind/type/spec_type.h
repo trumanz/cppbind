@@ -3,7 +3,7 @@
 #include "cppbind/cppbind_json.hpp"
 
 namespace cppbind{
-
+#if 0
 class SpecTypeBase {
 
 public:
@@ -39,7 +39,7 @@ public:
     virtual std::string encode() = 0;
     virtual ~SpecTypeBase(){};
 };
-
+#endif
 //class PosixTime
 
 #if 0

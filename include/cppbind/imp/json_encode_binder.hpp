@@ -10,33 +10,32 @@ public:
     JsonEncodeBinder(ClassRegisterBase* _class_reg){
         this->class_reg = _class_reg;
     }
-    void setJson(const Json::Value& jv){
-        this->root = jv;
-    }
+   // void setJson(const Json::Value& jv){
+   //     this->root_jv[0] = jv;
+   // }
     template<typename T>
     void bind(const std::string& name, T& v){
-          Json::Value jv =  encode(v);
+          Json::Value jv;
+          encode(v, &jv);
           root[name] = jv;
     }
 
     template<typename T>
     void bind(const std::string& name, T& v, const T& default_value){
-          Json::Value jv =  encode(v);
-          root[name] = jv;
+          this->bind(name,v);
     }
-
 
     template<typename T>
     void bind(const std::string& name, boost::shared_ptr<T>& v){
           if(v.get() != NULL) {
-               Json::Value jv =  encode(*(v.get()));
-               root[name] = jv;
+              this->bind(name,*(v.get()));
           }
     }
 
     template<typename T>
     void bindWithForeginKey(const std::string& name, T& v){
-          Json::Value jv =  encodeWithForeginKey(v);
+          Json::Value jv;
+          encodeWithForeginKey(v, &jv);
           root[name] = jv;
     }
     template<typename T>
@@ -52,71 +51,69 @@ public:
 public: //for std container type
     
     template<typename T>
-    Json::Value encode(std::vector<T>& e){
-        Json::Value jv;
+    void encode(std::vector<T>& e, Json::Value* jv){
         for(typename std::vector<T>::iterator  it  = e.begin(); it != e.end(); it++) {
-             Json::Value je = encode(*it);
-             jv.append(je);
+             Json::Value je;
+             encode(*it, &je);
+             jv->append(je);
         }
-        return jv;
     }
     template<typename T>
-    Json::Value encode(std::vector<T*>& e){
-        Json::Value jv;
+    void encode(std::vector<T*>& e, Json::Value* jv){
         for(typename std::vector<T*>::iterator  it  = e.begin(); it != e.end(); it++) {
-             Json::Value je = encode(*(*it));
-             jv.append(je);
+             Json::Value je;
+             T* e = *it;
+             encode(*(e), &je);
+             jv->append(je);
         }
-        return jv;
     }
     template<typename T>
-    Json::Value encodeWithForeginKey(std::vector<T*>& e){
-        Json::Value jv;
+    void encodeWithForeginKey(std::vector<T*>& e, Json::Value* jv){
         for(typename std::vector<T*>::iterator  it  = e.begin(); it != e.end(); it++) {
              T* x = *it;
-             Json::Value je = encode(x->getKeyStr());
-             jv.append(je);
+             Json::Value je;
+             encode(x->getKeyStr(), &je);
+             jv->append(je);
         }
-        return jv;
     }
     template<typename T>
-    Json::Value encode(std::list<T*>& e){
-        Json::Value jv;
+    void encode(std::list<T*>& e, Json::Value* jv){
         for(typename std::list<T*>::iterator  it  = e.begin(); it != e.end(); it++) {
              T& e_x = *(*it);
              Json::Value je = encode(e_x);
-             jv.append(je);
+             jv->append(je);
         }
-        return jv;
     }
     template<typename T>
-    Json::Value encode(std::list<T>& e){
-        Json::Value jv;
+    void encode(std::list<T>& e, Json::Value* jv){
         for(typename std::list<T>::iterator  it  = e.begin(); it != e.end(); it++) {
-             Json::Value je = encode(*it);
-             jv.append(je);
+             Json::Value je;
+             encode(*it, &je);
+             jv->append(je);
         }
-        return jv;
     }
     template<typename T>
-    Json::Value encode(std::set<T>& e){
-        Json::Value jv;
-        if(e.empty()) return Json::arrayValue;
+    void encode(std::set<T>& e, Json::Value* jv){
+        if(e.empty()) jv[0] = Json::arrayValue;
         for(typename std::set<T>::iterator  it  = e.begin(); it != e.end(); it++) {
-             Json::Value je = encode(*(T*)(&(*it)));
-             jv.append(je);
+             //T& e = *it;
+             Json::Value je;
+             //encode(*(T*)(&(*it)), &je);
+             encode(e, &je);
+             jv->append(je);
         }
-        return jv;
     }
 
    
     template<typename KeyT, typename ValueT>
-    Json::Value encode(std::map<KeyT, ValueT>& e){
+    void encode(std::map<KeyT, ValueT>& e, Json::Value* _jv){
         Json::Value jv;
         for(typename std::map<KeyT, ValueT>::iterator it =  e.begin(); it != e.end(); it++) {
             KeyT k = it->first;
-            Json::Value k_jv = encode(k);
-            Json::Value v_jv = encode(it->second);
+            Json::Value k_jv;
+            encode(k, &k_jv);
+            Json::Value v_jv;
+            encode(it->second, &v_jv);
             
             std::string str_key = k_jv.toStyledString();
             std::size_t x = str_key.find_last_not_of("\r\n");
@@ -132,93 +129,99 @@ public: //for std container type
             jv[str_key] = v_jv;
             
         }
-        return jv;
+        _jv[0] = jv;
     }
 //CLASS&STRUCT type
 public:
-    
+    //call setBind
     class SetBindMemberFunctionCaller{
     public:
         template<typename T>
-        void call(T&e, Binder* binder){
+        void call(T&e, Binder* binder, Json::Value* jv){
             e.setBind(binder);
+            JsonEncodeBinder* json_encoder_binder = dynamic_cast<JsonEncodeBinder*>(binder->binder_imp.get());
+            jv[0] = json_encoder_binder->root;
         }
     };
 
+    //call toJsonValue4Bind
     class ToJsonValue4BindMemberFunctionCaller{
     public:
         template<typename T>
-        void call(T&e, Binder* binder){
-            Json::Value jv = e.toJsonValue4Bind();
-            JsonEncodeBinder* json_encoder_binder = dynamic_cast<JsonEncodeBinder*>(binder->binder_imp.get());
-            json_encoder_binder->setJson(jv);
+        void call(T&e, Binder* binder, Json::Value* jv){
+            jv[0] = e.toJsonValue4Bind();
         }
     };
 
+    //call registered functon
     class RunTimeBinderCaller{
     public:
         template<typename T>
-        void call(T&e, Binder* binder){
+        void call(T&e, Binder* binder, Json::Value* jv){
             std::string x = binder->str_convert_mgmt.toString(e);
-            JsonEncodeBinder* json_encoder_binder = dynamic_cast<JsonEncodeBinder*>(binder->binder_imp.get());
-            json_encoder_binder->setJson(Json::Value(x));
+            jv[0] = Json::Value(x);
         }
     };
+
+    //call toJsonValue4Bind or RunTime Registered
     class Option2MemberFunctionCaller{
     public:
         template<typename T>
-        void call(T&e, Binder* binder){
+        void call(T&e, Binder* binder, Json::Value* jv){
           //if have "Json::Value toJsonValue4Bind()" then call setbind; else call otheres
           typedef typename boost::mpl::if_c<has_member_function_toJsonValue4Bind<Json::Value (T::*) ()>::value, 
               ToJsonValue4BindMemberFunctionCaller, RunTimeBinderCaller>::type CallerT;
 
-          CallerT().call(e, binder); 
+          CallerT().call(e, binder, jv); 
         }
     };
-     
+    //call setbind or  Option2MemberFunctionCaller
     template<typename T>
-    Json::Value encode(T& e){
+    void encode(T& e, Json::Value* jv){
        Binder binder(boost::shared_ptr<BinderImpBase>(new JsonEncodeBinder(this->class_reg)));
 
        typedef typename boost::mpl::if_c<has_member_function_setBind<void (T::*) (Binder*)>::value, 
            SetBindMemberFunctionCaller, Option2MemberFunctionCaller>::type CallerT;
 
-       CallerT().call(e, &binder);
+       CallerT().call(e, &binder, jv);
 
        //e.setBind(&binder);
-       JsonEncodeBinder* json_encoder_binder = dynamic_cast<JsonEncodeBinder*>(binder.binder_imp.get());
-       return json_encoder_binder->root;
+       //JsonEncodeBinder* json_encoder_binder = dynamic_cast<JsonEncodeBinder*>(binder.binder_imp.get());
+       //jv[0] = json_encoder_binder->root;
     }
 
     template<typename T>
-    Json::Value encodeWithForeginKey(T& e){
-        Json::Value jv = encode(e->getKeyStr());
-        return jv;
+    void encodeWithForeginKey(T& e, Json::Value* jv){
+         encode(e->getKeyStr(), jv);
     }
 
     template<typename T>
-    Json::Value encode(T* e, bool* is_basic_type){
+    void encode(T* e, Json::Value* jv){
         T& _e = *e;
-        return this->encode(_e);
+        this->encode(_e, jv);
     } 
 private:
-    Json::Value encode(const Json::Value e){
-        return e;
+    void encode(const Json::Value& e, Json::Value* jv){
+        jv[0] = e;
     }
-private:  //for basic type
+    void encode(Json::Value& e, Json::Value* jv){
+        jv[0] = e;
+    }
+//for basic type
+private:  
     // bool 
-    Json::Value encode(const bool e) { return Json::Value(e);}
+    void encode(const bool e, Json::Value* jv) { jv[0] = Json::Value(e);}
     //int32_t
-    Json::Value encode(const int32_t e) { Json::Int x = e; return Json::Value(x); }
+    void encode(const int32_t e, Json::Value* jv) { Json::Int x = e; jv[0] =  Json::Value(x); }
     //int64_t 
-    Json::Value encode(const int64_t e) { Json::Int64 x = e; return Json::Value(x); }
+    void encode(const int64_t e, Json::Value* jv) { Json::Int64 x = e; jv[0] =  Json::Value(x); }
     //float 
-    Json::Value encode(const float e){ return Json::Value(e); }
+    void encode(const float e, Json::Value* jv){ jv[0] =  Json::Value(e); }
     //double 
-    Json::Value encode(const double e){ return Json::Value(e); }
+    void encode(const double e, Json::Value* jv){ jv[0] =  Json::Value(e); }
     //string
-    Json::Value encode(const std::string& e) { return Json::Value(e);}
-    Json::Value encode(      std::string& e) { return Json::Value(e);}
+    void encode(const std::string& e, Json::Value* jv) { jv[0] =  Json::Value(e);}
+    void encode(      std::string& e, Json::Value* jv) { jv[0] =  Json::Value(e);}
 public:
     Json::Value root;
 };

@@ -19,7 +19,7 @@
 using namespace boost::posix_time;
 using namespace cppbind;
 
-
+#if 0
 class PosixTime : public ptime, public SpecTypeBase {
 public:
       PosixTime(){
@@ -47,7 +47,7 @@ private:
     }
     std::string pattern;
 };
-
+#endif
 
 class SexEnum{
 public:
@@ -237,8 +237,11 @@ TEST(JsonROM, baisc){
      ASSERT_TRUE(metro != NULL);
      ASSERT_EQ(3, metro->data.line);
 
+     for(int i = 0; i < 100000; i++) {
+         std::stringstream ss;
+         binder.encode(*(me.get()), &ss);
+     }
      std::stringstream ss;
      binder.encode(*(me.get()), &ss);
-
      printf("%s\n", ss.str().c_str());
 };

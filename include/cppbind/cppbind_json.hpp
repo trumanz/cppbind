@@ -94,7 +94,7 @@ public:
     template<typename T>
     void  encodeToJsonValue(T&e, Json::Value* jv){
          JsonEncodeBinder encoder(class_reg);
-         jv[0] = encoder.encode(e);
+         encoder.encode(e, jv);
     }
     template<typename T>
     Json::Value  encodeToJsonValue(T&e){

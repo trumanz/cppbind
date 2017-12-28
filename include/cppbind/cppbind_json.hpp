@@ -88,30 +88,37 @@ public:
         return this->decodeIStream2Point<T>(fs);
     }
 
+//Encode Interface
+public:
+    //to JsonValue
+    template<typename T>
+    void  encodeToJsonValue(T&e, Json::Value* jv){
+         JsonEncodeBinder encoder(class_reg);
+         jv[0] = encoder.encode(e);
+    }
     template<typename T>
     Json::Value  encodeToJsonValue(T&e){
-         //EncodeBinder binder;
-         JsonEncodeBinder encoder(class_reg);
-         bool dummy;
-         Json::Value jv = encoder.encode(e, &dummy);
-        return jv;
+         Json::Value jv;
+         this->encodeToJsonValue(e,&jv);
+         return jv;
     }
-     
+    //to ostream
     template<typename T>
     void encode(T&e, std::ostream *out){
-         //EncodeBinder binder;
-         JsonEncodeBinder encoder(class_reg);
-         bool dummy;
-         Json::Value jv = encoder.encode(e, &dummy);
-         Json::StyledStreamWriter writer;
-         writer.write(*out, jv);
+        Json::Value jv;
+        this->encodeToJsonValue(e,&jv);
+        Json::StyledStreamWriter writer;//TODO, performance ?
+        writer.write(*out, jv);
     }
+
+    //to string
     template<typename T>
     std::string toJsonStr(T&e){
          std::stringstream ss;
-         encode(e, &ss);
+         this->encode(e, &ss);
          return ss.str();
     }
+
 
 };
 

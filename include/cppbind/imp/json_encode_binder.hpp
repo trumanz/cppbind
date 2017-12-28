@@ -15,15 +15,13 @@ public:
     }
     template<typename T>
     void bind(const std::string& name, T& v){
-          bool dummy;
-          Json::Value jv =  encode(v, &dummy);
+          Json::Value jv =  encode(v);
           root[name] = jv;
     }
 
     template<typename T>
     void bind(const std::string& name, T& v, const T& default_value){
-          bool dummy;
-          Json::Value jv =  encode(v, &dummy);
+          Json::Value jv =  encode(v);
           root[name] = jv;
     }
 
@@ -31,16 +29,14 @@ public:
     template<typename T>
     void bind(const std::string& name, boost::shared_ptr<T>& v){
           if(v.get() != NULL) {
-               bool dummy;
-               Json::Value jv =  encode(*(v.get()), &dummy);
+               Json::Value jv =  encode(*(v.get()));
                root[name] = jv;
           }
     }
 
     template<typename T>
     void bindWithForeginKey(const std::string& name, T& v){
-          bool dummy;
-          Json::Value jv =  encodeWithForeginKey(v, &dummy);
+          Json::Value jv =  encodeWithForeginKey(v);
           root[name] = jv;
     }
     template<typename T>
@@ -56,71 +52,58 @@ public:
 public: //for std container type
     
     template<typename T>
-    Json::Value encode(std::vector<T>& e,bool* is_basic_type){
-        *is_basic_type = false;
+    Json::Value encode(std::vector<T>& e){
         Json::Value jv;
         for(typename std::vector<T>::iterator  it  = e.begin(); it != e.end(); it++) {
-            bool dummy;
-             Json::Value je = encode(*it, &dummy);
+             Json::Value je = encode(*it);
              jv.append(je);
         }
         return jv;
     }
     template<typename T>
-    Json::Value encode(std::vector<T*>& e,bool* is_basic_type){
-        *is_basic_type = false;
+    Json::Value encode(std::vector<T*>& e){
         Json::Value jv;
         for(typename std::vector<T*>::iterator  it  = e.begin(); it != e.end(); it++) {
-            bool dummy;
-             Json::Value je = encode(*(*it), &dummy);
+             Json::Value je = encode(*(*it));
              jv.append(je);
         }
         return jv;
     }
     template<typename T>
-    Json::Value encodeWithForeginKey(std::vector<T*>& e,bool* is_basic_type){
-        *is_basic_type = false;
+    Json::Value encodeWithForeginKey(std::vector<T*>& e){
         Json::Value jv;
         for(typename std::vector<T*>::iterator  it  = e.begin(); it != e.end(); it++) {
-             bool dummy;
              T* x = *it;
-             std::string key = x->getKeyStr();
-             Json::Value je = encode(key, &dummy);
+             Json::Value je = encode(x->getKeyStr());
              jv.append(je);
         }
         return jv;
     }
     template<typename T>
-    Json::Value encode(std::list<T*>& e,bool* is_basic_type){
-        *is_basic_type = false;
+    Json::Value encode(std::list<T*>& e){
         Json::Value jv;
         for(typename std::list<T*>::iterator  it  = e.begin(); it != e.end(); it++) {
              T& e_x = *(*it);
-             bool dummy;
-             Json::Value je = encode(e_x, &dummy);
+             Json::Value je = encode(e_x);
              jv.append(je);
         }
         return jv;
     }
     template<typename T>
-    Json::Value encode(std::list<T>& e,bool* is_basic_type){
-        *is_basic_type = false;
+    Json::Value encode(std::list<T>& e){
         Json::Value jv;
         for(typename std::list<T>::iterator  it  = e.begin(); it != e.end(); it++) {
-             bool dummy;
-             Json::Value je = encode(*it, &dummy);
+             Json::Value je = encode(*it);
              jv.append(je);
         }
         return jv;
     }
     template<typename T>
-    Json::Value encode(std::set<T>& e,bool* is_basic_type){
+    Json::Value encode(std::set<T>& e){
         Json::Value jv;
-        is_basic_type[0] = false;
         if(e.empty()) return Json::arrayValue;
         for(typename std::set<T>::iterator  it  = e.begin(); it != e.end(); it++) {
-            bool dummy;
-             Json::Value je = encode(*(T*)(&(*it)), &dummy);
+             Json::Value je = encode(*(T*)(&(*it)));
              jv.append(je);
         }
         return jv;
@@ -128,15 +111,12 @@ public: //for std container type
 
    
     template<typename KeyT, typename ValueT>
-    Json::Value encode(std::map<KeyT, ValueT>& e,bool* is_basic_type){
-        *is_basic_type = false;
+    Json::Value encode(std::map<KeyT, ValueT>& e){
         Json::Value jv;
         for(typename std::map<KeyT, ValueT>::iterator it =  e.begin(); it != e.end(); it++) {
-            bool is_basic_type;
-            bool dummy;
             KeyT k = it->first;
-            Json::Value k_jv = encode(k, &is_basic_type);
-            Json::Value v_jv = encode(it->second, &dummy);
+            Json::Value k_jv = encode(k);
+            Json::Value v_jv = encode(it->second);
             
             std::string str_key = k_jv.toStyledString();
             std::size_t x = str_key.find_last_not_of("\r\n");
@@ -197,8 +177,7 @@ public:
     };
      
     template<typename T>
-    Json::Value encode(T& e, bool* is_basic_type){
-       *is_basic_type = false;
+    Json::Value encode(T& e){
        Binder binder(boost::shared_ptr<BinderImpBase>(new JsonEncodeBinder(this->class_reg)));
 
        typedef typename boost::mpl::if_c<has_member_function_setBind<void (T::*) (Binder*)>::value, 
@@ -212,37 +191,34 @@ public:
     }
 
     template<typename T>
-    Json::Value encodeWithForeginKey(T& e, bool* is_basic_type){
-        *is_basic_type = false;
-        bool dummy;
-        std::string key = e->getKeyStr();
-        Json::Value jv = encode(key, &dummy);
+    Json::Value encodeWithForeginKey(T& e){
+        Json::Value jv = encode(e->getKeyStr());
         return jv;
     }
 
     template<typename T>
     Json::Value encode(T* e, bool* is_basic_type){
         T& _e = *e;
-        return this->encode(_e, is_basic_type);
+        return this->encode(_e);
     } 
 private:
-    Json::Value encode(const Json::Value e, bool* is_basic_type){
+    Json::Value encode(const Json::Value e){
         return e;
     }
 private:  //for basic type
     // bool 
-    Json::Value encode(const bool e, bool* is_basic_type) {*is_basic_type = true; return Json::Value(e);}
+    Json::Value encode(const bool e) { return Json::Value(e);}
     //int32_t
-    Json::Value encode(const int32_t e, bool* is_basic_type) {*is_basic_type = true; Json::Int x = e; return Json::Value(x); }
+    Json::Value encode(const int32_t e) { Json::Int x = e; return Json::Value(x); }
     //int64_t 
-    Json::Value encode(const int64_t e, bool* is_basic_type) {*is_basic_type = true;Json::Int64 x = e; return Json::Value(x); }
+    Json::Value encode(const int64_t e) { Json::Int64 x = e; return Json::Value(x); }
     //float 
-    Json::Value encode(const float e, bool* is_basic_type){*is_basic_type = true;  return Json::Value(e); }
+    Json::Value encode(const float e){ return Json::Value(e); }
     //double 
-    Json::Value encode(const double e, bool* is_basic_type){*is_basic_type = true;  return Json::Value(e); }
+    Json::Value encode(const double e){ return Json::Value(e); }
     //string
-    Json::Value encode(const std::string& e, bool* is_basic_type) {*is_basic_type = true; return Json::Value(e);}
-    Json::Value encode(      std::string& e, bool* is_basic_type) {*is_basic_type = true; return Json::Value(e);}
+    Json::Value encode(const std::string& e) { return Json::Value(e);}
+    Json::Value encode(      std::string& e) { return Json::Value(e);}
 public:
     Json::Value root;
 };

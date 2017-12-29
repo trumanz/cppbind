@@ -94,7 +94,7 @@ public: //for std container type
     }
     template<typename T>
     void encode(std::set<T>& e_set, Json::Value* jv){
-        if(e.empty()) jv[0] = Json::arrayValue;
+        if(e_set.empty()) jv[0] = Json::arrayValue;
         for(typename std::set<T>::iterator  it  = e_set.begin(); it != e_set.end(); it++) {
              T& e = *it;
              Json::Value je;

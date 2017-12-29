@@ -61,7 +61,13 @@ public:
                  if(j > 0) {
                      csv_row << ",";
                  }
-                 assert(jv.isMember(header));
+                 if(!jv.isMember(header)) {
+                     std::stringstream ss;
+                     Json::StyledStreamWriter writer;
+                     writer.write(ss, jv);
+                     printf("jv is: \n%s\n", ss.str().c_str());
+                     assert(false);
+                 }
                  std::string cell_str = jv[header].toStyledString();
                  std::size_t x = cell_str.find_last_not_of("\r\n");
                  if(x!= std::string::npos) {
@@ -119,13 +125,13 @@ public:
          return rc;
     }
 private:
-    template<typename T>
-    T* decodeRow(const CSVRow &row) const{
-         T *e;
-         CSVDecodeBinder decoder(row.cells);
-         decoder.decode(e);
-         return e;
-    }
+   //emplate<typename T>
+   //* decodeRow(const CSVRow &row) const{
+   //    T *e;
+   //    CSVDecodeBinder decoder(row.cells);
+   //    decoder.decode(e);
+   //    return e;
+   //
 
     Json::Value createJsonObject(const std::vector<std::string>& headers, const std::vector<std::string>& data){
         Json::Value jv;

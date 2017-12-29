@@ -21,26 +21,65 @@ BOOST_TTI_HAS_MEMBER_FUNCTION(setBind)
 BOOST_TTI_HAS_MEMBER_FUNCTION(fromJsonValue4Bind)
 BOOST_TTI_HAS_MEMBER_FUNCTION(toJsonValue4Bind)
 
-class BinderImpBase {
-public:
-     virtual ~BinderImpBase() {}
-};
 
-class Binder{
+
+class BinderData{
 public:
-    /*  
-    //default is encoder
-    Binder();
-    //decoder
-    Binder(const Json::Value& root);
-    Binder(const std::vector<std::string>& csv_row); 
-    */ 
-    Binder(boost::shared_ptr<BinderImpBase> binder_imp){
-        this->binder_imp = binder_imp;
+    StringConverterManager str_convert_mgmt;
+    std::map<std::string, boost::any> type_tables;
+    ClassRegisterBase* class_reg;
+public:
+    BinderData(){
+        this->class_reg = NULL;
         str_convert_mgmt.addStringConverter<boost::posix_time::ptime,BoostPTimeConverter>();
         str_convert_mgmt.addStringConverter<boost::posix_time::time_duration,BoostTimeDurationConverter>();
         str_convert_mgmt.addStringConverter<boost::gregorian::date,BoostGDateConverter>();
     }
+};
+
+class BinderImpBase {
+public:
+     virtual ~BinderImpBase() {}
+     BinderData binder_data;
+
+     template<typename T>
+     void regTable(const std::map<std::string, T*> *table)
+     {
+         binder_data.type_tables[typeid(T).name()] = table;
+         binder_data.type_tables[typeid(T).name()] = table;
+     }
+     void regClassRegister(ClassRegisterBase* _class_reg){
+        assert(binder_data.class_reg == NULL);
+        binder_data.class_reg = _class_reg;
+    }
+};
+
+class Binder{
+public:
+    BinderImpBase* binder_imp;
+    Json::Value *json;
+
+  //Binder(BinderImpBase* _binder_imp){
+  //    this->intBinderImpBase(_binder_imp);
+  //    this->initDefaultStrConvertMgmt();
+  //    this->class_reg = NULL;
+  //}
+    Binder() {
+        //this->initDefaultStrConvertMgmt();
+        //this->class_reg = NULL;
+    }
+    void init(BinderImpBase* _binder_imp, Json::Value* jv){
+        this->binder_imp = _binder_imp;
+        this->json  = jv;
+        //if(jv != NULL) {
+        //    std::cout << __FILE__ << __LINE__  <<  this->json[0] << "\n";
+        //}
+    }
+  //void initDefaultStrConvertMgmt(){
+  //    str_convert_mgmt.addStringConverter<boost::posix_time::ptime,BoostPTimeConverter>();
+  //    str_convert_mgmt.addStringConverter<boost::posix_time::time_duration,BoostTimeDurationConverter>();
+  //    str_convert_mgmt.addStringConverter<boost::gregorian::date,BoostGDateConverter>();
+  //}
     /*
     *User code will call bind to build the attibute and name relation. 
     *Because the user code is not template functon, so we must tranfer a fixed type, This Binder type!!
@@ -54,9 +93,6 @@ public:
     void bindWithForeginKey(const std::string& name, T& v);
     template<typename T>
     void bindWithDynamicType(const std::string& name, T& v);
- public:
-    boost::shared_ptr<BinderImpBase> binder_imp;
-    StringConverterManager str_convert_mgmt;
 };
 
 }
@@ -71,12 +107,12 @@ namespace cppbind {
 template<typename T>
 void Binder::bind(const std::string& name, T& v){
         //CALL the real bind fucntion, must change to the real type of binder, then comile could instantiate the tempate funciton
-        JsonEncodeBinder* json_encode_binder = dynamic_cast<JsonEncodeBinder*>(this->binder_imp.get());
-        JsonDecodeBinder* json_decode_binder = dynamic_cast<JsonDecodeBinder*>(this->binder_imp.get());
+        JsonEncodeBinder* json_encode_binder = dynamic_cast<JsonEncodeBinder*>(this->binder_imp);
+        JsonDecodeBinder* json_decode_binder = dynamic_cast<JsonDecodeBinder*>(this->binder_imp);
         if( json_encode_binder ) {
-            json_encode_binder->bind(name,v);
+            json_encode_binder->bind(json,name,v);
         } else if(json_decode_binder ) {
-            json_decode_binder->bind(name,v);
+            json_decode_binder->bind(*this->json, name,v);
         } 
          else {
             assert("bug" == NULL);
@@ -87,12 +123,12 @@ void Binder::bind(const std::string& name, T& v){
 template<typename T>
 void Binder::bind(const std::string& name, T& v, const T& default_value){
         //CALL the real bind fucntion, must change to the real type of binder, then comile could instantiate the tempate funciton
-        JsonEncodeBinder* json_encode_binder = dynamic_cast<JsonEncodeBinder*>(this->binder_imp.get());
-        JsonDecodeBinder* json_decode_binder = dynamic_cast<JsonDecodeBinder*>(this->binder_imp.get());
+        JsonEncodeBinder* json_encode_binder = dynamic_cast<JsonEncodeBinder*>(this->binder_imp);
+        JsonDecodeBinder* json_decode_binder = dynamic_cast<JsonDecodeBinder*>(this->binder_imp);
         if( json_encode_binder ) {
-            json_encode_binder->bind(name,v, default_value);
+            json_encode_binder->bind(json, name,v, default_value);
         } else if(json_decode_binder ) {
-            json_decode_binder->bind(name,v, default_value);
+            json_decode_binder->bind(*json, name,v, default_value);
         } 
          else {
             assert("bug" == NULL);
@@ -102,12 +138,12 @@ void Binder::bind(const std::string& name, T& v, const T& default_value){
 template<typename T>
 void Binder::bindWithForeginKey(const std::string& name, T& v){
         //CALL the real bind fucntion, must change to the real type of binder, then comile could instantiate the tempate funciton
-        JsonEncodeBinder* json_encode_binder = dynamic_cast<JsonEncodeBinder*>(this->binder_imp.get());
-        JsonDecodeBinder* json_decode_binder = dynamic_cast<JsonDecodeBinder*>(this->binder_imp.get());
+        JsonEncodeBinder* json_encode_binder = dynamic_cast<JsonEncodeBinder*>(this->binder_imp);
+        JsonDecodeBinder* json_decode_binder = dynamic_cast<JsonDecodeBinder*>(this->binder_imp);
         if( json_encode_binder ) {
-            json_encode_binder->bindWithForeginKey(name,v);
+            json_encode_binder->bindWithForeginKey(json, name,v);
         } else if(json_decode_binder ) {
-            json_decode_binder->bindWithForeginKey(name,v);
+            json_decode_binder->bindWithForeginKey(*json, name,v);
         } 
          else {
             assert("bug" == NULL);
@@ -119,12 +155,12 @@ template<typename T>
 void Binder::bindWithDynamicType(const std::string& name, T& v){
 
     //CALL the real bind fucntion, must change to the real type of binder, then comile could instantiate the tempate funciton
-    JsonEncodeBinder* json_encode_binder = dynamic_cast<JsonEncodeBinder*>(this->binder_imp.get());
-    JsonDecodeBinder* json_decode_binder = dynamic_cast<JsonDecodeBinder*>(this->binder_imp.get());
+    JsonEncodeBinder* json_encode_binder = dynamic_cast<JsonEncodeBinder*>(this->binder_imp);
+    JsonDecodeBinder* json_decode_binder = dynamic_cast<JsonDecodeBinder*>(this->binder_imp);
     if( json_encode_binder ) {
-        json_encode_binder->bindWithDynamicType(name,v);
+        json_encode_binder->bindWithDynamicType(json, name,v);
     } else if(json_decode_binder ) {
-        json_decode_binder->bindWithDynamicType(name,v);
+        json_decode_binder->bindWithDynamicType(*json, name,v);
     } 
      else {
         assert("bug" == NULL);

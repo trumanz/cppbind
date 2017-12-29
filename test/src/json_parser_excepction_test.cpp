@@ -28,7 +28,7 @@ TEST(JsonROM, child_not_exist_message){
      }  catch ( CppBindException e) {
              message =  e.what();
      }
-     ASSERT_EQ("3Me2.not_existed not found", message);
+     ASSERT_EQ(".not_existed not found", message);
 };
 
 
@@ -60,5 +60,5 @@ TEST(JsonROM, child_child_not_exist_message){
      }  catch ( CppBindException e) {
              message = e.what();
      }
-     ASSERT_EQ("3Me3.skills.R.language_not_exist not found", message);
+     ASSERT_EQ(".skills.R.language_not_exist not found", message);
 };

@@ -167,10 +167,10 @@ public:
 TEST(JsonROM, baisc){
 
      std::ifstream ifs("./sample_data/me.json",  std::ifstream::in);
-     std::ifstream ifs2("./sample_data/music.csv",  std::ifstream::in);
+     std::ifstream music_csv("./sample_data/music.csv",  std::ifstream::in);
 
      cppbind::CSVBind music_csv_binder;
-     std::vector<Music*> all_musics =music_csv_binder.decode<Music>(ifs2);
+     std::vector<Music*> all_musics =music_csv_binder.decode<Music>(music_csv);
      std::map<std::string, Music*> music_table;
      for(size_t i = 0; i < all_musics.size(); i++) {
           music_table[all_musics[i]->id] = all_musics[i];
@@ -180,7 +180,7 @@ TEST(JsonROM, baisc){
      std::string csv_str = music_csv_binder.encodeToStr<Music>(all_musics);
      printf("csv_str=\n[%s]\n", csv_str.c_str());
 
-     printf("%s\n", JsonBind().toJsonStr(all_musics).c_str());
+     printf("all_music.json = ^ %s ^\n", JsonBind().toJsonStr(all_musics).c_str());
 
 
      ClassRegister class_register;
@@ -192,7 +192,7 @@ TEST(JsonROM, baisc){
 
      boost::shared_ptr<Me> me = binder.decode<Me>(ifs);
 
-     printf("decode ME sucess");
+     printf("decode ME sucess\n");
      //basic type
      ASSERT_EQ(me->name ,"truman");
      ASSERT_EQ(me->age ,30);
@@ -237,7 +237,7 @@ TEST(JsonROM, baisc){
      ASSERT_TRUE(metro != NULL);
      ASSERT_EQ(3, metro->data.line);
 
-     for(int i = 0; i < 100000; i++) {
+     for(int i = 0; i < 10; i++) {
          std::stringstream ss;
          binder.encode(*(me.get()), &ss);
      }

@@ -1,6 +1,6 @@
 #ifndef __CSV_DECODE_BINDER_H__
 #define __CSV_DECODE_BINDER_H__
-
+#if 0
 namespace  cppbind {
 
 
@@ -72,8 +72,8 @@ private: // for class type
     public:
         template<typename T>
         void call(T*e, Binder* binder){
-            JsonDecodeBinder* json_decode_binder = dynamic_cast<JsonDecodeBinder*>(binder->binder_imp.get());
-            Json::Value jv = json_decode_binder->json;
+            JsonDecodeBinder* json_decode_binder = dynamic_cast<JsonDecodeBinder*>(binder->binder_imp);
+            const Json::Value& jv = json_decode_binder->binder->json_to_decode;
             if(!jv.isString()) {
                 assert("bug" == NULL);
             }
@@ -89,7 +89,7 @@ private: // for class type
            x.insert(x.begin(),  begin, end);
            Binder binder(boost::shared_ptr<BinderImpBase>(new CSVDecodeBinder(x)));
            e->setBind(&binder);
-           CSVDecodeBinder*  csv_decode_binder  = dynamic_cast<CSVDecodeBinder*>(binder.binder_imp.get());
+           CSVDecodeBinder*  csv_decode_binder  = dynamic_cast<CSVDecodeBinder*>(binder.binder_imp);
           return  csv_decode_binder->used;
     } 
 private:  //for basic type
@@ -124,5 +124,5 @@ private:  //for basic type
 };
 
 }
-
+#endif
 #endif

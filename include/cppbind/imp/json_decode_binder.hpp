@@ -7,36 +7,40 @@ namespace  cppbind {
 class JsonDecodeBinder : public BinderImpBase {
 private:
     bool basic_wrapper_as_string;
-    std::map<std::string, boost::any>* type_tables;
-    ClassRegisterBase* class_reg;
+    Binder binder;
 public:
-    JsonDecodeBinder(Json::Value json, bool basic_wrapper_as_string, 
-                     std::map<std::string, boost::any>* type_tables,
-                     ClassRegisterBase* _class_reg){
-        this->json = json;
+    JsonDecodeBinder(bool basic_wrapper_as_string = true){
         this->basic_wrapper_as_string = basic_wrapper_as_string;
-        this->type_tables = type_tables;
-        this->class_reg = _class_reg;
-     }
-    void setJson(const Json::Value& jv){
-        this->json = jv;
+        binder.init(this, NULL);
     }
+
     template<typename T>
-    void decode(T* e){
-        try{
-            this->decode(this->json, e);
-        }catch(CppBindException e){
-            throw CppBindException(e, typeid(T).name());
-        }
-    }
+    void DecodeJson(Json::Value* jv, T* e) {
+        binder.init(this, jv);
+        this->decode(*jv, e);
+    }    
+
+   // template<typename T>
+  //void decode(const Json::Value& jv, T* e){
+  //    try{
+  //        this->decode(jv, e);
+  //    }catch(CppBindException e){
+  //        throw CppBindException(e, typeid(T).name());
+  //    }
+  //}
+
+//bind API
     template<typename T>
-    void bind(const std::string& name, T& v){
-         Json::Value jv = json[name];
-         //printf("name=%s, jv=%s\n", name.c_str(), jv.asString().c_str());
+    void bind(const Json::Value& _jv, const std::string& name, T& v){
+
+         const Json::Value& jv = _jv[name];
+         //std::cout << __FILE__ << __LINE__  << ": " << name << "\n";
          if(!jv.isNull()) {
              try {
                 decode(jv, &v);
+                //std::cout << __FILE__ << __LINE__  << ": " << name << "\n";
              } catch (CppBindException e) {
+                //std::cout << "error:" << __FILE__ << __LINE__  <<  name  <<","<<  typeid(T).name() << ","<< jv  << "\n";
                 throw CppBindException(e, std::string(".") + name);
              }
          } else  {
@@ -44,8 +48,8 @@ public:
          }
     }
     template<typename T>
-    void bind(const std::string& name, T& v, const T& default_vaule){
-        Json::Value jv = json[name];
+    void bind(const Json::Value& _jv, const std::string& name, T& v, const T& default_vaule){
+        const Json::Value& jv = _jv[name];
         if(!jv.isNull()) {
             try {
                decode(jv, &v);
@@ -55,24 +59,23 @@ public:
         } else  {
              v = default_vaule;
         }
-
     }
     template<typename T>
-    void bind(const std::string& name, boost::shared_ptr<T>& v){
-         Json::Value jv = json[name];
+    void bind(const Json::Value& _jv, const std::string& name, boost::shared_ptr<T>& v){
+        const Json::Value& jv = _jv[name];
          if(!jv.isNull()) {
              T  e;
-             bind(name, e);
+             bind(_jv, name, e);
              v = boost::shared_ptr<T>(new T(e));
          } 
     }
 
     
     template<typename T>
-    void bindWithForeginKey(const std::string& name, T& v){
+    void bindWithForeginKey(const Json::Value& _jv, const std::string& name, T& v){
          //printf("filed %s\n", name.c_str());
-         if(json.isMember(name)) {
-             Json::Value jv = json[name];
+         if(_jv.isMember(name)) {
+             const Json::Value& jv = _jv[name];
              try {
                 decodeWithForeginKey(jv, &v);
              } catch (CppBindException e) {
@@ -84,16 +87,16 @@ public:
     }
 
     template<typename T>
-    void bindWithDynamicType(const std::string& name, T*& v){
-        Json::Value jv = this->json[name];
+    void bindWithDynamicType(const Json::Value& _jv, const std::string& name, T*& v){
+        const Json::Value& jv = _jv[name];
         Json::Value::Members  members = jv.getMemberNames();
         assert(members.size() == 1);
         std::string class_name = members[0];
         Json::Value class_data = jv[class_name];
-        if(this->class_reg == NULL) {
+        if(this->binder_data.class_reg == NULL) {
             printf("ERROR, please register classRegister first");
         }
-        v = this->class_reg->createObj<T>(class_name.c_str(), class_data);
+        v = this->binder_data.class_reg->createObj<T>(class_name.c_str(), class_data);
     }
 
 //std container type
@@ -170,6 +173,7 @@ private:
              e->insert(*it);
          }
     }
+    #if 0
     //map
     template<typename T>
     void decode(const Json::Value& json, std::map<std::string, T>* e){
@@ -187,11 +191,12 @@ private:
                 }
             }
     }
-
+#endif
 
     //map
     template<typename KeyT, typename ValueT>
     void decode(const Json::Value& json, std::map<KeyT, ValueT>* e){
+
             if(!json.isObject()) {
                 throw CppBindException("shoulbe be a object");
             }
@@ -207,14 +212,16 @@ private:
                     //decode value
                     ValueT value;
                     Json::Value value_jv = json[*it];
-                    decode(json[*it], &value);
+
+
+                    decode(value_jv, &value);
                     (*e)[key] = value;
                 } catch  (CppBindException e) {
                    throw CppBindException(e, std::string(".") + *it);
                 }
             }
     }
-
+#if 0
     //map point
     template<typename T>
     void decode(const Json::Value& json, std::map<std::string, T*>* e){
@@ -232,37 +239,42 @@ private:
                 }
             }
     }
-private: // for class type
+#endif
 
+//decode for class Type
 
+public: 
+    //call Calss:setBind
     class SetBindMemberFunctionCaller{
     public:
         template<typename T>
-        void call(T*e, Binder* binder){
-            e->setBind(binder);
+        void call(const Json::Value& jv, T*e, JsonDecodeBinder* jbinder){
+            Binder next_binder;
+            next_binder.init(jbinder, (Json::Value*)&jv);
+
+            //std::cout << __FILE__ << __LINE__  <<  jv  << typeid(T).name() << "\n";
+            e->setBind(&next_binder);
         }
     };
 
+    //call Calss:fromJsonValue4Bind
     class FromJsonValue4BindMemberFunctionCaller{
     public:
         template<typename T>
-        void call(T*e, Binder* binder){
-           JsonDecodeBinder* json_decode_binder = dynamic_cast<JsonDecodeBinder*>(binder->binder_imp.get());
-           e->fromJsonValue4Bind(json_decode_binder->json);
+        void call(const Json::Value& jv, T*e, JsonDecodeBinder* binder){
+           e->fromJsonValue4Bind(jv);
         }
     };
 
+    //call str_convert_mgmt; TODO JsonMapManager
     class RunTimeBinderCaller{
     public:
         template<typename T>
-        void call(T*e, Binder* binder){
-            JsonDecodeBinder* json_decode_binder = dynamic_cast<JsonDecodeBinder*>(binder->binder_imp.get());
-            Json::Value jv = json_decode_binder->json;
+        void call(const Json::Value& jv, T*e, JsonDecodeBinder* binder){
             if(!jv.isString()) {
                 assert("bug" == NULL);
             }
-            std::string str = jv.asString();
-            e[0] = binder->str_convert_mgmt.fromString<T>(str);
+            e[0] = binder->binder_data.str_convert_mgmt.fromString<T>(jv.asString());
          }
 
     };
@@ -271,12 +283,12 @@ private: // for class type
     class Option2MemberFunctionCaller{
     public:
         template<typename T>
-        void call(T*e, Binder* binder){
+        void call(const Json::Value& jv, T*e, JsonDecodeBinder* binder){
           //if have "void fromStr4Bind(const Json::Value&)" then call setbind; else call otheres
           typedef typename boost::mpl::if_c<has_member_function_fromJsonValue4Bind<void (T::*) (const Json::Value&)>::value, 
               FromJsonValue4BindMemberFunctionCaller, RunTimeBinderCaller>::type CallerT;
 
-          CallerT().call(e, binder); 
+          CallerT().call(jv, e, binder); 
         }
     };
 
@@ -284,29 +296,26 @@ private: // for class type
     template<typename T>
     void decode(const Json::Value& json, T* e){
 
-         Binder binder(boost::shared_ptr<BinderImpBase>(new JsonDecodeBinder(json, this->basic_wrapper_as_string, this->type_tables, this->class_reg)));
-
-        
          //if have "void setBind(Binder*)" then call setbind; else call otheres
           typedef typename boost::mpl::if_c<has_member_function_setBind<void (T::*) (Binder*)>::value, 
            SetBindMemberFunctionCaller, Option2MemberFunctionCaller>::type CallerT;
 
-          CallerT().call(e, &binder);
+          CallerT().call(json, e, this);
     } 
 
+
+public:
     template<typename T>
     void decode(const Json::Value& json, T** e){
-
          *e  = new T();
          decode(json, *e);
     } 
- 
-    
+
     template<typename T>
     void decodeWithForeginKey(const Json::Value& json, T** e){
          std::string type_name = typeid(T).name();
-         std::map<std::string, boost::any>::iterator it = type_tables->find(type_name);
-         if(it == type_tables->end()) {
+         std::map<std::string, boost::any>::iterator it = binder_data.type_tables.find(type_name);
+         if(it == binder_data.type_tables.end()) {
              printf("ERROR, Please register table for %s\n", type_name.c_str());
              assert(false); 
          }
@@ -334,38 +343,38 @@ private:  //for Json type
     }
 private:  //for basic type
     void decode(const Json::Value& json, bool*e){
-        if(basic_wrapper_as_string) {
-           JsonStrToBasicType(json,e);
-           return;
-        }
+        if(json.isString()) {
+            this->JsonStrToBasicType(json,e);
+            return;
+        } 
         e[0] =  json.asBool();
     }
     void decode(const Json::Value& json, int32_t *e){
-         if(basic_wrapper_as_string) {
-           JsonStrToBasicType(json,e);
-           return;
-         }
+        if(json.isString()) {
+            this->JsonStrToBasicType(json,e);
+            return;
+        } 
          e[0] =  json.asInt();   
     }
     void decode(const Json::Value& json, int64_t *e){
-         if(basic_wrapper_as_string) {
-           JsonStrToBasicType(json,e);
-           return;
-         }
+        if(json.isString()) {
+            this->JsonStrToBasicType(json,e);
+            return;
+        } 
          e[0] =  json.asInt64();
     }
     void decode(const Json::Value& json, float *e){
-        if(basic_wrapper_as_string) {
-           JsonStrToBasicType(json,e);
-           return;
-         }
+        if(json.isString()) {
+            this->JsonStrToBasicType(json,e);
+            return;
+        } 
         e[0] =  json.asFloat();
     }
     void decode(const Json::Value& json, double *e){
-        if(basic_wrapper_as_string) {
-           JsonStrToBasicType(json,e);
-           return;
-         }
+        if(json.isString()) {
+            this->JsonStrToBasicType(json,e);
+            return;
+        } 
         e[0] =  json.asDouble();
     }
     void decode(const Json::Value& json, std::string *e){
@@ -384,8 +393,6 @@ private:  //for basic type
             *e = false;
         }
     }
-public:
-    Json::Value json;
 };
 
 }

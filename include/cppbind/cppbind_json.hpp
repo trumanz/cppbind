@@ -24,14 +24,30 @@
 
 namespace  cppbind {
 class JsonBind{
-private:
-   
+
+public:
+JsonEncodeBinder encoder;
+JsonDecodeBinder decoder;
+public:
+    JsonBind(){
+    }
+    template<typename T>
+    void regTable(const std::map<std::string, T*> *table)
+    {
+        encoder.regTable(table);
+        decoder.regTable(table);
+    }
+    void regClassRegister(ClassRegisterBase* _class_reg){
+        encoder.regClassRegister(_class_reg);
+        decoder.regClassRegister(_class_reg);
+    }
+public:
+    //decode API, !!!
     template<typename T>
     T* decodeJV2Point(const Json::Value& root, bool basic_wrapper_string = false){
          T* e = NULL;
          e = new T;
-         JsonDecodeBinder decoder(root,basic_wrapper_string, &type_tables, class_reg);
-         decoder.decode(e);
+         decoder.DecodeJson((Json::Value*)&root, e);
          return e;
     }
 
@@ -47,19 +63,6 @@ private:
          return decodeJV2Point<T>(root, basic_wrapper_string);
     }
 
-    std::map<std::string, boost::any> type_tables;
-    ClassRegisterBase* class_reg;
-public:
-    JsonBind(){ class_reg = NULL;}
-    template<typename T>
-    void regTable(const std::map<std::string, T*> *table)
-    {
-        type_tables[typeid(T).name()] = table;
-    }
-    void regClassRegister(ClassRegisterBase* _class_reg){
-        assert(class_reg == NULL);
-        this->class_reg = _class_reg;
-    }
 
     template<typename T>
     boost::shared_ptr<T> decode(std::istream &is){
@@ -90,11 +93,10 @@ public:
 
 //Encode Interface
 public:
-    //to JsonValue
+    //to JsonValue; !!!
     template<typename T>
     void  encodeToJsonValue(T&e, Json::Value* jv){
-         JsonEncodeBinder encoder(class_reg);
-         encoder.encode(e, jv);
+         encoder.encodeToJson(&e, jv);
     }
     template<typename T>
     Json::Value  encodeToJsonValue(T&e){

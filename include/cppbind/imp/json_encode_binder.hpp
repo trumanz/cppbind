@@ -96,10 +96,9 @@ public: //for std container type
     void encode(std::set<T>& e_set, Json::Value* jv){
         if(e_set.empty()) jv[0] = Json::arrayValue;
         for(typename std::set<T>::iterator  it  = e_set.begin(); it != e_set.end(); it++) {
-             T& e = *it;
              Json::Value je;
-             //encode(*(T*)(&(*it)), &je);
-             encode(e, &je);
+             encode(*(T*)(&(*it)), &je);
+             //encode(e, &je);
              jv->append(je);
         }
     }

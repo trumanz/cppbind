@@ -80,6 +80,6 @@ TEST(boost_datetime, duration_parse_format) {
     td = minutes(100);   
   
       
-    std::cout << "minutes(100): "<< td << "\n";
+    //std::cout << "minutes(100): "<< td << "\n";
 }
 

@@ -24,7 +24,8 @@ TEST(JsonROM, child_not_exist_message){
      std::string message;
      try {
        std::ifstream ifs("./sample_data/me.json",  std::ifstream::in);
-       boost::shared_ptr<Me2> me = JsonBind().decode<Me2>(ifs);
+       Me2* me = JsonBind().decodeIStream2Point<Me2>(ifs);
+       delete me;
      }  catch ( CppBindException e) {
              message =  e.what();
      }
@@ -56,7 +57,8 @@ TEST(JsonROM, child_child_not_exist_message){
      std::string message;
      try {
        std::ifstream ifs("./sample_data/me.json",  std::ifstream::in);
-       boost::shared_ptr<Me3> me = JsonBind().decode<Me3>(ifs);
+       Me3* me = JsonBind().decodeIStream2Point<Me3>(ifs);
+       delete me;
      }  catch ( CppBindException e) {
              message = e.what();
      }

@@ -244,4 +244,9 @@ TEST(JsonROM, baisc){
      std::stringstream ss;
      binder.encode(*(me.get()), &ss);
      printf("%s\n", ss.str().c_str());
+
+
+     for(size_t i = 0; i < all_musics.size(); i++) {
+         delete all_musics[i];
+     }
 };

@@ -6,11 +6,9 @@ namespace  cppbind {
 
 class JsonDecodeBinder : public BinderImpBase {
 private:
-    bool basic_wrapper_as_string;
     Binder binder;
 public:
-    JsonDecodeBinder(bool basic_wrapper_as_string = true){
-        this->basic_wrapper_as_string = basic_wrapper_as_string;
+    JsonDecodeBinder(){
         binder.init(this, NULL);
     }
 

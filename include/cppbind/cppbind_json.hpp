@@ -44,7 +44,7 @@ public:
 public:
     //decode API, !!!
     template<typename T>
-    T* decodeJV2Point(const Json::Value& root, bool basic_wrapper_string = false){
+    T* decodeJV2Point(const Json::Value& root){
          T* e = NULL;
          e = new T;
          decoder.DecodeJson((Json::Value*)&root, e);
@@ -52,7 +52,7 @@ public:
     }
 
     template<typename T>
-    T* decodeIStream2Point(std::istream &is, bool basic_wrapper_string = false){
+    T* decodeIStream2Point(std::istream &is){
          Json::Value root;
          Json::Reader reader;
          bool parsingSuccessful = reader.parse(is, root);
@@ -60,7 +60,7 @@ public:
            printf("Failed to parse, %s\n", reader.getFormatedErrorMessages().c_str());
            throw  CppBindException(reader.getFormatedErrorMessages());
          }
-         return decodeJV2Point<T>(root, basic_wrapper_string);
+         return decodeJV2Point<T>(root);
     }
 
 
@@ -77,8 +77,8 @@ public:
     }
 
     template<typename T>
-    T* decode2(const Json::Value& root, bool basic_wrapper_string){
-        return this->decodeJV2Point<T>(root,basic_wrapper_string);
+    T* decode2(const Json::Value& root){
+        return this->decodeJV2Point<T>(root);
     }
 
     template<typename T>

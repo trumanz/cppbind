@@ -35,7 +35,7 @@ public:
         csv.readRows(csv_content);
         for(size_t i = 0; i < csv.rows.size(); i++) {
             Json::Value jv = this->createJsonObject(csv.headers,csv.rows[i].cells);
-            rc.push_back(json_binder.decode2<T>(jv, true));
+            rc.push_back(json_binder.decode2<T>(jv));
         }
         return rc;
     }

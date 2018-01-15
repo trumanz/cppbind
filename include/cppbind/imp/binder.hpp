@@ -58,16 +58,8 @@ class Binder{
 public:
     BinderImpBase* binder_imp;
     Json::Value *json;
-
-  //Binder(BinderImpBase* _binder_imp){
-  //    this->intBinderImpBase(_binder_imp);
-  //    this->initDefaultStrConvertMgmt();
-  //    this->class_reg = NULL;
-  //}
-    Binder() {
-        //this->initDefaultStrConvertMgmt();
-        //this->class_reg = NULL;
-    }
+    std::set<std::string> decoded_member_key_set;
+    Binder() {}
     void init(BinderImpBase* _binder_imp, Json::Value* jv){
         this->binder_imp = _binder_imp;
         this->json  = jv;
@@ -75,11 +67,6 @@ public:
         //    std::cout << __FILE__ << __LINE__  <<  this->json[0] << "\n";
         //}
     }
-  //void initDefaultStrConvertMgmt(){
-  //    str_convert_mgmt.addStringConverter<boost::posix_time::ptime,BoostPTimeConverter>();
-  //    str_convert_mgmt.addStringConverter<boost::posix_time::time_duration,BoostTimeDurationConverter>();
-  //    str_convert_mgmt.addStringConverter<boost::gregorian::date,BoostGDateConverter>();
-  //}
     /*
     *User code will call bind to build the attibute and name relation. 
     *Because the user code is not template functon, so we must tranfer a fixed type, This Binder type!!
@@ -112,6 +99,7 @@ void Binder::bind(const std::string& name, T& v){
         if( json_encode_binder ) {
             json_encode_binder->bind(json,name,v);
         } else if(json_decode_binder ) {
+            decoded_member_key_set.insert(name);
             json_decode_binder->bind(*this->json, name,v);
         } 
          else {
@@ -128,6 +116,7 @@ void Binder::bind(const std::string& name, T& v, const T& default_value){
         if( json_encode_binder ) {
             json_encode_binder->bind(json, name,v, default_value);
         } else if(json_decode_binder ) {
+            decoded_member_key_set.insert(name);
             json_decode_binder->bind(*json, name,v, default_value);
         } 
          else {
@@ -143,6 +132,7 @@ void Binder::bindWithForeginKey(const std::string& name, T& v){
         if( json_encode_binder ) {
             json_encode_binder->bindWithForeginKey(json, name,v);
         } else if(json_decode_binder ) {
+            decoded_member_key_set.insert(name);
             json_decode_binder->bindWithForeginKey(*json, name,v);
         } 
          else {
@@ -160,6 +150,7 @@ void Binder::bindWithDynamicType(const std::string& name, T& v){
     if( json_encode_binder ) {
         json_encode_binder->bindWithDynamicType(json, name,v);
     } else if(json_decode_binder ) {
+        decoded_member_key_set.insert(name);
         json_decode_binder->bindWithDynamicType(*json, name,v);
     } 
      else {

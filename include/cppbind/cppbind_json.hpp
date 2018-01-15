@@ -41,6 +41,9 @@ public:
         encoder.regClassRegister(_class_reg);
         decoder.regClassRegister(_class_reg);
     }
+    void IgnoreUnknownKey(){
+        decoder.IgnoreUnknownKey();
+    }
 public:
     //decode API, !!!
     template<typename T>

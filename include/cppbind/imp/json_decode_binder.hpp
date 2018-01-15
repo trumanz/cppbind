@@ -5,16 +5,21 @@ namespace  cppbind {
 
 
 class JsonDecodeBinder : public BinderImpBase {
-private:
-    Binder binder;
+public:
+    //Binder binder;
+    bool ignore_unknown_key;
 public:
     JsonDecodeBinder(){
-        binder.init(this, NULL);
+        ignore_unknown_key = false;
+       // binder.init(this, NULL);
+    }
+    void IgnoreUnknownKey(){
+        ignore_unknown_key = true;
     }
 
     template<typename T>
     void DecodeJson(Json::Value* jv, T* e) {
-        binder.init(this, jv);
+        //binder.init(this, jv);
         this->decode(*jv, e);
     }    
 
@@ -252,6 +257,18 @@ public:
 
             //std::cout << __FILE__ << __LINE__  <<  jv  << typeid(T).name() << "\n";
             e->setBind(&next_binder);
+
+            if(!jbinder->ignore_unknown_key) {
+                assert(jv.isObject());
+                Json::Value::Members keys = jv.getMemberNames();
+                for(Json::Value::Members::iterator it = keys.begin(); it != keys.end(); it++) {
+                    std::string key_str = *it;
+                    if(next_binder.decoded_member_key_set.find(key_str) == next_binder.decoded_member_key_set.end()) {
+                        throw CppBindException(std::string("unknown json key:[") + key_str + "]");
+                    }
+                }
+
+            }
         }
     };
 

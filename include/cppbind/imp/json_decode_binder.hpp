@@ -90,8 +90,11 @@ public:
     }
 
     template<typename T>
-    void bindWithDynamicType(const Json::Value& _jv, const std::string& name, T*& v){
-        const Json::Value& jv = _jv[name];
+    void bindWithDynamicType(const Json::Value& _jv, const std::string& name, T*& v,  Json::Value* default_value ){
+        Json::Value jv = _jv[name];
+        if(jv.isNull() && default_value != NULL) {
+            jv = *default_value;
+        }
         Json::Value::Members  members = jv.getMemberNames();
         assert(members.size() == 1);
         std::string class_name = members[0];

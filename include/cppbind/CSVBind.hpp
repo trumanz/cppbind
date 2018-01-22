@@ -42,48 +42,22 @@ public:
 
 
     template<typename T>
-    void encodeToStream(std::vector<T*> data, std::stringstream* output){
+    void encodeToStream(std::vector<T*> data, std::ostream* output){
 
-         for(size_t j = 0; j < csv.headers.size(); j++) {
-             std::string& header = csv.headers[j];
-             if(j > 0) {
-                     output[0] << ",";
-             }
-             output[0] << header;
-         }
+        std::vector<std::string> headers = this->csv.headers;
 
-         for(size_t i = 0; i < data.size(); i++) {
-             std::stringstream csv_row;
-             T* e = data[i];
-             Json::Value jv = json_binder.encodeToJsonValue(*e);
-             for(size_t j = 0; j < csv.headers.size(); j++) {
-                 std::string& header = csv.headers[j];
-                 if(j > 0) {
-                     csv_row << ",";
-                 }
-                 if(!jv.isMember(header)) {
-                     std::stringstream ss;
-                     Json::StyledStreamWriter writer;
-                     writer.write(ss, jv);
-                     printf("jv is: \n%s\n", ss.str().c_str());
-                     assert(false);
-                 }
-                 std::string cell_str = jv[header].toStyledString();
-                 std::size_t x = cell_str.find_last_not_of("\r\n");
-                 if(x!= std::string::npos) {
-                     cell_str = cell_str.substr(0, x+1);
-                 }
-                 if(jv[header].isString()) {
-                     assert(cell_str.length() >= 2);
-                     assert(cell_str[0] == '\"');
-                     assert(cell_str[cell_str.length()-1] == '\"');
-                     cell_str = cell_str.substr(1, cell_str.length()-2);
-                 }
-                 csv_row << cell_str;
-             }
-             output[0] << "\n";
-             output[0] << csv_row.str();
-         }
+        //try get header from data
+        if(headers.size() == 0 && data.size() != 0) {
+            Json::Value jv = json_binder.encodeToJsonValue(*(data[0]));
+            headers = json_binder.encoder.binder.encoded_key;
+            
+        } 
+        appendCSVHeader(headers,output);
+        for(size_t i = 0; i < data.size(); i++) {
+            output[0] << "\n";
+            Json::Value jv = json_binder.encodeToJsonValue(*(data[i]));
+            this->appendCSVLine(headers,jv,output);
+        }
     }
 
     template<typename T>
@@ -125,14 +99,6 @@ public:
          return rc;
     }
 private:
-   //emplate<typename T>
-   //* decodeRow(const CSVRow &row) const{
-   //    T *e;
-   //    CSVDecodeBinder decoder(row.cells);
-   //    decoder.decode(e);
-   //    return e;
-   //
-
     Json::Value createJsonObject(const std::vector<std::string>& headers, const std::vector<std::string>& data){
         Json::Value jv;
         if(headers.size() != data.size()) {
@@ -150,6 +116,46 @@ private:
         }
         return jv;
     }
+
+    void appendCSVHeader(const std::vector<std::string>& headers, std::ostream* output){
+        for(size_t j = 0; j < headers.size(); j++) {
+            const std::string& header = headers[j];
+            if(j > 0) {
+                     output[0] << ",";
+            }
+            output[0] << header;
+         }
+    }
+    void appendCSVLine(const std::vector<std::string>& headers,const Json::Value &jv , std::ostream* output){
+         std::stringstream csv_row;
+         for(size_t j = 0; j < headers.size(); j++) {
+             const std::string& header = headers[j];
+             if(j > 0) {
+                 csv_row << ",";
+             }
+             if(!jv.isMember(header)) {
+                 std::stringstream ss;
+                 Json::StyledStreamWriter writer;
+                 writer.write(ss, jv);
+                 printf("jv is: \n%s\n", ss.str().c_str());
+                 assert(false);
+             }
+             std::string cell_str = jv[header].toStyledString();
+             std::size_t x = cell_str.find_last_not_of("\r\n");
+             if(x!= std::string::npos) {
+                 cell_str = cell_str.substr(0, x+1);
+             }
+             if(jv[header].isString()) {
+                 assert(cell_str.length() >= 2);
+                 assert(cell_str[0] == '\"');
+                 assert(cell_str[cell_str.length()-1] == '\"');
+                 cell_str = cell_str.substr(1, cell_str.length()-2);
+             }
+             csv_row << cell_str;
+         }
+         output[0] << csv_row.str();
+    }
+    
 };
 
 }

@@ -59,10 +59,13 @@ public:
     BinderImpBase* binder_imp;
     Json::Value *json;
     std::set<std::string> decoded_member_key_set;
+    std::vector<std::string> encoded_key;
     Binder() {}
     void init(BinderImpBase* _binder_imp, Json::Value* jv){
         this->binder_imp = _binder_imp;
         this->json  = jv;
+        this->encoded_key.clear();
+        this->decoded_member_key_set.clear();
         //if(jv != NULL) {
         //    std::cout << __FILE__ << __LINE__  <<  this->json[0] << "\n";
         //}
@@ -101,6 +104,7 @@ void Binder::bind(const std::string& name, T& v){
         JsonEncodeBinder* json_encode_binder = dynamic_cast<JsonEncodeBinder*>(this->binder_imp);
         JsonDecodeBinder* json_decode_binder = dynamic_cast<JsonDecodeBinder*>(this->binder_imp);
         if( json_encode_binder ) {
+            encoded_key.push_back(name);
             json_encode_binder->bind(json,name,v);
         } else if(json_decode_binder ) {
             decoded_member_key_set.insert(name);
@@ -118,6 +122,7 @@ void Binder::bind(const std::string& name, T& v, const T& default_value){
         JsonEncodeBinder* json_encode_binder = dynamic_cast<JsonEncodeBinder*>(this->binder_imp);
         JsonDecodeBinder* json_decode_binder = dynamic_cast<JsonDecodeBinder*>(this->binder_imp);
         if( json_encode_binder ) {
+            encoded_key.push_back(name);
             json_encode_binder->bind(json, name,v, default_value);
         } else if(json_decode_binder ) {
             decoded_member_key_set.insert(name);
@@ -134,6 +139,7 @@ void Binder::bindWithForeginKey(const std::string& name, T& v){
         JsonEncodeBinder* json_encode_binder = dynamic_cast<JsonEncodeBinder*>(this->binder_imp);
         JsonDecodeBinder* json_decode_binder = dynamic_cast<JsonDecodeBinder*>(this->binder_imp);
         if( json_encode_binder ) {
+            encoded_key.push_back(name);
             json_encode_binder->bindWithForeginKey(json, name,v);
         } else if(json_decode_binder ) {
             decoded_member_key_set.insert(name);
@@ -167,6 +173,7 @@ void Binder::bindWithDynamicType(const std::string& name, T& v, Json::Value* def
     JsonEncodeBinder* json_encode_binder = dynamic_cast<JsonEncodeBinder*>(this->binder_imp);
     JsonDecodeBinder* json_decode_binder = dynamic_cast<JsonDecodeBinder*>(this->binder_imp);
     if( json_encode_binder ) {
+        encoded_key.push_back(name);
         json_encode_binder->bindWithDynamicType(json, name,v);
     } else if(json_decode_binder ) {
         decoded_member_key_set.insert(name);

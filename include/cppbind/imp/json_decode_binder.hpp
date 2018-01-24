@@ -147,7 +147,7 @@ private:
                     e->push_back(tmp);
                  } catch  (CppBindException e) {
                     char buf[20];
-                    sprintf(buf, "[%d]", i);
+                    snprintf(buf, sizeof(buf),"[%d]", i);
                     throw CppBindException(e, buf);
                  }
             }

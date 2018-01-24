@@ -140,7 +140,7 @@ private:
             if(!json.isArray()) {
                 throw CppBindException("should be a list");
             }
-            for(int i = 0; i  < json.size(); i++) {
+            for(unsigned int i = 0; i  < json.size(); i++) {
                  try { 
                     T tmp;
                     decode(json[i], &tmp);

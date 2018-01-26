@@ -52,7 +52,7 @@ public: //for std container type
     
     template<typename T>
     void encode(std::vector<T>& e, Json::Value* jv){
-        if(e.size() = 0) {
+        if(e.size() == 0) {
             jv[0] =  Json::Value(Json::arrayValue);
         }
         for(typename std::vector<T>::iterator  it  = e.begin(); it != e.end(); it++) {
@@ -63,7 +63,7 @@ public: //for std container type
     }
     template<typename T>
     void encode(std::vector<T*>& e_list, Json::Value* jv){
-        if(e_list.size() = 0) {
+        if(e_list.size() == 0) {
             jv[0] =  Json::Value(Json::arrayValue);
         }
         for(typename std::vector<T*>::iterator  it  = e_list.begin(); it != e_list.end(); it++) {
@@ -75,7 +75,7 @@ public: //for std container type
     }
     template<typename T>
     void encodeWithForeginKey(std::vector<T*>& e, Json::Value* jv){
-        if(e.size() = 0) {
+        if(e.size() == 0) {
             jv[0] =  Json::Value(Json::arrayValue);
         }
         for(typename std::vector<T*>::iterator  it  = e.begin(); it != e.end(); it++) {

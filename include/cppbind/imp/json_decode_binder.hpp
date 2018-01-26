@@ -147,7 +147,11 @@ private:
                     e->push_back(tmp);
                  } catch  (CppBindException e) {
                     char buf[20];
+#ifdef WIN32
+                    _snprintf(buf, sizeof(buf),"[%d]", i);
+#else
                     snprintf(buf, sizeof(buf),"[%d]", i);
+#endif
                     throw CppBindException(e, buf);
                  }
             }

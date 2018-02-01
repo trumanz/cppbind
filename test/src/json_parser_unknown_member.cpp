@@ -14,7 +14,7 @@ using namespace cppbind;
 class XObj {
 public:
     int  x;
-    void setBind(Binder *binder){
+    void setBind(Binder *binder, bool load){
           binder->bind("x",x);
     }
    

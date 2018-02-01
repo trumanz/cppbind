@@ -263,7 +263,7 @@ public:
             next_binder.init(jbinder, (Json::Value*)&jv);
 
             //std::cout << __FILE__ << __LINE__  <<  jv  << typeid(T).name() << "\n";
-            e->setBind(&next_binder);
+            e->setBind(&next_binder, true);
 
             if(!jbinder->ignore_unknown_key) {
                 assert(jv.isObject());
@@ -319,7 +319,7 @@ public:
     void decode(const Json::Value& json, T* e){
 
          //if have "void setBind(Binder*)" then call setbind; else call otheres
-          typedef typename boost::mpl::if_c<has_member_function_setBind<void (T::*) (Binder*)>::value, 
+          typedef typename boost::mpl::if_c<has_member_function_setBind<void (T::*) (Binder*, bool)>::value, 
            SetBindMemberFunctionCaller, Option2MemberFunctionCaller>::type CallerT;
 
           CallerT().call(json, e, this);

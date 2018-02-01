@@ -148,7 +148,7 @@ public:
         void call(T&e, JsonEncodeBinder* jbinder, Json::Value* jv){
             Binder binder;
             binder.init(jbinder, jv);
-            e.setBind(&binder);
+            e.setBind(&binder, false);
         }
     };
 
@@ -187,7 +187,7 @@ public:
     template<typename T>
     void encode(T& e, Json::Value* jv){
 
-       typedef typename boost::mpl::if_c<has_member_function_setBind<void (T::*) (Binder*)>::value, 
+       typedef typename boost::mpl::if_c<has_member_function_setBind<void (T::*) (Binder*, bool)>::value, 
            SetBindMemberFunctionCaller, Option2MemberFunctionCaller>::type CallerT;
 
        CallerT().call(e, this, jv);

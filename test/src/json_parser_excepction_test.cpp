@@ -14,7 +14,7 @@ using namespace cppbind;
 class Me2 {
 public:
     int  not_existed;
-    void setBind(Binder *binder){
+    void setBind(Binder *binder, bool load){
           binder->bind("not_existed", not_existed);
     }
    
@@ -37,7 +37,7 @@ class Skill2 {
 public:
     std::string language;
     boost::shared_ptr<int> grade;
-    void setBind(Binder *binder) {
+    void setBind(Binder *binder,  bool load) {
           binder->bind("language_not_exist", language);
     }
 };
@@ -46,7 +46,7 @@ class Me3 {
 public:
     std::string name;
     std::map<std::string, Skill2>  skills;
-    void setBind(Binder *binder){
+    void setBind(Binder *binder,  bool load){
           binder->bind("name", name);
           binder->bind("skills", skills);
     }

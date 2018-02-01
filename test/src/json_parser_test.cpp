@@ -75,7 +75,7 @@ public:
     class Data4Bind{
     public:
         int line;
-         void setBind(Binder *binder){
+         void setBind(Binder *binder, bool load){
              binder->bind("line", line);
           }
     };
@@ -94,7 +94,7 @@ public:
     std::string name;
     std::string singer;
     float grade;
-    void setBind(Binder *binder){
+    void setBind(Binder *binder, bool load){
           binder->bind("id", id);
           binder->bind("name", name);
           binder->bind("singer",singer);
@@ -109,7 +109,7 @@ public:
     Contact(){}
     std::string email;
     std::string phone;
-    void setBind(Binder *binder){
+    void setBind(Binder *binder, bool load){
           binder->bind("email", email);
           binder->bind("phone", phone);
     }
@@ -119,7 +119,7 @@ public:
 class Skill {
 public:
     int grade;
-    void setBind(Binder *binder) {
+    void setBind(Binder *binder, bool load) {
           binder->bind("grade", grade);
     }
 };
@@ -143,7 +143,7 @@ public:
     Music* favorite_music;
     Vehicle* vehicle;
     std::map<SexType, std::string> favorite_singer;
-    void setBind(Binder *binder){
+    void setBind(Binder *binder, bool load){
           binder->bind("name", name);
           binder->bind("age", age);
           binder->bind("sex", sex);

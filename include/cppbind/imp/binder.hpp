@@ -159,8 +159,9 @@ void Binder::bindWithDynamicTypeWithJsonDefaultValue(const std::string& name, T&
          Json::Reader reader;
          bool parsingSuccessful = reader.parse(std::string(json_str_default_value), root);
          if(!parsingSuccessful) {
-           printf("Failed to parse, %s\n", reader.getFormatedErrorMessages().c_str());
-           throw  CppBindException(reader.getFormatedErrorMessages());
+			 std::string err_msg =  reader.getFormattedErrorMessages();
+           printf("Failed to parse, %s\n",err_msg.c_str());
+           throw  CppBindException(err_msg);
          }
          this->bindWithDynamicType(name,v,&root);
     }

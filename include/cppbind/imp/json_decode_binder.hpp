@@ -128,7 +128,7 @@ private:
          if(!json.isArray()) {
                 throw CppBindException("should be a list");
          }
-         for(int i = 0; i  < json.size(); i++) {
+		 for(Json::Value::ArrayIndex i = 0; i  < json.size(); i++) {
              T* x = NULL;
              decodeWithForeginKey(json[i], &x);
              e->push_back(x);
@@ -140,19 +140,15 @@ private:
             if(!json.isArray()) {
                 throw CppBindException("should be a list");
             }
-            for(unsigned int i = 0; i  < json.size(); i++) {
+            for(Json::Value::ArrayIndex i = 0; i  < json.size(); i++) {
                  try { 
                     T tmp;
                     decode(json[i], &tmp);
                     e->push_back(tmp);
                  } catch  (CppBindException e) {
-                    char buf[20];
-#ifdef WIN32
-                    _snprintf(buf, sizeof(buf),"[%d]", i);
-#else
-                    snprintf(buf, sizeof(buf),"[%d]", i);
-#endif
-                    throw CppBindException(e, buf);
+					 std::stringstream ss;
+					 ss << "[" << i << "]";
+                    throw CppBindException(e, ss.str());
                  }
             }
     }
@@ -162,15 +158,15 @@ private:
             if(!json.isArray()) {
                 throw CppBindException("should be a list");
             }
-            for(int i = 0; i  < json.size(); i++) {
+			for(Json::Value::ArrayIndex i = 0; i  < json.size(); i++) {
                  try { 
                     T*  tmp = new T();
                     decode(json[i], tmp);
                     e->push_back(tmp);
                  } catch  (CppBindException e) {
-                    char buf[20];
-                    sprintf(buf, "[%d]", i);
-                    throw CppBindException(e, buf);
+					 std::stringstream ss;
+					 ss << "[" <<  i << "]";
+                    throw CppBindException(e, ss.str());
                  }
             }
     }

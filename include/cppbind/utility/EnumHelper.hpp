@@ -35,7 +35,7 @@ private:
        int x = -1;
        for(size_t i = 0; i < T::enum_str_info_len; i++) {
            if(str == T::enum_str_info[i]) {
-              x = i;
+              x = (int)i;
               break;
            }
        }

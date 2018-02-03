@@ -39,8 +39,9 @@ private:
        Json::Reader reader;
        bool parsingSuccessful = reader.parse(fs, root);
        if(!parsingSuccessful) {
-         printf("Failed to parse, %s\n", reader.getFormatedErrorMessages().c_str());
-         throw  CppBindException(reader.getFormatedErrorMessages());
+		   std::string err_msg = reader.getFormattedErrorMessages();
+         printf("Failed to parse, %s\n", err_msg.c_str());
+         throw  CppBindException(err_msg);
        }
        this->jv = root;        
    }

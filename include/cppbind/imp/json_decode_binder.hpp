@@ -34,20 +34,24 @@ public:
 
 //bind API
     template<typename T>
-    void bind(const Json::Value& _jv, const std::string& name, T& v){
+    void bind(const Json::Value& _jv, const std::string& name, T& v, const Json::Value* jv_default = NULL){
 
-         const Json::Value& jv = _jv[name];
+         Json::Value jv = _jv[name];
+         if(jv.isNull()) {
+             if(jv_default != NULL) {
+                 jv = *jv_default;
+             } else {
+                 throw CppBindException(std::string(".") + name, std::string("not found"));
+             } 
+         }
+
          //std::cout << __FILE__ << __LINE__  << ": " << name << "\n";
-         if(!jv.isNull()) {
-             try {
-                decode(jv, &v);
-                //std::cout << __FILE__ << __LINE__  << ": " << name << "\n";
-             } catch (CppBindException e) {
-                //std::cout << "error:" << __FILE__ << __LINE__  <<  name  <<","<<  typeid(T).name() << ","<< jv  << "\n";
-                throw CppBindException(e, std::string(".") + name);
-             }
-         } else  {
-              throw CppBindException(std::string(".") + name, std::string("not found"));
+         try {
+            decode(jv, &v);
+            //std::cout << __FILE__ << __LINE__  << ": " << name << "\n";
+         } catch (CppBindException e) {
+            //std::cout << "error:" << __FILE__ << __LINE__  <<  name  <<","<<  typeid(T).name() << ","<< jv  << "\n";
+            throw CppBindException(e, std::string(".") + name);
          }
     }
     template<typename T>
@@ -64,11 +68,11 @@ public:
         }
     }
     template<typename T>
-    void bind(const Json::Value& _jv, const std::string& name, boost::shared_ptr<T>& v){
+    void bind(const Json::Value& _jv, const std::string& name, boost::shared_ptr<T>& v, const Json::Value* jv_default = NULL){
         const Json::Value& jv = _jv[name];
          if(!jv.isNull()) {
              T  e;
-             bind(_jv, name, e);
+             bind(_jv, name, e, jv_default);
              v = boost::shared_ptr<T>(new T(e));
          } 
     }

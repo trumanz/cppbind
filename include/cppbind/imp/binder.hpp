@@ -75,16 +75,14 @@ public:
     *Because the user code is not template functon, so we must tranfer a fixed type, This Binder type!!
     *and this will use EncodeBinder or DecodeBinder  to do the real work.
     */
-    //Common bind
     template<typename T>
-    void bind(const std::string& name, T& v, const char* json_str_default_value = NULL);
+    void bind(const std::string& name, T& v);
     template<typename T>
     void bind(const std::string& name, T& v, const T& default_value);
-    // Foregin KeyBind
     template<typename T>
     void bindWithForeginKey(const std::string& name, T& v);
-
-    //DynamicType Bind
+    //template<typename T>
+    //void bindWithDynamicType(const std::string& name, T& v);
     template<typename T>
     void bindWithDynamicType(const std::string& name, T& v,  Json::Value* default_value = NULL);
     template<typename T>
@@ -101,28 +99,16 @@ public:
 namespace cppbind {
 
 template<typename T>
-void Binder::bind(const std::string& name, T& v, const char* json_str_default_value){
+void Binder::bind(const std::string& name, T& v){
         //CALL the real bind fucntion, must change to the real type of binder, then comile could instantiate the tempate funciton
         JsonEncodeBinder* json_encode_binder = dynamic_cast<JsonEncodeBinder*>(this->binder_imp);
         JsonDecodeBinder* json_decode_binder = dynamic_cast<JsonDecodeBinder*>(this->binder_imp);
         if( json_encode_binder ) {
+            encoded_key.push_back(name);
             json_encode_binder->bind(json,name,v);
         } else if(json_decode_binder ) {
             decoded_member_key_set.insert(name);
-            if(json_str_default_value != NULL) {
-                encoded_key.push_back(name);
-                Json::Value root;
-                Json::Reader reader;
-                bool parsingSuccessful = reader.parse(std::string(json_str_default_value), root);
-                if(!parsingSuccessful) {
-                    std::string err_msg =  reader.getFormattedErrorMessages();
-                  printf("Failed to parse, %s\n",err_msg.c_str());
-                  throw  CppBindException(err_msg);
-                }
-                json_decode_binder->bind(*this->json, name,v, &root);
-            } else {
-                json_decode_binder->bind(*this->json, name,v, (Json::Value*)NULL);
-            }
+            json_decode_binder->bind(*this->json, name,v);
         } 
          else {
             assert("bug" == NULL);

@@ -149,6 +149,7 @@ public:
             Binder binder;
             binder.init(jbinder, jv);
             e.setBind(&binder, false);
+            jbinder->binder.encoded_key = binder.encoded_key;
         }
     };
 

@@ -177,7 +177,7 @@ TEST(JsonROM, baisc){
      }
      ASSERT_EQ(music_table["music_1"]->name, "Dirty Diana");
 
-     std::string csv_str = music_csv_binder.encodeToStr<Music>(all_musics);
+     std::string csv_str = cppbind::CSVBind().encodeToStr<Music>(all_musics);
      printf("csv_str=\n[%s]\n", csv_str.c_str());
 
      printf("all_music.json = ^ %s ^\n", JsonBind().toJsonStr(all_musics).c_str());

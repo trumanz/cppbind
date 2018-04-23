@@ -20,21 +20,23 @@ namespace  cppbind {
 
 class CSVBind {
 public:
-     CSVReader csv;
+     boost::shared_ptr<CSVReader> csv;
      JsonBind json_binder;
 public:
-    CSVBind(){}
+    CSVBind(){
+        csv = boost::shared_ptr<CSVReader>(new CSVReader());
+    }
 
     template<typename T>
     std::vector<T*> decode(std::istream& csv_content, std::istream*  header_stream = NULL){
 
         std::vector<T*> rc;
         if(header_stream != NULL) {
-           csv.readRows(csv_content);
+           csv->readRows(csv_content);
         }
-        csv.readRows(csv_content);
-        for(size_t i = 0; i < csv.rows.size(); i++) {
-            Json::Value jv = this->createJsonObject(csv.headers,csv.rows[i].cells);
+        csv->readRows(csv_content);
+        for(size_t i = 0; i < csv->rows.size(); i++) {
+            Json::Value jv = this->createJsonObject(csv->headers,csv->rows[i].cells);
             rc.push_back(json_binder.decode2<T>(jv));
         }
         return rc;
@@ -44,7 +46,7 @@ public:
     template<typename T>
     void encodeToStream(std::vector<T*> data, std::ostream* output){
 
-        std::vector<std::string> headers = this->csv.headers;
+        std::vector<std::string> headers = this->csv->headers;
 
         //try get header from data
         if(headers.size() == 0 && data.size() != 0) {
@@ -81,11 +83,11 @@ public:
     }
     
     template<typename T>
-    std::vector<T*> decodeFile(const char *data_file, const char* header_file = NULL){
+    std::vector<T*> decodeFile(std::string data_file, const char* header_file = NULL){
          std::vector<T*> rc;
-         std::ifstream  fs(data_file);
+         std::ifstream  fs(data_file.c_str());
          if(!fs) {
-             printf("Can not open %s\n", data_file);
+             printf("Can not open %s\n", data_file.c_str());
              assert("TODO, throw exception" == NULL);
          }
          if(header_file != NULL) {

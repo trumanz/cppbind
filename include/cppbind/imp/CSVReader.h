@@ -30,6 +30,7 @@ class CSVReader{
 public:
     std::vector<std::string> headers;
     std::vector<CSVRow> rows;
+    virtual ~CSVReader(){}
 public:
    void readFile(const char *filename){
        std::ifstream _in(filename);

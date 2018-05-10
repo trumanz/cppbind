@@ -11,6 +11,7 @@
 #include <assert.h>
 #include <list>
 #include <boost/shared_ptr.hpp>
+#include <boost/tti/has_member_function.hpp>
 #include <stdint.h>
 #include "../cppbind_exception.h"
 #include "cppbind/type/StringConverter.h"

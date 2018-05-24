@@ -374,12 +374,26 @@ private:  //for basic type
         } 
          e[0] =  json.asInt();   
     }
+    void decode(const Json::Value& json, uint32_t *e){
+        if(json.isString()) {
+            this->JsonStrToBasicType(json,e);
+            return;
+        } 
+         e[0] =  json.asUInt();   
+    }
     void decode(const Json::Value& json, int64_t *e){
         if(json.isString()) {
             this->JsonStrToBasicType(json,e);
             return;
         } 
          e[0] =  json.asInt64();
+    }
+    void decode(const Json::Value& json, uint64_t *e){
+        if(json.isString()) {
+            this->JsonStrToBasicType(json,e);
+            return;
+        } 
+         e[0] =  json.asUInt64();   
     }
     void decode(const Json::Value& json, float *e){
         if(json.isString()) {

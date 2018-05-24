@@ -226,6 +226,10 @@ private:
     void encode(const int32_t e, Json::Value* jv) { Json::Int x = e; jv[0] =  Json::Value(x); }
     //int64_t 
     void encode(const int64_t e, Json::Value* jv) { Json::Int64 x = e; jv[0] =  Json::Value(x); }
+    //uint32_t
+    void encode(const uint32_t e, Json::Value* jv) { Json::UInt x = e; jv[0] =  Json::Value(x); }
+    //uint64_t 
+    void encode(const uint64_t e, Json::Value* jv) { Json::UInt64 x = e; jv[0] =  Json::Value(x); }
     //float 
     void encode(const float e, Json::Value* jv){ jv[0] =  Json::Value(e); }
     //double 

@@ -56,17 +56,9 @@ public:
 
     template<typename T>
     T* decodeIStream2Point(std::istream &is){
-         Json::Value root;
-         Json::Reader reader;
-         bool parsingSuccessful = reader.parse(is, root);
-         if(!parsingSuccessful) {
-			 std::string err_msg =  reader.getFormattedErrorMessages();
-           printf("Failed to parse, %s\n", err_msg.c_str());
-           throw  CppBindException(err_msg);
-         }
+         Json::Value root = decodeIStream2JsonValue(is);
          return decodeJV2Point<T>(root);
     }
-
 
     template<typename T>
     boost::shared_ptr<T> decode(std::istream &is){
@@ -87,12 +79,28 @@ public:
 
     template<typename T>
     T* decodeFile(const char * file_name){
-        std::fstream fs (file_name, std::fstream::in);
+        Json::Value root = decodeFile2JsonValue(file_name);
+        return decodeJV2Point<T>(root);
+    }
+
+    Json::Value decodeIStream2JsonValue(std::istream &is){
+         Json::Value root;
+         Json::Reader reader;
+         bool parsingSuccessful = reader.parse(is, root);
+         if(!parsingSuccessful) {
+			 std::string err_msg =  reader.getFormattedErrorMessages();
+           printf("Failed to parse, %s\n", err_msg.c_str());
+           throw  CppBindException(err_msg);
+         }
+         return root;
+    }
+    Json::Value decodeFile2JsonValue(std::string file_name) {
+        std::fstream fs(file_name.c_str(), std::fstream::in);
         if(!fs) {
-            printf("ERROR Can not open file %s\n", file_name);
+            printf("ERROR Can not open file %s\n", file_name.c_str());
             assert("TODO throw exception" == NULL);
         }
-        return this->decodeIStream2Point<T>(fs);
+        return this->decodeIStream2JsonValue(fs);
     }
 
 //Encode Interface

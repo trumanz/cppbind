@@ -24,11 +24,14 @@ public:
          std::string str = jv.asString();
          this->fromStr4Bind(str);
    }
+   std::string valueStr() const {
+       int x = value;
+       assert(x < T::enum_str_info_len);
+       return T::enum_str_info[x];
+   }
 private:
     std::string toStr4Bind(){  
-        int x = value;
-        assert(x < T::enum_str_info_len);
-        return T::enum_str_info[x];
+        return valueStr();
     } 
 
    void fromStr4Bind(const std::string& str){

@@ -46,8 +46,8 @@ public:
      template<typename T>
      void regTable(const std::map<std::string, T*> *table)
      {
-         binder_data.type_tables[typeid(T).name()] = table;
-         binder_data.type_tables[typeid(T).name()] = table;
+         std::string type_name = typeid(T).name();
+         binder_data.type_tables[type_name] = table;
      }
      void regClassRegister(ClassRegisterBase* _class_reg){
         assert(binder_data.class_reg == NULL);

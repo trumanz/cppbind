@@ -13,7 +13,6 @@
 #include <cppbind/type/timestr.h>
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include <cppbind/utility/EnumHelper.hpp>
-#include <cppbind/type/spec_type.h>
 #include <cppbind/ClassRegister.h>
 
 using namespace boost::posix_time;

@@ -119,7 +119,11 @@ public:
         }
         for(Json::Value::ArrayIndex i = 0; i  < jv.size(); i++) {
             T* e;
-            bindDynamicType(jv,e);
+            if(!jv[i].isObject()) {
+                throw CppBindException(std::string(".") + name, "should be a obj array");
+                assert(false);
+            }
+            bindDynamicType(jv[i],e);
             v.push_back(e);
         }
     }

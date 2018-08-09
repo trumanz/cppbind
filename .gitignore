@@ -1,3 +1,4 @@
 3pp
 se_project_cppbind*
 *.o
+*.gch

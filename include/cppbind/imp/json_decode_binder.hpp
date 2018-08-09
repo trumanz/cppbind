@@ -95,6 +95,11 @@ public:
         if(jv.isNull() && default_value != NULL) {
             jv = *default_value;
         }
+        bindDynamicType(jv,v);
+    }
+
+    template<typename T>
+    void bindDynamicType(const Json::Value& jv, T*& v){
         Json::Value::Members  members = jv.getMemberNames();
         assert(members.size() == 1);
         std::string class_name = members[0];
@@ -103,6 +108,20 @@ public:
             printf("ERROR, please register classRegister first");
         }
         v = this->binder_data.class_reg->createObj<T>(class_name.c_str(), class_data);
+    }
+
+    template<typename T>
+    void bindDynamicTypeArray(const Json::Value &_jv, const std::string& name, std::vector<T*>& v){
+        const Json::Value& jv = _jv[name];
+        if(!jv.isArray()) {
+            throw CppBindException(std::string(".") + name, "should be a obj array");
+            assert(false);
+        }
+        for(Json::Value::ArrayIndex i = 0; i  < jv.size(); i++) {
+            T* e;
+            bindDynamicType(jv,e);
+            v.push_back(e);
+        }
     }
 
 //std container type

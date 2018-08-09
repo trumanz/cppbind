@@ -47,6 +47,16 @@ public:
         jv[reg_name] = v->getJsonValue4Bind();
         _jv[0][name] = jv;
     }
+
+    template<typename T>
+    void bindDynamicTypeArray(Json::Value *_jv, const std::string& name, std::vector<T*>& v){
+         
+        for(size_t i = 0; i < v.size();i++) {
+            Json::Value jv;
+            bindWithDynamicType(&jv, name, v[i]);
+            _jv[0].append(jv);
+        }
+    }    
     
 public: //for std container type
     

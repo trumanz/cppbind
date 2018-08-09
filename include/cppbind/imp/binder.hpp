@@ -82,12 +82,15 @@ public:
     void bind(const std::string& name, T& v, const T& default_value);
     template<typename T>
     void bindWithForeginKey(const std::string& name, T& v);
-    //template<typename T>
-    //void bindWithDynamicType(const std::string& name, T& v);
+
     template<typename T>
     void bindWithDynamicType(const std::string& name, T& v,  Json::Value* default_value = NULL);
+
     template<typename T>
     void bindWithDynamicTypeWithJsonDefaultValue(const std::string& name, T& v,  const char* json_str_default_value = NULL);
+    
+    template<typename T>
+    void bindDynamicTypeArray(const std::string& name, std::vector<T*>& v);
 };
 
 }
@@ -186,6 +189,24 @@ void Binder::bindWithDynamicType(const std::string& name, T& v, Json::Value* def
     }
 }
 
+
+template<typename T>
+void Binder::bindDynamicTypeArray(const std::string& name, std::vector<T*>& v)
+{
+    //CALL the real bind fucntion, must change to the real type of binder, then comile could instantiate the tempate funciton
+    JsonEncodeBinder* json_encode_binder = dynamic_cast<JsonEncodeBinder*>(this->binder_imp);
+    JsonDecodeBinder* json_decode_binder = dynamic_cast<JsonDecodeBinder*>(this->binder_imp);
+    if( json_encode_binder ) {
+        encoded_key.push_back(name);
+        json_encode_binder->bindDynamicTypeArray(json, name,v);
+    } else if(json_decode_binder ) {
+        decoded_member_key_set.insert(name);
+        json_decode_binder->bindDynamicTypeArray(*json, name,v);
+    } 
+     else {
+        assert("bug" == NULL);
+    }
+}
 
 }
 

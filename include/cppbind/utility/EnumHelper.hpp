@@ -1,6 +1,9 @@
 #ifndef _CPPBIND__ENUM_HELPER__
 #define _CPPBIND__ENUM_HELPER__
 
+#include <assert.h>
+#include <string>
+#include <jsoncpp/json/json.h>
 
 namespace  cppbind {
 

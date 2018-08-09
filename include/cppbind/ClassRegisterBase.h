@@ -1,5 +1,6 @@
 #ifndef _CPPBIND_CLASS__REGISTER_BASE_H
 #define _CPPBIND_CLASS__REGISTER_BASE_H
+#include <stdio.h>
 #include <assert.h>
 #include <typeinfo>
 #include <boost/noncopyable.hpp>

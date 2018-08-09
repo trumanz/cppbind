@@ -1,12 +1,14 @@
 #ifndef _CPPBIND__Json_file__
 #define _CPPBIND__Json_file__
 
+#include <iostream>
 #include <fstream>     
 #include <assert.h>
 #include <jsoncpp/json/writer.h>
 #include <jsoncpp/json/json.h>
 #include <boost/filesystem.hpp>
 #include <boost/regex.hpp>
+#include "cppbind/cppbind_exception.h"
 namespace  cppbind {
 
 
@@ -30,13 +32,13 @@ public:
    }
 private:
     void encodeFile(const Json::Value& _jv, const std::string& _file_path){  
-        std::fstream fs(_file_path, std::fstream::out);
+        std::fstream fs(_file_path.c_str(),  std::fstream::out);
         Json::StyledStreamWriter writer;
         writer.write(fs, _jv);
     } 
 
    void decodeFile(const std::string& file_path){
-       std::fstream fs(file_path, std::fstream::in);
+       std::fstream fs(file_path.c_str(),  std::fstream::in);
        Json::Value root;
        Json::Reader reader;
        bool parsingSuccessful = reader.parse(fs, root);

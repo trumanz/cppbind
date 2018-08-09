@@ -32,9 +32,9 @@ public:
 
     std::string format(const boost::gregorian::date &gd){
         char buf[100];
-        int y = x.year();
-        int m = x.month();
-        int d = x.day();
+        int y = gd.year();
+        int m = gd.month();
+        int d = gd.day();
         snprintf(buf, sizeof(buf), "%d-%02d-%02d", y, m, d);
         return buf;
     }

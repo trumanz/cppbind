@@ -2,6 +2,10 @@
 #define __CPPBIND__STRING_CONVERTER_
 #include <typeinfo>   // operator typeid
 #include <boost/any.hpp>
+#include <sstream>
+#include <map>
+#include <assert.h>
+#include <boost/shared_ptr.hpp>
 namespace cppbind{
 
 class StringConverter{
@@ -71,3 +75,4 @@ public:
 
 
 #endif
+

@@ -8,6 +8,9 @@ class Object{
 public:
     virtual ~Object(){}
     virtual Json::Value getJsonValue4Bind() const = 0; 
+    virtual std::string getRegClassName() const {
+        return typeid(*this).name();
+    }
 };
 
 

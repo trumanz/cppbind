@@ -12,7 +12,7 @@ class ClassRegister : public ClassRegisterBase {
 public:
    template<typename ClassT>
    void regClass(const char *name){
-       ObjFactory* of = new ObjFactoryT<ClassT>();
+       ObjFactory* of = new ObjFactoryT<ClassT>(name);
        this->regClassWithFactory(name, of);
    }
 

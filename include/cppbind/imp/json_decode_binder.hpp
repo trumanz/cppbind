@@ -101,7 +101,12 @@ public:
     template<typename T>
     void bindDynamicType(const Json::Value& jv, T*& v){
         Json::Value::Members  members = jv.getMemberNames();
-        assert(members.size() == 1);
+        if(members.size() != 1) {
+            std::stringstream ss;
+            ss << jv;
+            printf("jv=%s", ss.str().c_str());
+            assert(false);
+        }
         std::string class_name = members[0];
         Json::Value class_data = jv[class_name];
         if(this->binder_data.class_reg == NULL) {
@@ -313,6 +318,8 @@ public:
         template<typename T>
         void call(const Json::Value& jv, T*e, JsonDecodeBinder* binder){
             if(!jv.isString()) {
+                std::stringstream ss; ss<< jv;
+                printf("error: jv=%s", ss.str().c_str());
                 assert("bug" == NULL);
             }
             e[0] = binder->binder_data.str_convert_mgmt.fromString<T>(jv.asString());

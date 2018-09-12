@@ -5,6 +5,7 @@
 #include <typeinfo>
 #include <boost/noncopyable.hpp>
 #include "ObjFactory.h"
+#include "cppbind_exception.h"
 
 namespace cppbind{
 
@@ -50,8 +51,8 @@ private:
    ObjFactory* getObjFactory(const char* name){
        std::map<std::string, ObjFactory*>::iterator it  = obj_factories.find(name);
        if(it == obj_factories.end()) {
-           printf("ERROR can not find rule %s", name);
-           assert(false);
+           printf("ERROR can not find class %s\n", name);
+           throw ClassMissRegException(name);
        }
        return it->second;
    }

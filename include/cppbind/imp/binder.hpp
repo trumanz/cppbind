@@ -210,8 +210,12 @@ void Binder::bindDynamicTypeArray(const std::string& name, std::vector<T*>& v)
         encoded_key.push_back(name);
         json_encode_binder->bindDynamicTypeArray(json, name,v);
     } else if(json_decode_binder ) {
-        decoded_member_key_set.insert(name);
-        json_decode_binder->bindDynamicTypeArray(*json, name,v);
+        try{
+           decoded_member_key_set.insert(name);
+           json_decode_binder->bindDynamicTypeArray(*json, name,v);
+        } catch(CppBindException& e) {
+            throw CppBindException(e, std::string(".") + name);
+        }
     } 
      else {
         assert("bug" == NULL);

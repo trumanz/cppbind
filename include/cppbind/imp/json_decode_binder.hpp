@@ -97,10 +97,14 @@ public:
         }
         std::string class_name = members[0];
         Json::Value class_data = jv[class_name];
-        if(this->binder_data.class_reg == NULL) {
-            printf("ERROR, please register classRegister first");
+        try{
+            if(this->binder_data.class_reg == NULL) {
+                printf("ERROR, please register classRegister first");
+            }
+            v = this->binder_data.class_reg->createObj<T>(class_name.c_str(), class_data);
+        }catch (CppBindException& e) {
+                throw CppBindException(e, std::string(".") + class_name);
         }
-        v = this->binder_data.class_reg->createObj<T>(class_name.c_str(), class_data);
     }
 
     template<typename T>
@@ -116,8 +120,18 @@ public:
                 throw CppBindException(std::string(".") + name, "should be a obj array");
                 assert(false);
             }
-            bindDynamicType(jv[i],e);
-            v.push_back(e);
+            try {
+                bindDynamicType(jv[i],e);
+                v.push_back(e);
+            } catch (ClassMissRegException& e) {
+                if (!this->ignore_unknown_key) {
+                    printf("ERROR %s\n", e.what());
+                    assert(false);
+                }
+            } catch(CppBindException& e) {
+                std::stringstream ss; ss << i;
+                throw CppBindException(e, std::string(".") + ss.str());
+            }
         }
     }
 

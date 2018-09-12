@@ -28,6 +28,14 @@ class CppBindException : public std::runtime_error
     
 };
 
+class ClassMissRegException : public std::runtime_error{
+public:
+    ClassMissRegException(std::string class_name) : 
+        runtime_error(class_name + " miss register"){
+
+    }
+};
+
 }
 
 #endif

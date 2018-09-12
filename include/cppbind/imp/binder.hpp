@@ -80,9 +80,17 @@ public:
     void bind(const std::string& name, T& v);
     template<typename T>
     void bind(const std::string& name, T& v, const T& default_value);
-    template<typename T>
-    void bindWithForeginKey(const std::string& name, T& v);
 
+//foreign key
+public:
+    template<typename T>
+    void bindForeginKey(const std::string& name, T& v) { bindForeginKey(name,v, (const T*)NULL);}
+    template<typename T>
+    void bindForeginKey(const std::string& name, T& v, const T& default_value) { bindForeginKey(name,v,&default_value);}
+private:
+    template<typename T>
+    void bindForeginKey(const std::string& name, T& v, const T* default_value);
+public:
     template<typename T>
     void bindWithDynamicType(const std::string& name, T& v,  Json::Value* default_value = NULL);
 
@@ -138,21 +146,23 @@ void Binder::bind(const std::string& name, T& v, const T& default_value){
 }
 
 template<typename T>
-void Binder::bindWithForeginKey(const std::string& name, T& v){
+void Binder::bindForeginKey(const std::string& name, T& v, const T* default_value){
         //CALL the real bind fucntion, must change to the real type of binder, then comile could instantiate the tempate funciton
         JsonEncodeBinder* json_encode_binder = dynamic_cast<JsonEncodeBinder*>(this->binder_imp);
         JsonDecodeBinder* json_decode_binder = dynamic_cast<JsonDecodeBinder*>(this->binder_imp);
         if( json_encode_binder ) {
             encoded_key.push_back(name);
-            json_encode_binder->bindWithForeginKey(json, name,v);
+            json_encode_binder->bindForeginKey(json, name,v, default_value);
         } else if(json_decode_binder ) {
             decoded_member_key_set.insert(name);
-            json_decode_binder->bindWithForeginKey(*json, name,v);
+            json_decode_binder->bindForeginKey(*json, name,v, default_value);
         } 
          else {
             assert("bug" == NULL);
         }
 }
+
+
 template<typename T>
 void Binder::bindWithDynamicTypeWithJsonDefaultValue(const std::string& name, T& v,  const char* json_str_default_value)
 {

@@ -10,9 +10,8 @@ public:
     JsonEncodeBinder(){
         binder.init(this, NULL);
     }
-   // void setJson(const Json::Value& jv){
-   //     this->root_jv[0] = jv;
-   // }
+
+
     template<typename T>
     void bind(Json::Value *_jv, const std::string& name, T& v){
           Json::Value jv;
@@ -33,11 +32,7 @@ public:
     }
 
     template<typename T>
-    void bindWithForeginKey(Json::Value *_jv, const std::string& name, T& v){
-          Json::Value jv;
-          encodeWithForeginKey(v, &jv);
-          _jv[0][name] = jv;
-    }
+    void bindForeginKey(Json::Value *_jv, const std::string& name, T& v, const T* default_value);
     template<typename T>
     void bindWithDynamicType(Json::Value *_jv, const std::string& name, T*& v){
         //printf("name=%s\n", name.c_str());
@@ -250,6 +245,13 @@ private:
     void encode(      std::string& e, Json::Value* jv) { jv[0] =  Json::Value(e); }
 };
 
+
+template<typename T>
+void JsonEncodeBinder::bindForeginKey(Json::Value *_jv, const std::string& name, T& v, const T* default_value){
+      Json::Value jv;
+      encodeWithForeginKey(v, &jv);
+      _jv[0][name] = jv;
+}
  
 
 }

@@ -156,8 +156,8 @@ public:
           binder->bind("skills", skills);
           binder->bind("value_not_exist",  value_not_exist);
           binder->bind("jv", jv);
-          binder->bindWithForeginKey("liked_music", liked_music_list);
-          binder->bindWithForeginKey("favorite_music", favorite_music);
+          binder->bindForeginKey("liked_music", liked_music_list);
+          binder->bindForeginKey("favorite_music", favorite_music);
           binder->bindWithDynamicType("vehicle", vehicle);
           binder->bind("favorite_singer", favorite_singer);
     }

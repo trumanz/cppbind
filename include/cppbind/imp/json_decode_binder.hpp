@@ -75,19 +75,7 @@ public:
 
     
     template<typename T>
-    void bindWithForeginKey(const Json::Value& _jv, const std::string& name, T& v){
-         //printf("filed %s\n", name.c_str());
-         if(_jv.isMember(name)) {
-             const Json::Value& jv = _jv[name];
-             try {
-                decodeWithForeginKey(jv, &v);
-             } catch (CppBindException e) {
-                throw CppBindException(e, std::string(".") + name);
-             }
-         } else  {
-              throw CppBindException(std::string(".") + name, "not found");
-         }
-    }
+    void bindForeginKey(const Json::Value& _jv, const std::string& name, T& v, const T* default_value);
 
     template<typename T>
     void bindWithDynamicType(const Json::Value& _jv, const std::string& name, T*& v,  Json::Value* default_value ){
@@ -456,6 +444,24 @@ private:  //for basic type
         }
     }
 };
+
+template<typename T>
+void JsonDecodeBinder::bindForeginKey(const Json::Value& _jv, const std::string& name, T& v, const T* default_value){
+     //printf("filed %s\n", name.c_str());
+     if(_jv.isMember(name)) {
+         const Json::Value& jv = _jv[name];
+         try {
+            decodeWithForeginKey(jv, &v);
+         } catch (CppBindException e) {
+            throw CppBindException(e, std::string(".") + name);
+         }
+     } else if(default_value) {
+         v = *default_value;
+
+     }else  {
+          throw CppBindException(std::string(".") + name, "not found");
+     }
+}
 
 }
 

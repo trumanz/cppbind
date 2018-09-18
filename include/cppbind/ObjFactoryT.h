@@ -36,8 +36,16 @@ public:
     ObjFactoryT(const std::string& class_name) {
         this->reg_class_name = class_name;
     }
-    virtual Object* createObj(const Json::Value& json_parameter) const {
-         boost::shared_ptr<typename ObjT::Data4Bind> parameter = cppbind::JsonBind().decode<typename ObjT::Data4Bind>(json_parameter);
+    virtual Object* createObj(const Json::Value& json_parameter, JsonDecodeBinder* bind = NULL) const {
+         boost::shared_ptr<typename ObjT::Data4Bind> parameter;
+         if(bind) {
+              typename ObjT::Data4Bind* e = NULL;
+              e = new typename ObjT::Data4Bind();
+              bind->DecodeJson((Json::Value*)&json_parameter, e);
+              parameter =  boost::shared_ptr<typename ObjT::Data4Bind>(e);
+         } else {
+             parameter = cppbind::JsonBind().decode<typename ObjT::Data4Bind>(json_parameter);
+         }
          //ObjT* p = new ObjT(*(parameter.get()));
          Object* p = new ObjWrapperT<ObjT>(reg_class_name, *(parameter.get()));
          return p;

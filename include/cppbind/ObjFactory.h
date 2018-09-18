@@ -6,11 +6,11 @@
 #include "Object.h"
 namespace cppbind{
 
-
+class JsonDecodeBinder;
 class ObjFactory{
 public:
     //any is a point
-    virtual Object* createObj(const Json::Value& json_parameter) const = 0;
+    virtual Object* createObj(const Json::Value& json_parameter, JsonDecodeBinder* bind = NULL) const = 0;
    // virtual boost::any createObj(const boost::any& any_parameter) const = 0;
     virtual std::string getTypeIdName() const = 0;
 };

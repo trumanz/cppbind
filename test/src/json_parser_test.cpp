@@ -158,7 +158,7 @@ public:
           binder->bind("jv", jv);
           binder->bindForeginKey("liked_music", liked_music_list);
           binder->bindForeginKey("favorite_music", favorite_music);
-          binder->bindWithDynamicType("vehicle", vehicle);
+          binder->bindDynamicType("vehicle", vehicle);
           binder->bind("favorite_singer", favorite_singer);
     }
 };

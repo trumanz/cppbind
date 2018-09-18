@@ -23,15 +23,6 @@ public:
         this->decode(*jv, e);
     }    
 
-   // template<typename T>
-  //void decode(const Json::Value& jv, T* e){
-  //    try{
-  //        this->decode(jv, e);
-  //    }catch(CppBindException e){
-  //        throw CppBindException(e, typeid(T).name());
-  //    }
-  //}
-
 //bind API
     template<typename T>
     void bind(const Json::Value& _jv, const std::string& name, T& v){
@@ -101,7 +92,7 @@ public:
             if(this->binder_data.class_reg == NULL) {
                 printf("ERROR, please register classRegister first");
             }
-            v = this->binder_data.class_reg->createObj<T>(class_name.c_str(), class_data);
+            v = this->binder_data.class_reg->createObj<T>(class_name.c_str(), class_data, this);
         }catch (CppBindException& e) {
                 throw CppBindException(e, std::string(".") + class_name);
         }

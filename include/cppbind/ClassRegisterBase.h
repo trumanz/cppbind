@@ -35,16 +35,16 @@ public:
 
 
    template<typename ClassT>
-   ClassT* createObj(const char* name, const Json::Value& json_parameter)  {
-       Object* any_obj = this->createAnyObj(name,json_parameter);
+   ClassT* createObj(const char* name, const Json::Value& json_parameter, JsonDecodeBinder* bind = NULL)  {
+       Object* any_obj = this->createAnyObj(name,json_parameter, bind);
        ClassT* rc = dynamic_cast<ClassT*>(any_obj);
        assert(rc != NULL);
        return rc; 
    }
 
-   Object* createAnyObj(const char* name, const Json::Value& json_parameter)  {
+   Object* createAnyObj(const char* name, const Json::Value& json_parameter, JsonDecodeBinder* bind = NULL)  {
        ObjFactory* of = this->getObjFactory(name);
-       Object* any_obj = of->createObj(json_parameter);
+       Object* any_obj = of->createObj(json_parameter, bind);
        return any_obj;
    }
 private:

@@ -4,6 +4,7 @@
 #include <assert.h>
 #include <typeinfo>
 #include <boost/noncopyable.hpp>
+#include <boost/algorithm/string/case_conv.hpp>
 #include "ObjFactory.h"
 #include "cppbind_exception.h"
 
@@ -12,27 +13,18 @@ namespace cppbind{
 class ClassRegisterBase {
 private:
    std::map<std::string, ObjFactory*> obj_factories;
-   std::map<std::string, std::string> typeid_name_str_name_map;
 public:
 
    void regClassWithFactory(const char *name, ObjFactory* obj_factory){
-       this->obj_factories[name] = obj_factory;
-       this->typeid_name_str_name_map[obj_factory->getTypeIdName()] = name;
-   }
-
-   std::string getRegName(const char* typeid_name){
-       const std::map<std::string, std::string>::const_iterator it = typeid_name_str_name_map.find(typeid_name);
-       if(it == typeid_name_str_name_map.end()) {
-           printf("ERROR can not found class typeid name: %s\n", typeid_name);
-           for(std::map<std::string, std::string>::const_iterator it2 = typeid_name_str_name_map.begin();
-                it2 !=  typeid_name_str_name_map.end(); it2++){
-               printf("registered class typeid name: %s\n", it2->first.c_str());
-           }
+       std::string reg_name(name);
+       boost::algorithm::to_upper(reg_name);
+       if(this->obj_factories.find(reg_name) != this->obj_factories.end()) {
+           printf("Error %s alread registered", reg_name.c_str());
            assert(false);
+       } else {
+           this->obj_factories[reg_name] = obj_factory;
        }
-       return it->second;
    }
-
 
    template<typename ClassT>
    ClassT* createObj(const char* name, const Json::Value& json_parameter, JsonDecodeBinder* bind = NULL)  {
@@ -44,12 +36,14 @@ public:
 
    Object* createAnyObj(const char* name, const Json::Value& json_parameter, JsonDecodeBinder* bind = NULL)  {
        ObjFactory* of = this->getObjFactory(name);
-       Object* any_obj = of->createObj(json_parameter, bind);
+       Object* any_obj = of->createObj(name, json_parameter, bind);
        return any_obj;
    }
 private:
    ObjFactory* getObjFactory(const char* name){
-       std::map<std::string, ObjFactory*>::iterator it  = obj_factories.find(name);
+       std::string reg_name(name);
+       boost::algorithm::to_upper(reg_name);
+       std::map<std::string, ObjFactory*>::iterator it  = obj_factories.find(reg_name);
        if(it == obj_factories.end()) {
            printf("ERROR can not find class %s\n", name);
            throw ClassMissRegException(name);

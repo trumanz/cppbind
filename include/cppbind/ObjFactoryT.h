@@ -12,17 +12,19 @@ template<typename ObjT>
 class ObjWrapperT : public ObjT
 {
 private:
-    std::string reg_class_name;
+    std::string obj_gen_name;
 public:
-    ObjWrapperT(const std::string& class_name, const typename ObjT::Data4Bind& data) : ObjT(data){
-        this->reg_class_name = class_name;
+    ObjWrapperT(std::string obj_name, const typename ObjT::Data4Bind& data) : ObjT(data){
+        this->obj_gen_name = obj_name;
     }
     virtual Json::Value getJsonValue4Bind() const {
         typename ObjT::Data4Bind data = this->getData4Bind();
-        return cppbind::JsonBind().encodeToJsonValue(data);
+        Json::Value jv;
+        jv[obj_gen_name] = cppbind::JsonBind().encodeToJsonValue(data);
+        return jv;
     }
-    std::string getRegClassName() const {
-        return reg_class_name;
+    std::string getObjGenName() const {
+        return this->obj_gen_name;
     }
 
 };
@@ -30,13 +32,10 @@ public:
 template<typename ObjT>
 class ObjFactoryT : public ObjFactory
 {
-private:
-    std::string reg_class_name;
 public:
-    ObjFactoryT(const std::string& class_name) {
-        this->reg_class_name = class_name;
+    ObjFactoryT() {
     }
-    virtual Object* createObj(const Json::Value& json_parameter, JsonDecodeBinder* bind = NULL) const {
+    virtual Object* createObj(const std::string& obj_name, const Json::Value& json_parameter, JsonDecodeBinder* bind = NULL) const {
          boost::shared_ptr<typename ObjT::Data4Bind> parameter;
          if(bind) {
               typename ObjT::Data4Bind* e = NULL;
@@ -47,7 +46,7 @@ public:
              parameter = cppbind::JsonBind().decode<typename ObjT::Data4Bind>(json_parameter);
          }
          //ObjT* p = new ObjT(*(parameter.get()));
-         Object* p = new ObjWrapperT<ObjT>(reg_class_name, *(parameter.get()));
+         Object* p = new ObjWrapperT<ObjT>(obj_name, *(parameter.get()));
          return p;
     }
     virtual std::string getTypeIdName() const{

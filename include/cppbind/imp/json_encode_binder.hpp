@@ -37,10 +37,7 @@ public:
     void bindWithDynamicType(Json::Value *_jv, const std::string& name, T*& v){
         //printf("name=%s\n", name.c_str());
         std::string typid_name = typeid(*v).name();
-        std::string reg_name = binder_data.class_reg->getRegName(typid_name.c_str());
-        Json::Value jv;
-        jv[reg_name] = v->getJsonValue4Bind();
-        _jv[0][name] = jv;
+        _jv[0][name] = v->getJsonValue4Bind();
     }
 
     template<typename T>

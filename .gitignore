@@ -2,3 +2,4 @@
 se_project_cppbind*
 *.o
 *.gch
+lib/libcppbind.so

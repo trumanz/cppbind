@@ -11,7 +11,7 @@ gtest(){
      echo "user donloaded googletest"
    else
      git clone https://github.com/google/googletest.git  \
-     && cd googletest \
+     && cd googletest && git checkout  release-1.7.0 \
      && cmake  -DCMAKE_INSTALL_PREFIX:PATH=$INSTALL_DIR \
      && make -j4 && make  install
      if [ $? != 0 ]; then

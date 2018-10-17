@@ -53,6 +53,29 @@ public:
         assert(binder_data.class_reg == NULL);
         binder_data.class_reg = _class_reg;
     }
+    template<typename T>
+    T* getForeignObj(std::string key) {
+        std::string type_name = typeid(T).name();
+         std::map<std::string, boost::any>::iterator it = binder_data.type_tables.find(type_name);
+         if(it == binder_data.type_tables.end()) {
+             printf("ERROR, Please register table for %s\n", type_name.c_str());
+             assert(false); 
+         }
+         boost::any any_table = it->second;
+         const std::map<std::string, T*>* table= boost::any_cast<const std::map<std::string, T*>*>(it->second);
+         assert(table != NULL);
+         typename std::map<std::string, T*>::const_iterator it2 = table->find(key);
+         if(it2 == table->end()) {
+             for(typename std::map<std::string, T*>::const_iterator it3 = table->begin(); it3 != table->end(); it3++) {
+                 printf("%s\n", it3->first.c_str());
+             }
+             printf("ERROR, Can not found %s in table for %s", key.c_str(), type_name.c_str());
+             assert(false);
+         }
+         T* x = it2->second;
+         return x;
+    }
+
 };
 
 class Binder{

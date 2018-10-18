@@ -90,7 +90,7 @@ public:
          if(!parsingSuccessful) {
 			 std::string err_msg =  reader.getFormattedErrorMessages();
            printf("Failed to parse, %s\n", err_msg.c_str());
-           throw  CppBindException(err_msg);
+           throw  ParseErrorException(err_msg);
          }
          return root;
     }

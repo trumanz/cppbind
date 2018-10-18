@@ -33,12 +33,13 @@ public:
              try {
                 decode(jv, &v);
                 //std::cout << __FILE__ << __LINE__  << ": " << name << "\n";
-             } catch (CppBindException e) {
+             } catch (ParseErrorException& e) {
                 //std::cout << "error:" << __FILE__ << __LINE__  <<  name  <<","<<  typeid(T).name() << ","<< jv  << "\n";
-                throw CppBindException(e, std::string(".") + name);
+                e.addParentNodeName(name);
+                throw e;
              }
          } else  {
-              throw CppBindException(std::string(".") + name, std::string("not found"));
+              throw ParseErrorException(name, std::string("not found"));
          }
     }
     template<typename T>
@@ -47,8 +48,9 @@ public:
         if(!jv.isNull()) {
             try {
                decode(jv, &v);
-            } catch (CppBindException e) {
-               throw CppBindException(e, std::string(".") + name);
+            } catch (ParseErrorException& e) {
+                e.addParentNodeName(name);
+                throw e;
             }
         } else  {
              v = default_vaule;
@@ -93,8 +95,9 @@ public:
                 printf("ERROR, please register classRegister first");
             }
             v = this->binder_data.class_reg->createObj<T>(class_name.c_str(), class_data, this);
-        }catch (CppBindException& e) {
-                throw CppBindException(e, std::string(".") + class_name);
+        }catch (ParseErrorException& e) {
+            e.addParentNodeName(class_name);
+            throw e;
         }
     }
 
@@ -102,13 +105,13 @@ public:
     void bindDynamicTypeArray(const Json::Value &_jv, const std::string& name, std::vector<T*>& v){
         const Json::Value& jv = _jv[name];
         if(!jv.isArray()) {
-            throw CppBindException(std::string(".") + name, "should be a obj array");
+            throw ParseErrorException(name, "should be a obj array");
             assert(false);
         }
         for(Json::Value::ArrayIndex i = 0; i  < jv.size(); i++) {
             T* e;
             if(!jv[i].isObject()) {
-                throw CppBindException(std::string(".") + name, "should be a obj array");
+                throw ParseErrorException(name, "should be a obj array");
                 assert(false);
             }
             try {
@@ -119,9 +122,10 @@ public:
                     printf("ERROR %s\n", e.what());
                     assert(false);
                 }
-            } catch(CppBindException& e) {
+            } catch(ParseErrorException& e) {
                 std::stringstream ss; ss << i;
-                throw CppBindException(e, std::string(".") + ss.str());
+                e.addParentNodeName(ss.str());
+                throw e;
             }
         }
     }
@@ -147,7 +151,7 @@ private:
     void decodeWithForeginKey(const Json::Value& json, std::vector<T*>* e){
          std::vector<std::string> keys;
          if(!json.isArray()) {
-                throw CppBindException("should be a list");
+                throw ParseErrorException("should be a list");
          }
 		 for(Json::Value::ArrayIndex i = 0; i  < json.size(); i++) {
              T* x = NULL;
@@ -159,17 +163,17 @@ private:
     template<typename T>
     void decode(const Json::Value& json, std::list<T>* e){
             if(!json.isArray()) {
-                throw CppBindException("should be a list");
+                throw ParseErrorException("should be a list");
             }
             for(Json::Value::ArrayIndex i = 0; i  < json.size(); i++) {
                  try { 
                     T tmp;
                     decode(json[i], &tmp);
                     e->push_back(tmp);
-                 } catch  (CppBindException e) {
+                 } catch  (ParseErrorException e) {
 					 std::stringstream ss;
 					 ss << "[" << i << "]";
-                    throw CppBindException(e, ss.str());
+                     e.addParentNodeName(ss.str());
                  }
             }
     }
@@ -177,17 +181,18 @@ private:
     template<typename T>
     void decode(const Json::Value& json, std::list<T*>* e){
             if(!json.isArray()) {
-                throw CppBindException("should be a list");
+                throw ParseErrorException("should be a list");
             }
 			for(Json::Value::ArrayIndex i = 0; i  < json.size(); i++) {
                  try { 
                     T*  tmp = new T();
                     decode(json[i], tmp);
                     e->push_back(tmp);
-                 } catch  (CppBindException e) {
+                 } catch  (ParseErrorException& e) {
 					 std::stringstream ss;
 					 ss << "[" <<  i << "]";
-                    throw CppBindException(e, ss.str());
+                     e.addParentNodeName(ss.str());
+                     throw e;
                  }
             }
     }
@@ -225,7 +230,7 @@ private:
     void decode(const Json::Value& json, std::map<KeyT, ValueT>* e){
 
             if(!json.isObject()) {
-                throw CppBindException("shoulbe be a object");
+                throw ParseErrorException("shoulbe be a object");
             }
             Json::Value::Members keys = json.getMemberNames();
             for(Json::Value::Members::iterator it = keys.begin(); it != keys.end(); it++) {
@@ -243,8 +248,9 @@ private:
 
                     decode(value_jv, &value);
                     (*e)[key] = value;
-                } catch  (CppBindException e) {
-                   throw CppBindException(e, std::string(".") + *it);
+                } catch  (ParseErrorException& e) {
+                    e.addParentNodeName(*it);
+                    throw e;
                 }
             }
     }
@@ -288,7 +294,7 @@ public:
                 for(Json::Value::Members::iterator it = keys.begin(); it != keys.end(); it++) {
                     std::string key_str = *it;
                     if(next_binder.decoded_member_key_set.find(key_str) == next_binder.decoded_member_key_set.end()) {
-                        throw CppBindException(std::string("unknown json key:[") + key_str + "]");
+                        throw ParseErrorException(std::string("unknown json key:[") + key_str + "]");
                     }
                 }
 
@@ -438,14 +444,15 @@ void JsonDecodeBinder::bindForeginKey(const Json::Value& _jv, const std::string&
          const Json::Value& jv = _jv[name];
          try {
             decodeWithForeginKey(jv, &v);
-         } catch (CppBindException e) {
-            throw CppBindException(e, std::string(".") + name);
+         } catch (ParseErrorException& e) {
+             e.addParentNodeName(name);
+             throw e;
          }
      } else if(default_value) {
          v = *default_value;
 
      }else  {
-          throw CppBindException(std::string(".") + name, "not found");
+          throw ParseErrorException(name, "not found");
      }
 }
 

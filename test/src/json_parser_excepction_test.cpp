@@ -26,10 +26,10 @@ TEST(JsonROM, child_not_exist_message){
        std::ifstream ifs("./sample_data/me.json",  std::ifstream::in);
        Me2* me = JsonBind().decodeIStream2Point<Me2>(ifs);
        delete me;
-     }  catch ( CppBindException e) {
+     }  catch ( ParseErrorException e) {
              message =  e.what();
      }
-     ASSERT_EQ(".not_existed not found", message);
+     ASSERT_EQ("not_existed not found", message);
 };
 
 
@@ -59,8 +59,8 @@ TEST(JsonROM, child_child_not_exist_message){
        std::ifstream ifs("./sample_data/me.json",  std::ifstream::in);
        Me3* me = JsonBind().decodeIStream2Point<Me3>(ifs);
        delete me;
-     }  catch ( CppBindException e) {
+     }  catch ( ParseErrorException e) {
              message = e.what();
      }
-     ASSERT_EQ(".skills.R.language_not_exist not found", message);
+     ASSERT_EQ("skills.R.language_not_exist not found", message);
 };

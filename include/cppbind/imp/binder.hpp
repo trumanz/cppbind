@@ -198,7 +198,7 @@ void Binder::bindWithDynamicTypeWithJsonDefaultValue(const std::string& name, T&
          if(!parsingSuccessful) {
 			 std::string err_msg =  reader.getFormattedErrorMessages();
            printf("Failed to parse, %s\n",err_msg.c_str());
-           throw  CppBindException(err_msg);
+           throw  ParseErrorException(err_msg);
          }
          this->bindDynamicType(name,v,&root);
     }
@@ -236,8 +236,8 @@ void Binder::bindDynamicType(const std::string& name, std::vector<T*>& v)
         try{
            decoded_member_key_set.insert(name);
            json_decode_binder->bindDynamicTypeArray(*json, name,v);
-        } catch(CppBindException& e) {
-            throw CppBindException(e, std::string(".") + name);
+        } catch(ParseErrorException& e) {
+            throw ParseErrorException(e, std::string(".") + name);
         }
     } 
      else {

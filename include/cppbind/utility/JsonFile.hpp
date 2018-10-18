@@ -45,7 +45,7 @@ private:
        if(!parsingSuccessful) {
 		   std::string err_msg = reader.getFormattedErrorMessages();
          printf("Failed to parse, %s, %s\n", file_path.c_str(),err_msg.c_str());
-         throw  CppBindException(file_path+ ":" + err_msg);
+         throw  CppBindParseErrorException(file_path+ ":" + err_msg);
        }
        this->jv = root;        
    }

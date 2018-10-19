@@ -106,6 +106,8 @@ public:
         }catch (ParseErrorException& e){
             e.addParentNodeName(file_name);
             throw e;
+        } catch (std::runtime_error &e) {
+            throw cppbind::ParseErrorException(file_name, e.what());
         }
         return jv;
     }

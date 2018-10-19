@@ -95,12 +95,19 @@ public:
          return root;
     }
     Json::Value decodeFile2JsonValue(std::string file_name) {
-        std::fstream fs(file_name.c_str(), std::fstream::in);
-        if(!fs) {
-            printf("ERROR Can not open file %s\n", file_name.c_str());
-            assert("TODO throw exception" == NULL);
+        Json::Value jv;
+        try{
+            std::fstream fs(file_name.c_str(), std::fstream::in);
+            if(!fs) {
+                printf("ERROR Can not open file %s\n", file_name.c_str());
+                assert("TODO throw exception" == NULL);
+            }
+            jv =  this->decodeIStream2JsonValue(fs);
+        }catch (ParseErrorException& e){
+            e.addParentNodeName(file_name);
+            throw e;
         }
-        return this->decodeIStream2JsonValue(fs);
+        return jv;
     }
 
 //Encode Interface

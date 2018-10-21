@@ -55,7 +55,7 @@ public:
         }
         bindDynamicType(jv,v);
     }
-
+private:
     template<typename T>
     void bindDynamicType(const Json::Value& jv, T*& v){
         Json::Value::Members  members = jv.getMemberNames();
@@ -71,10 +71,13 @@ public:
         v = this->binder_data.class_reg->createObj<T>(class_name.c_str(), class_data, this);
         
     }
-
+public:
     template<typename T>
-    void bindDynamicType(const Json::Value &_jv, const std::string& name, std::vector<T*>& v){
-        const Json::Value& jv = _jv[name];
+    void bindDynamicType(const Json::Value &_jv, const std::string& name, std::vector<T*>& v, Json::Value* default_value){
+        Json::Value jv = _jv[name];
+        if(jv.isNull() && default_value != NULL) {
+            jv = *default_value;
+        }
         if(!jv.isArray()) {
             throw ParseErrorException(name, "should be a object array");
         }

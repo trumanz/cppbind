@@ -60,44 +60,35 @@ public:
     void bindDynamicType(const Json::Value& jv, T*& v){
         Json::Value::Members  members = jv.getMemberNames();
         if(members.size() != 1) {
-            std::stringstream ss;
-            ss << jv;
-            printf("jv=%s", ss.str().c_str());
-            assert(false);
+            throw ParseErrorException("DynamicType object must have a unique key as it's type");
         }
         std::string class_name = members[0];
         Json::Value class_data = jv[class_name];
-        try{
-            if(this->binder_data.class_reg == NULL) {
-                printf("ERROR, please register classRegister first");
-            }
-            v = this->binder_data.class_reg->createObj<T>(class_name.c_str(), class_data, this);
-        }catch (ParseErrorException& e) {
-            e.addParentNodeName(class_name);
-            throw e;
+       
+        if(this->binder_data.class_reg == NULL) {
+            throw ParseErrorException("no class register");
         }
+        v = this->binder_data.class_reg->createObj<T>(class_name.c_str(), class_data, this);
+        
     }
 
     template<typename T>
     void bindDynamicTypeArray(const Json::Value &_jv, const std::string& name, std::vector<T*>& v){
         const Json::Value& jv = _jv[name];
         if(!jv.isArray()) {
-            throw ParseErrorException(name, "should be a obj array");
-            assert(false);
+            throw ParseErrorException(name, "should be a object array");
         }
         for(Json::Value::ArrayIndex i = 0; i  < jv.size(); i++) {
             T* e;
             if(!jv[i].isObject()) {
-                throw ParseErrorException(name, "should be a obj array");
-                assert(false);
+                throw ParseErrorException(name, "should be a object");
             }
             try {
                 bindDynamicType(jv[i],e);
                 v.push_back(e);
             } catch (ClassMissRegException& e) {
                 if (!this->ignore_unknown_key) {
-                    printf("ERROR %s\n", e.what());
-                    assert(false);
+                    throw e;
                 }
             } catch(ParseErrorException& e) {
                 std::stringstream ss; ss << i;

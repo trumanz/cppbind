@@ -143,7 +143,14 @@ void Binder::bind(const std::string& name, T& v){
             json_encode_binder->bind(json,name,v);
         } else if(json_decode_binder ) {
             decoded_member_key_set.insert(name);
-            json_decode_binder->bind(*this->json, name,v);
+            try{
+                json_decode_binder->bind(*this->json, name,v);
+            }catch (cppbind::ParseErrorException& e){
+                 e.addParentNodeName(name);
+                 throw e;
+            } catch (std::runtime_error &e) {
+                 throw cppbind::ParseErrorException(name, e.what());
+            }
         } 
          else {
             assert("bug" == NULL);
@@ -161,7 +168,14 @@ void Binder::bind(const std::string& name, T& v, const T& default_value){
             json_encode_binder->bind(json, name,v, default_value);
         } else if(json_decode_binder ) {
             decoded_member_key_set.insert(name);
-            json_decode_binder->bind(*json, name,v, default_value);
+            try{
+                json_decode_binder->bind(*json, name,v, default_value);
+            }catch (cppbind::ParseErrorException& e){
+                 e.addParentNodeName(name);
+                 throw e;
+            } catch (std::runtime_error &e) {
+                 throw cppbind::ParseErrorException(name, e.what());
+            }
         } 
          else {
             assert("bug" == NULL);
@@ -237,7 +251,8 @@ void Binder::bindDynamicType(const std::string& name, std::vector<T*>& v)
            decoded_member_key_set.insert(name);
            json_decode_binder->bindDynamicTypeArray(*json, name,v);
         } catch(ParseErrorException& e) {
-            throw ParseErrorException(e, std::string(".") + name);
+            e.addParentNodeName(name);
+            throw e;
         }
     } 
      else {

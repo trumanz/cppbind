@@ -30,28 +30,28 @@ public:
          const Json::Value& jv = _jv[name];
          //std::cout << __FILE__ << __LINE__  << ": " << name << "\n";
          if(!jv.isNull()) {
-             try {
+             //try {
+             //   std::cout << __FILE__ << __LINE__  << ": " << name << "," << typeid(T).name() << "," << jv  << "\n";
                 decode(jv, &v);
-                //std::cout << __FILE__ << __LINE__  << ": " << name << "\n";
-             } catch (ParseErrorException& e) {
-                //std::cout << "error:" << __FILE__ << __LINE__  <<  name  <<","<<  typeid(T).name() << ","<< jv  << "\n";
-                e.addParentNodeName(name);
-                throw e;
-             }
+             //} catch (ParseErrorException& e) {
+             //   //std::cout << "error:" << __FILE__ << __LINE__  <<  name  <<","<<  typeid(T).name() << ","<< jv  << "\n";
+             //   e.addParentNodeName(name);
+             //   throw e;
+             //}
          } else  {
-              throw ParseErrorException(name, std::string("not found"));
+              throw ParseErrorException(std::string("not found"));
          }
     }
     template<typename T>
     void bind(const Json::Value& _jv, const std::string& name, T& v, const T& default_vaule){
         const Json::Value& jv = _jv[name];
         if(!jv.isNull()) {
-            try {
+           // try {
                decode(jv, &v);
-            } catch (ParseErrorException& e) {
-                e.addParentNodeName(name);
-                throw e;
-            }
+           // } catch (ParseErrorException& e) {
+           //     e.addParentNodeName(name);
+           //     throw e;
+           // }
         } else  {
              v = default_vaule;
         }
@@ -174,6 +174,7 @@ private:
 					 std::stringstream ss;
 					 ss << "[" << i << "]";
                      e.addParentNodeName(ss.str());
+                     throw e;
                  }
             }
     }
@@ -188,10 +189,11 @@ private:
                     T*  tmp = new T();
                     decode(json[i], tmp);
                     e->push_back(tmp);
-                 } catch  (ParseErrorException e) {
+                 } catch  (ParseErrorException& e) {
 					 std::stringstream ss;
 					 ss << "[" <<  i << "]";
-                    throw ParseErrorException(e, ss.str());
+                     e.addParentNodeName(ss.str());
+                     throw e;
                  }
             }
     }

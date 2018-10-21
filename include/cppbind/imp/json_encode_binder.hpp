@@ -34,18 +34,18 @@ public:
     template<typename T>
     void bindForeginKey(Json::Value *_jv, const std::string& name, T& v, const T* default_value);
     template<typename T>
-    void bindWithDynamicType(Json::Value *_jv, const std::string& name, T*& v){
+    void bindDynamicType(Json::Value *_jv, const std::string& name, T*& v){
         //printf("name=%s\n", name.c_str());
         std::string typid_name = typeid(*v).name();
         _jv[0][name] = v->getJsonValue4Bind();
     }
 
     template<typename T>
-    void bindDynamicTypeArray(Json::Value *_jv, const std::string& name, std::vector<T*>& v){
+    void bindDynamicType(Json::Value *_jv, const std::string& name, std::vector<T*>& v){
          
         for(size_t i = 0; i < v.size();i++) {
             Json::Value jv;
-            bindWithDynamicType(&jv, name, v[i]);
+            bindDynamicType(&jv, name, v[i]);
             _jv[0].append(jv);
         }
     }    

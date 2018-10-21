@@ -48,7 +48,7 @@ public:
     void bindForeginKey(const Json::Value& _jv, const std::string& name, T& v, const T* default_value);
 
     template<typename T>
-    void bindWithDynamicType(const Json::Value& _jv, const std::string& name, T*& v,  Json::Value* default_value ){
+    void bindDynamicType(const Json::Value& _jv, const std::string& name, T*& v,  Json::Value* default_value ){
         Json::Value jv = _jv[name];
         if(jv.isNull() && default_value != NULL) {
             jv = *default_value;
@@ -73,7 +73,7 @@ public:
     }
 
     template<typename T>
-    void bindDynamicTypeArray(const Json::Value &_jv, const std::string& name, std::vector<T*>& v){
+    void bindDynamicType(const Json::Value &_jv, const std::string& name, std::vector<T*>& v){
         const Json::Value& jv = _jv[name];
         if(!jv.isArray()) {
             throw ParseErrorException(name, "should be a object array");

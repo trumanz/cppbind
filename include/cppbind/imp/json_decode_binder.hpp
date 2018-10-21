@@ -9,35 +9,17 @@ public:
     //Binder binder;
     bool ignore_unknown_key;
 public:
-    JsonDecodeBinder(){
-        ignore_unknown_key = false;
-       // binder.init(this, NULL);
-    }
-    void IgnoreUnknownKey(){
-        ignore_unknown_key = true;
-    }
+    JsonDecodeBinder(){ ignore_unknown_key = false; }
+    void IgnoreUnknownKey(){ ignore_unknown_key = true;}
 
     template<typename T>
-    void DecodeJson(Json::Value* jv, T* e) {
-        //binder.init(this, jv);
-        this->decode(*jv, e);
-    }    
+    void DecodeJson(Json::Value* jv, T* e) { this->decode(*jv, e); }    
 
-//bind API
     template<typename T>
     void bind(const Json::Value& _jv, const std::string& name, T& v){
-
          const Json::Value& jv = _jv[name];
-         //std::cout << __FILE__ << __LINE__  << ": " << name << "\n";
          if(!jv.isNull()) {
-             //try {
-             //   std::cout << __FILE__ << __LINE__  << ": " << name << "," << typeid(T).name() << "," << jv  << "\n";
                 decode(jv, &v);
-             //} catch (ParseErrorException& e) {
-             //   //std::cout << "error:" << __FILE__ << __LINE__  <<  name  <<","<<  typeid(T).name() << ","<< jv  << "\n";
-             //   e.addParentNodeName(name);
-             //   throw e;
-             //}
          } else  {
               throw ParseErrorException(std::string("not found"));
          }
@@ -46,12 +28,7 @@ public:
     void bind(const Json::Value& _jv, const std::string& name, T& v, const T& default_vaule){
         const Json::Value& jv = _jv[name];
         if(!jv.isNull()) {
-           // try {
                decode(jv, &v);
-           // } catch (ParseErrorException& e) {
-           //     e.addParentNodeName(name);
-           //     throw e;
-           // }
         } else  {
              v = default_vaule;
         }
@@ -206,25 +183,6 @@ private:
              e->insert(*it);
          }
     }
-    #if 0
-    //map
-    template<typename T>
-    void decode(const Json::Value& json, std::map<std::string, T>* e){
-            if(!json.isObject()) {
-                throw CppBindException("shoulbe be a object");
-            }
-            Json::Value::Members keys = json.getMemberNames();
-            for(Json::Value::Members::iterator it = keys.begin(); it != keys.end(); it++) {
-                try { 
-                    T tmp;
-                    decode(json[*it], &tmp);
-                    (*e)[*it] = tmp;
-                } catch  (CppBindException e) {
-                   throw CppBindException(e, std::string(".") + *it);
-                }
-            }
-    }
-#endif
 
     //map
     template<typename KeyT, typename ValueT>
@@ -255,27 +213,6 @@ private:
                 }
             }
     }
-#if 0
-    //map point
-    template<typename T>
-    void decode(const Json::Value& json, std::map<std::string, T*>* e){
-            if(!json.isObject()) {
-                throw CppBindException("shoulbe be a object");
-            }
-            Json::Value::Members keys = json.getMemberNames();
-            for(Json::Value::Members::iterator it = keys.begin(); it != keys.end(); it++) {
-                try { 
-                    T* tmp = new T();
-                    decode(json[*it], tmp);
-                    (*e)[*it] = tmp;
-                } catch  (CppBindException e) {
-                   throw CppBindException(e, std::string(".") + *it);
-                }
-            }
-    }
-#endif
-
-//decode for class Type
 
 public: 
     //call Calss:setBind

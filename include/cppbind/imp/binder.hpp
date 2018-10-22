@@ -120,7 +120,7 @@ public:
     void bindDynamicType(const std::string& name, T& v,  Json::Value* default_value = NULL) { bindDynamicTypeImp(name, v, default_value);}
 private:
     template<typename T>
-    void bindDynamicTypeImp(const std::string& name, TV& v, Json::Value* default_value );
+    void bindDynamicTypeImp(const std::string& name, T& v, Json::Value* default_value );
 public:
     template<typename T>
     void bindWithDynamicTypeWithJsonDefaultValue(const std::string& name, T& v,  const char* json_str_default_value = NULL);

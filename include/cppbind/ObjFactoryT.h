@@ -9,7 +9,7 @@ namespace cppbind{
 
 
 template<typename ObjT>
-class ObjWrapperT : public ObjT , public Object
+class ObjWrapperT : public ObjT
 {
 private:
     std::string obj_gen_name;

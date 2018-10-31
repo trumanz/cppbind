@@ -153,6 +153,8 @@ void Binder::bind(const std::string& name, T& v){
                  throw e;
             } catch (std::runtime_error &e) {
                  throw cppbind::ParseErrorException(name, e.what());
+            } catch (std::exception &e) {
+                throw cppbind::ParseErrorException(name, e.what());
             }
         } 
          else {

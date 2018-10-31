@@ -80,7 +80,14 @@ public:
     template<typename T>
     T* decodeFile(const char * file_name){
         Json::Value root = decodeFile2JsonValue(file_name);
-        return decodeJV2Point<T>(root);
+        T* x;
+        try{
+            x = decodeJV2Point<T>(root);
+        }catch (cppbind::ParseErrorException& e){
+            e.addParentNodeName(file_name);
+            throw e;
+        }
+        return x;
     }
 
     Json::Value decodeIStream2JsonValue(std::istream &is){

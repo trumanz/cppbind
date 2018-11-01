@@ -221,7 +221,6 @@ public:
             e->setBind(&next_binder, true);
 
             if(!jbinder->ignore_unknown_key) {
-                assert(jv.isObject());
                 Json::Value::Members keys = jv.getMemberNames();
                 for(Json::Value::Members::iterator it = keys.begin(); it != keys.end(); it++) {
                     std::string key_str = *it;

@@ -106,8 +106,7 @@ public:
         try{
             std::fstream fs(file_name.c_str(), std::fstream::in);
             if(!fs) {
-                printf("ERROR Can not open file %s\n", file_name.c_str());
-                assert("TODO throw exception" == NULL);
+                throw ParseErrorException("Can not open file");
             }
             jv =  this->decodeIStream2JsonValue(fs);
         }catch (ParseErrorException& e){

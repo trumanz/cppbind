@@ -11,8 +11,9 @@ namespace cppbind{
 class ClassRegister : public ClassRegisterBase {
 public:
    template<typename ClassT>
-   void regClass(const char *name){
+   void regClass(const char *name, Json::Value property = Json::Value()){
        ObjFactory* of = new ObjFactoryT<ClassT>();
+       of->obj_property = property;
        this->regClassWithFactory(name, of);
    }
 

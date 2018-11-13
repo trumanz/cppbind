@@ -9,6 +9,9 @@ public:
     virtual ~Object(){}
     virtual Json::Value getJsonValue4Bind() const = 0; 
     virtual std::string getObjGenName() const { return typeid(*this).name(); }
+    virtual Json::Value getObjProperty() const{
+        return Json::Value();
+    }
 };
 
 

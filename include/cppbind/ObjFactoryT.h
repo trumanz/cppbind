@@ -13,9 +13,14 @@ class ObjWrapperT : public ObjT
 {
 private:
     std::string obj_gen_name;
+    Json::Value obj_property;
 public:
-    ObjWrapperT(std::string obj_name, const typename ObjT::Data4Bind& data) : ObjT(data){
+    ObjWrapperT(std::string obj_name,const Json::Value& property, const typename ObjT::Data4Bind& data) : ObjT(data){
         this->obj_gen_name = obj_name;
+        this->obj_property = property;
+    }
+    virtual Json::Value getObjProperty()const{
+        return obj_property;
     }
     virtual Json::Value getJsonValue4Bind() const {
         typename ObjT::Data4Bind data = this->getData4Bind();
@@ -46,7 +51,7 @@ public:
              parameter = cppbind::JsonBind().decode<typename ObjT::Data4Bind>(json_parameter);
          }
          //ObjT* p = new ObjT(*(parameter.get()));
-         Object* p = new ObjWrapperT<ObjT>(obj_name, *(parameter.get()));
+         Object* p = new ObjWrapperT<ObjT>(obj_name,obj_property, *(parameter.get()));
          return p;
     }
     virtual std::string getTypeIdName() const{

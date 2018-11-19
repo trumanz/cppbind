@@ -70,7 +70,7 @@ public:
                  printf("%s\n", it3->first.c_str());
              }
              printf("ERROR, Can not found %s in table for %s", key.c_str(), type_name.c_str());
-             assert(false);
+             throw cppbind::ParseErrorException(key, "Foregin key can not found");
          }
          T* x = it2->second;
          return x;

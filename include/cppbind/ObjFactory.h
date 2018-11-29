@@ -1,4 +1,4 @@
-#ifndef _CPPBIND_ObjFactory_H
+﻿#ifndef _CPPBIND_ObjFactory_H
 #define _CPPBIND_ObjFactory_H
 #include <typeinfo>
 #include <boost/noncopyable.hpp>

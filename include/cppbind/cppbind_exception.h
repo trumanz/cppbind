@@ -1,4 +1,4 @@
-#ifndef __CPPBIND__EXCEPTION_H__
+﻿#ifndef __CPPBIND__EXCEPTION_H__
 #define __CPPBIND__EXCEPTION_H__
 #include <string>
 #include <vector>

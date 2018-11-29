@@ -1,4 +1,4 @@
-#ifndef __CPPBIND__JSONBIND_IMP__
+﻿#ifndef __CPPBIND__JSONBIND_IMP__
 #define __CPPBIND__JSONBIND_IMP__
 #include <string>
 #include <stdio.h>

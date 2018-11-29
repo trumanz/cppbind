@@ -1,4 +1,4 @@
-#ifndef __JSON_ENCODE_BINDER_H__
+﻿#ifndef __JSON_ENCODE_BINDER_H__
 #define __JSON_ENCODE_BINDER_H__
 
 namespace  cppbind {

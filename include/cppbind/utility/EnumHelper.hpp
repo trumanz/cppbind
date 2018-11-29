@@ -1,4 +1,4 @@
-#ifndef _CPPBIND__ENUM_HELPER__
+﻿#ifndef _CPPBIND__ENUM_HELPER__
 #define _CPPBIND__ENUM_HELPER__
 
 #include <assert.h>

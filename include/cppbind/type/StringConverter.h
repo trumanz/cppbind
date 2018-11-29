@@ -1,4 +1,4 @@
-#ifndef __CPPBIND__STRING_CONVERTER_
+﻿#ifndef __CPPBIND__STRING_CONVERTER_
 #define __CPPBIND__STRING_CONVERTER_
 #include <typeinfo>   // operator typeid
 #include <boost/any.hpp>

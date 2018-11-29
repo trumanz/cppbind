@@ -1,4 +1,4 @@
-#!/bin/bash
+﻿#!/bin/bash
 #cat /proc/cpuinfo
 #cat /proc/meminfo
 source source.env

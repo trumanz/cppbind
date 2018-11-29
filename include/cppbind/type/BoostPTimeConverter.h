@@ -1,4 +1,4 @@
-#ifndef __CPPBIND__BoostPTimeCoverter_
+﻿#ifndef __CPPBIND__BoostPTimeCoverter_
 #define __CPPBIND__BoostPTimeCoverter_
 #include "timestr.h"
 #include "cppbind/cppbind_exception.h"

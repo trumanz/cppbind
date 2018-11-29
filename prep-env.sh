@@ -1,4 +1,4 @@
-#!/bin/sh
+﻿#!/bin/sh
 
 BASE_DIR=$(pwd)/3pp
 [ -d $BASE_DIR ] || mkdir $BASE_DIR

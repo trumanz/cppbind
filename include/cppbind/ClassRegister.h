@@ -1,4 +1,4 @@
-#ifndef _CPPBIND_CLASS__REGISTER_H
+﻿#ifndef _CPPBIND_CLASS__REGISTER_H
 #define _CPPBIND_CLASS__REGISTER_H
 #include <typeinfo>
 #include <boost/noncopyable.hpp>

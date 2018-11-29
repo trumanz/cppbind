@@ -1,4 +1,4 @@
-#ifndef _CPPBIND_Object_H
+﻿#ifndef _CPPBIND_Object_H
 #define _CPPBIND_Object_H
 #include <typeinfo>
 #include <jsoncpp/json/json.h>

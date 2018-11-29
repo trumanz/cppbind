@@ -1,4 +1,4 @@
-#ifndef __CSV_DECODE_BINDER_H__
+﻿#ifndef __CSV_DECODE_BINDER_H__
 #define __CSV_DECODE_BINDER_H__
 #if 0
 namespace  cppbind {

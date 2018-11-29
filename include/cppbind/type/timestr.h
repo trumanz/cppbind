@@ -1,4 +1,4 @@
-#ifndef __CPPBIND_TIMESTR_H_
+﻿#ifndef __CPPBIND_TIMESTR_H_
 #define __CPPBIND_TIMESTR_H_
 
 #include <string>

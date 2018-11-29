@@ -1,4 +1,4 @@
-#ifndef _CPPBIND__Json_file__
+﻿#ifndef _CPPBIND__Json_file__
 #define _CPPBIND__Json_file__
 
 #include <iostream>

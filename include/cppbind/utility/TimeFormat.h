@@ -1,4 +1,4 @@
-#ifndef __CPPBIND_TIMEFORMAT_H_
+﻿#ifndef __CPPBIND_TIMEFORMAT_H_
 #define __CPPBIND_TIMEFORMAT_H_
 
 #include <string>

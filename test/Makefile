@@ -4,7 +4,7 @@ CFLAGS =   -I./
 CFLAGS +=  -I../include
 CFLAGS += -c  -g -O0  -Wall 
 
-LDFLAGS = -L../  -lcppbind
+LDFLAGS = -L../ # -lcppbind
 LDFLAGS += -lgtest  -lpthread 
 LDFLAGS +=  -ljsoncpp 
 

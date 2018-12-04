@@ -23,11 +23,15 @@ BOOST_TTI_HAS_MEMBER_FUNCTION(fromJsonValue4Bind)
 BOOST_TTI_HAS_MEMBER_FUNCTION(toJsonValue4Bind)
 
 
+struct ForeignTableV2{
+    boost::any table;
+    boost::shared_ptr<ForeignObjFactory> obj_factory;
+};
 
-class BinderData{
+class BinderData{ 
 public:
     StringConverterManager str_convert_mgmt;
-    std::map<std::string, boost::any> type_tables;
+    std::map<std::string, ForeignTableV2> type_tables;
     ClassRegisterBase* class_reg;
 public:
     BinderData(){
@@ -44,11 +48,15 @@ public:
      BinderData binder_data;
 
      template<typename T>
-     void regTable(const std::map<std::string, T*> *table)
+     void regTable(std::map<std::string, T*> *table, boost::shared_ptr<ForeignObjFactory> factory = boost::shared_ptr<ForeignObjFactory>())
      {
+         ForeignTableV2 ft;
+         ft.table = table;
+         ft.obj_factory = factory;
          std::string type_name = typeid(T).name();
-         binder_data.type_tables[type_name] = table;
+         binder_data.type_tables[type_name] = ft;
      }
+  
      void regClassRegister(ClassRegisterBase* _class_reg){
         assert(binder_data.class_reg == NULL);
         binder_data.class_reg = _class_reg;
@@ -56,21 +64,28 @@ public:
     template<typename T>
     T* getForeignObj(std::string key) {
         std::string type_name = typeid(T).name();
-         std::map<std::string, boost::any>::iterator it = binder_data.type_tables.find(type_name);
+        std::map<std::string, ForeignTableV2>::iterator it = binder_data.type_tables.find(type_name);
          if(it == binder_data.type_tables.end()) {
              printf("ERROR, Please register table for %s\n", type_name.c_str());
              assert(false); 
          }
-         boost::any any_table = it->second;
-         const std::map<std::string, T*>* table= boost::any_cast<const std::map<std::string, T*>*>(it->second);
-         assert(table != NULL);
+         ForeignTableV2 foreign_table_info = it->second;
+         std::map<std::string, T*>* table = NULL;
+         table = boost::any_cast<std::map<std::string, T*>*>(foreign_table_info.table);
          typename std::map<std::string, T*>::const_iterator it2 = table->find(key);
          if(it2 == table->end()) {
-             for(typename std::map<std::string, T*>::const_iterator it3 = table->begin(); it3 != table->end(); it3++) {
-                 printf("%s\n", it3->first.c_str());
+             if(foreign_table_info.obj_factory.get() != NULL) {
+                 Object* obj = foreign_table_info.obj_factory->createObj(key);
+                 assert(dynamic_cast<T*>(obj));
+                 (*table)[key] = dynamic_cast<T*>(obj);
+                 it2 = table->find(key);
+             } else {
+                 for(typename std::map<std::string, T*>::const_iterator it3 = table->begin(); it3 != table->end(); it3++) {
+                     printf("%s\n", it3->first.c_str());
+                 }
+                 printf("ERROR, Can not found %s in table for %s", key.c_str(), type_name.c_str());
+                 throw cppbind::ParseErrorException(key, "Foregin key can not found");
              }
-             printf("ERROR, Can not found %s in table for %s", key.c_str(), type_name.c_str());
-             throw cppbind::ParseErrorException(key, "Foregin key can not found");
          }
          T* x = it2->second;
          return x;

@@ -78,8 +78,13 @@ public:
 
     template<typename T>
     void regTable(const std::map<std::string, T*> *table)
-    {
+    {   
         json_binder.regTable(table);
+    } 
+    template<typename T>
+    void regTable(std::map<std::string, T*> *table, boost::shared_ptr<ForeignObjFactory> factory)
+    {   
+        json_binder.regTable(table, factory);
     }
 
     template<typename T>

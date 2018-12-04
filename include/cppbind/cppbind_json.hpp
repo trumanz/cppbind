@@ -33,9 +33,13 @@ public:
     }
     template<typename T>
     void regTable(const std::map<std::string, T*> *table)
-    {
-        encoder.regTable(table);
-        decoder.regTable(table);
+    {   
+        decoder.regTable((std::map<std::string, T*> *)table);
+    } 
+    template<typename T>
+    void regTable(std::map<std::string, T*> *table, boost::shared_ptr<ForeignObjFactory> factory)
+    {   
+        decoder.regTable(table, factory);
     }
     void regClassRegister(ClassRegisterBase* _class_reg){
         encoder.regClassRegister(_class_reg);
@@ -44,6 +48,10 @@ public:
     void IgnoreUnknownKey(){
         decoder.IgnoreUnknownKey();
     }
+public:
+    //decode API; v2
+    template<typename T>
+    T* decodeJsonString(const std::string& jv);
 public:
     //decode API, !!!
     template<typename T>
@@ -151,6 +159,15 @@ public:
 
 };
 
+
+
+template<typename T>
+T* JsonBind::decodeJsonString(const std::string& jv)
+{
+    std::stringstream ss;
+    ss <<jv;
+    return this->decodeIStream2Point<T>(ss);
+}
 
 }
 

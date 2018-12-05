@@ -55,6 +55,20 @@ public:
         }
         bindDynamicType(jv,v);
     }
+
+    
+    template<typename T>
+    void bindDynamicType(const Json::Value& _jv, const std::string& name, boost::shared_ptr<T> &v, boost::shared_ptr<T> default_value){
+        Json::Value jv = _jv[name];
+        if(jv.isNull()) {
+            v = default_value;
+        } else {
+            T* tmp_v = NULL;
+            bindDynamicType(jv,tmp_v);
+            v = boost::shared_ptr<T>(tmp_v);
+        }
+    }
+
 private:
     template<typename T>
     void bindDynamicType(const Json::Value& jv, T*& v){
@@ -69,7 +83,6 @@ private:
             throw ParseErrorException("no class register");
         }
         v = this->binder_data.class_reg->createObj<T>(class_name.c_str(), class_data, this);
-        
     }
 public:
     template<typename T>

@@ -99,7 +99,7 @@ public:
          std::vector<T*> rc;
          std::ifstream  fs(data_file.c_str());
          if(!fs) {
-             printf("Can not open %s\n", data_file.c_str());
+             printf("Error, Can not open %s\n", data_file.c_str());
              assert("TODO, throw exception" == NULL);
          }
          if(header_file != NULL) {

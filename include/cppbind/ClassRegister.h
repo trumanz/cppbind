@@ -13,7 +13,7 @@ public:
    template<typename ClassT>
    void regClass(const char *name, Json::Value property = Json::Value()){
        ObjFactory* of = new ObjFactoryT<ClassT>();
-       of->obj_property = property;
+       of->obj_base_property = property;
        this->regClassWithFactory(name, of);
    }
 

@@ -116,11 +116,11 @@ private:
     Json::Value createJsonObject(const std::vector<std::string>& headers, const std::vector<std::string>& data){
         Json::Value jv;
         if(headers.size() != data.size() && (!this->ignore_unknown_filed)) {
-            for(size_t i = 0; i < headers.size(); i++) {
-                printf("header, %lu, [%s]\n", i, headers[i].c_str());
-            }
-            for(size_t i = 0; i < data.size(); i++) {
-                printf("data, %lu, [%s]\n", i, data[i].c_str());
+            const size_t max_num = headers.size() > data.size() ?  headers.size() : data.size();
+            for(size_t i = 0; i < max_num; i++) {
+                std::string h = i < headers.size() ? headers[i] : std::string("");
+                std::string d = i < data.size() ? data[i] : std::string("");
+                printf("%lu, [%s] : [%s]\n", i, h.c_str(), d.c_str());
             }
             assert(false);
         }

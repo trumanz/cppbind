@@ -35,7 +35,8 @@ public:
     }
 
     template<typename T>
-    std::vector<T*> decode(std::istream& csv_content, std::istream*  header_stream = NULL){
+    std::vector<T*> decode(std::istream& csv_content, std::istream*  header_stream = NULL,
+                            const std::vector<std::string> *default_value = NULL){
 
         std::vector<T*> rc;
         if(header_stream != NULL) {
@@ -43,7 +44,7 @@ public:
         }
         csv->readRows(csv_content);
         for(size_t i = 0; i < csv->rows.size(); i++) {
-            Json::Value jv = this->createJsonObject(csv->headers,csv->rows[i].cells);
+            Json::Value jv = this->createJsonObject(csv->headers,csv->rows[i].cells, default_value);
             rc.push_back(json_binder.decode2<T>(jv));
         }
         return rc;
@@ -95,7 +96,8 @@ public:
     }
     
     template<typename T>
-    std::vector<T*> decodeFile(std::string data_file, const char* header_file = NULL){
+    std::vector<T*> decodeFile(std::string data_file, const char* header_file = NULL,
+                               const std::vector<std::string> *default_value = NULL){
          std::vector<T*> rc;
          std::ifstream  fs(data_file.c_str());
          if(!fs) {
@@ -105,17 +107,27 @@ public:
          if(header_file != NULL) {
              std::ifstream  fs_header(header_file);
              if(!fs_header)  assert("TODO, throw exception" == NULL);
-             rc = this->decode<T>(fs, &fs_header);
+             rc = this->decode<T>(fs, &fs_header, default_value);
          } else {
-             rc = this->decode<T>(fs, NULL);
+             rc = this->decode<T>(fs, NULL, default_value);
          }
          fs.close();
          return rc;
     }
 private:
-    Json::Value createJsonObject(const std::vector<std::string>& headers, const std::vector<std::string>& data){
+    Json::Value createJsonObject(const std::vector<std::string>& headers, const std::vector<std::string>& data,
+                                 const std::vector<std::string> *default_value = NULL){
         Json::Value jv;
-        if(headers.size() != data.size() && (!this->ignore_unknown_filed)) {
+
+        bool data_not_align = false;
+        if (data.size() + (default_value ? default_value->size() : 0) < headers.size()) {
+            data_not_align = true;
+        }
+        if (data.size() > headers.size() && (!this->ignore_unknown_filed)) {
+            data_not_align = true;
+        }
+        
+        if(data_not_align) {
             const size_t max_num = headers.size() > data.size() ?  headers.size() : data.size();
             for(size_t i = 0; i < max_num; i++) {
                 std::string h = i < headers.size() ? headers[i] : std::string("");
@@ -125,8 +137,9 @@ private:
             assert(false);
         }
         for(size_t i = 0; i < headers.size(); i++) {
-             jv[headers[i]] = data[i];
-             assert(jv[headers[i]].asString() == data[i]);
+            std::string d = i < data.size() ? data[i] : default_value->at(default_value->size() - (headers.size() -i));
+             jv[headers[i]] = d;
+             assert(jv[headers[i]].asString() == d);
         }
         return jv;
     }

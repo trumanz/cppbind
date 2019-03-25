@@ -12,9 +12,8 @@ namespace cppbind{
 
 class ClassRegisterBase {
 private:
-   std::map<std::string, ObjFactory*> obj_factories;
+   std::map<std::string, boost::shared_ptr<ObjFactory> > obj_factories;
 public:
-
    void regClassWithFactory(const char *name, ObjFactory* obj_factory){
        std::string reg_name(name);
        boost::algorithm::to_upper(reg_name);
@@ -22,7 +21,7 @@ public:
            printf("Error %s alread registered", reg_name.c_str());
            assert(false);
        } else {
-           this->obj_factories[reg_name] = obj_factory;
+           this->obj_factories[reg_name] = boost::shared_ptr<ObjFactory>(obj_factory);
        }
    }
 
@@ -43,12 +42,13 @@ private:
    ObjFactory* getObjFactory(const char* name){
        std::string reg_name(name);
        boost::algorithm::to_upper(reg_name);
-       std::map<std::string, ObjFactory*>::iterator it  = obj_factories.find(reg_name);
+       std::map<std::string, boost::shared_ptr<ObjFactory> >::iterator it  = obj_factories.find(reg_name);
        if(it == obj_factories.end()) {
            printf("ERROR can not find class %s\n", name);
            throw ClassMissRegException(name);
        }
-       return it->second;
+       boost::shared_ptr<ObjFactory> obj_factory = it->second;
+       return obj_factory.get();
    }
 };
 

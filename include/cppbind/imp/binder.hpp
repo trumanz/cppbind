@@ -142,6 +142,16 @@ private:
     void bindDynamicTypeImp(const std::string& name, T &v, Json::Value* default_value );
     template<typename T>
     void bindDynamicTypeImp(const std::string& name, boost::shared_ptr<T> &v, boost::shared_ptr<T> default_value );
+
+private:
+	template<typename T>
+	void addEncodedKey(const std::string& key, const boost::shared_ptr<T>& v)
+	{
+		if (v.get())
+			encoded_key.push_back(key);
+	}
+    template<typename T>
+	void addEncodedKey(const std::string& key, const T& v) { encoded_key.push_back(key); }
 };
 
 }
@@ -159,8 +169,9 @@ void Binder::bind(const std::string& name, T& v){
         JsonEncodeBinder* json_encode_binder = dynamic_cast<JsonEncodeBinder*>(this->binder_imp);
         JsonDecodeBinder* json_decode_binder = dynamic_cast<JsonDecodeBinder*>(this->binder_imp);
         if( json_encode_binder ) {
-            encoded_key.push_back(name);
-            json_encode_binder->bind(json,name,v);
+            //encoded_key.push_back(name);
+			addEncodedKey(name, v);
+			json_encode_binder->bind(json,name,v);
         } else if(json_decode_binder ) {
             decoded_member_key_set.insert(name);
             try{

@@ -16,9 +16,11 @@ private:
 public:
    void regClassWithFactory(const char *name, ObjFactory* obj_factory){
        std::string reg_name(name);
-       boost::algorithm::to_upper(reg_name);
-       if(this->obj_factories.find(reg_name) != this->obj_factories.end()) {
-           printf("Error %s alread registered", reg_name.c_str());
+       boost::algorithm::to_lower(reg_name);
+       if(this->obj_factories.count(reg_name)) {
+           printf("Error %s alread registered %s when register %s", 
+                  reg_name.c_str(),  typeid(*(this->obj_factories[reg_name].get())).name(),
+                  typeid(*obj_factory).name());
            assert(false);
        } else {
            this->obj_factories[reg_name] = boost::shared_ptr<ObjFactory>(obj_factory);
@@ -41,7 +43,7 @@ public:
 private:
    ObjFactory* getObjFactory(const char* name){
        std::string reg_name(name);
-       boost::algorithm::to_upper(reg_name);
+       boost::algorithm::to_lower(reg_name);
        std::map<std::string, boost::shared_ptr<ObjFactory> >::iterator it  = obj_factories.find(reg_name);
        if(it == obj_factories.end()) {
            printf("ERROR can not find class %s\n", name);

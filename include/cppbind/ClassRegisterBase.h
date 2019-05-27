@@ -54,7 +54,7 @@ private:
        boost::algorithm::to_lower(reg_name);
        std::map<std::string, boost::shared_ptr<ObjFactory> >::iterator it  = obj_factories.find(reg_name);
        if(it == obj_factories.end()) {
-           printf("ERROR can not find class %s\n", name);
+           printf("ERROR can not find class '%s'\n", name);
            throw ClassMissRegException(name);
        }
        boost::shared_ptr<ObjFactory> obj_factory = it->second;

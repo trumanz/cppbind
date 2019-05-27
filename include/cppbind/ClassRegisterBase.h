@@ -14,7 +14,7 @@ class ClassRegisterBase {
 private:
    std::map<std::string, boost::shared_ptr<ObjFactory> > obj_factories;
 public:
-   void regClassWithFactory(const char *name, ObjFactory* obj_factory){
+   void regClassWithFactory(const std::string name, boost::shared_ptr<ObjFactory> obj_factory){
        std::string reg_name(name);
        boost::algorithm::to_lower(reg_name);
        if(this->obj_factories.count(reg_name)) {
@@ -23,8 +23,11 @@ public:
                   typeid(*obj_factory).name());
            assert(false);
        } else {
-           this->obj_factories[reg_name] = boost::shared_ptr<ObjFactory>(obj_factory);
+           this->obj_factories[reg_name] = obj_factory;
        }
+   }
+   void regClassWithFactory(const std::string name, ObjFactory* obj_factory){
+       this->regClassWithFactory(name,boost::shared_ptr<ObjFactory>(obj_factory));
    }
 
    template<typename ClassT>
@@ -39,6 +42,11 @@ public:
        ObjFactory* of = this->getObjFactory(name);
        Object* any_obj = of->createObj(name, json_parameter, bind);
        return any_obj;
+   }
+   void merge(const ClassRegisterBase& oth_reg) {
+        for(auto it = oth_reg.obj_factories.begin(); it != oth_reg.obj_factories.end(); it++){
+            this->regClassWithFactory(it->first, it->second);
+        }
    }
 private:
    ObjFactory* getObjFactory(const char* name){

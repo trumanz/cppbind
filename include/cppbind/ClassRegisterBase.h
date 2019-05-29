@@ -44,7 +44,8 @@ public:
        return any_obj;
    }
    void merge(const ClassRegisterBase& oth_reg) {
-        for(auto it = oth_reg.obj_factories.begin(); it != oth_reg.obj_factories.end(); it++){
+        for(std::map<std::string, boost::shared_ptr<ObjFactory> >::const_iterator it = oth_reg.obj_factories.begin();
+              it != oth_reg.obj_factories.end(); it++){
             this->regClassWithFactory(it->first, it->second);
         }
    }

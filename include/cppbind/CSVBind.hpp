@@ -13,7 +13,7 @@
 #include <list>
 #include <boost/shared_ptr.hpp>
 #include <stdexcept>
-#include "cppbind_json.hpp"
+#include "JsonBind.hpp"
 #include "imp/CSVReader.h"
 namespace  cppbind {
 

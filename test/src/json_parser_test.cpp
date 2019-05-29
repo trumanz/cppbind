@@ -7,7 +7,7 @@
 #include <sstream>
 #include <fstream>      // std::ifstream
 #include <jsoncpp/json/json.h>
-#include <cppbind/cppbind_json.hpp>
+#include <cppbind/JsonBind.hpp>
 #include <cppbind/CSVBind.hpp>
 #include <cppbind/ObjFactoryT.h>
 #include <cppbind/type/timestr.h>

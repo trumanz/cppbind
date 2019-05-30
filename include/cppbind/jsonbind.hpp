@@ -31,16 +31,16 @@ JsonDecodeBinder decoder;
 public:
     JsonBind(){
     }
-    template<typename T>
-    void regTable(const std::map<std::string, T*> *table)
+    template<typename ObjT>
+    void regTable(const std::map<std::string, ObjT*> *table)
     {   
-        decoder.regTable((std::map<std::string, T*> *)table);
+        decoder.regTable(table);
     } 
-    template<typename T>
-    void regTable(std::map<std::string, T*> *table, boost::shared_ptr<ForeignObjFactory> factory)
-    {   
-        decoder.regTable(table, factory);
+    template<typename ObjT, typename FTable>
+    void regTable(boost::shared_ptr<FTable> ft){
+        decoder.regTable<ObjT, FTable>(ft);
     }
+
     void regClassRegister(ClassRegisterBase* _class_reg){
         encoder.regClassRegister(_class_reg);
         decoder.regClassRegister(_class_reg);

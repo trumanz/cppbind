@@ -46,13 +46,25 @@ TEST(foregin_key, decode){
     ASSERT_EQ(c->ht->name, "ShanDong");
 };
 
+class ForeginTable{
+ public:
+  map<string, Hometown*> foreign_table;
+   Hometown* getObj(std::string key){
+    if (foreign_table.count(key)) return foreign_table[key];
+    foreign_table[key] = new Hometown(key);
+    return foreign_table[key];
+  }
+};
+
 TEST(foregin_key, decode_with_foregin_factory){
     cppbind::JsonBind jb;
     std::string jv = "{\"hometown\" : \"ShanDong\"} ";
-    map<string, Hometown*> foreign_table;
-    jb.regTable(&foreign_table, boost::shared_ptr<ForeignObjFactory>(new ForeignObjFactoryT<Hometown>()));
+
+
+    boost::shared_ptr<ForeginTable> ftable(new ForeginTable());
+    jb.regTable<Hometown, ForeginTable>(ftable);
     Customer* c = jb.decodeJsonString<Customer>(jv.c_str());
     ASSERT_EQ(c->ht->name, "ShanDong");
-    ASSERT_EQ(foreign_table.size(), 1);
-    ASSERT_EQ(foreign_table["ShanDong"]->name, "ShanDong");
+    ASSERT_EQ(ftable->foreign_table.size(), 1);
+    ASSERT_EQ(ftable->foreign_table["ShanDong"]->name, "ShanDong");
 };

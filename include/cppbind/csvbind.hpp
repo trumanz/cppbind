@@ -77,15 +77,14 @@ public:
          return ss.str();
     }
 
-    template<typename T>
-    void regTable(const std::map<std::string, T*> *table)
+    template<typename ObjT>
+    void regTable(const std::map<std::string, ObjT*> *table)
     {   
         json_binder.regTable(table);
     } 
-    template<typename T>
-    void regTable(std::map<std::string, T*> *table, boost::shared_ptr<ForeignObjFactory> factory)
-    {   
-        json_binder.regTable(table, factory);
+    template<typename ObjT, typename FTable>
+    void regTable(boost::shared_ptr<FTable> ft){
+        json_binder.regTable<ObjT, FTable>(ft);
     }
 
     template<typename T>

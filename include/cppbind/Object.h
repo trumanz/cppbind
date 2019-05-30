@@ -14,21 +14,6 @@ public:
     virtual Json::Value getObjProperty() const{ return Json::Value(); }
 };
 
-class ForeignObjFactory{
-public:
-    virtual Object* createObj(const std::string& key) const = 0;
-};
-template<typename T>
-class ForeignObjFactoryT : public ForeignObjFactory {
-public:
-    virtual Object* createObj(const std::string& key) const 
-    {
-        T* obj = new T();
-        obj->setKeyStr(key);
-        return obj;
-    }
-};
-
 
 }
 

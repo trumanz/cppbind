@@ -31,14 +31,14 @@ public:
    }
 
    template<typename ClassT>
-   ClassT* createObj(const char* name, const Json::Value& json_parameter, JsonDecodeBinder* bind = NULL)  {
+   ClassT* createObj(const std::string& name, const Json::Value& json_parameter, JsonDecodeBinder* bind = NULL)  {
        Object* any_obj = this->createAnyObj(name,json_parameter, bind);
        ClassT* rc = dynamic_cast<ClassT*>(any_obj);
        assert(rc != NULL);
        return rc; 
    }
 
-   Object* createAnyObj(const char* name, const Json::Value& json_parameter, JsonDecodeBinder* bind = NULL)  {
+   Object* createAnyObj(const std::string& name, const Json::Value& json_parameter, JsonDecodeBinder* bind = NULL)  {
        ObjFactory* of = this->getObjFactory(name);
        Object* any_obj = of->createObj(name, json_parameter, bind);
        return any_obj;
@@ -50,12 +50,12 @@ public:
         }
    }
 private:
-   ObjFactory* getObjFactory(const char* name){
+   ObjFactory* getObjFactory(const std::string& name){
        std::string reg_name(name);
        boost::algorithm::to_lower(reg_name);
        std::map<std::string, boost::shared_ptr<ObjFactory> >::iterator it  = obj_factories.find(reg_name);
        if(it == obj_factories.end()) {
-           printf("ERROR can not find class '%s'\n", name);
+           printf("ERROR can not find class '%s'\n", name.c_str());
            throw ClassMissRegException(name);
        }
        boost::shared_ptr<ObjFactory> obj_factory = it->second;

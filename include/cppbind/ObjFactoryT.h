@@ -26,7 +26,7 @@ public:
     virtual Json::Value getJsonValue4Bind() const {
         typename ObjT::Data4Bind data = this->getData4Bind();
         Json::Value jv;
-        jv[obj_gen_name] = cppbind::JsonBind().encodeToJsonValue(data);
+        jv[obj_gen_name] = cppbind::JsonBind().encode(data);
         return jv;
     }
     std::string getObjGenName() const {

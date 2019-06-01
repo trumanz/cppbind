@@ -58,14 +58,14 @@ public:
 
         //try get header from data
         if(headers.size() == 0 && data.size() != 0) {
-            Json::Value jv = json_binder.encodeToJsonValue(*(data[0]));
+            Json::Value jv = json_binder.encode(*(data[0]));
             headers = json_binder.encoder.binder.encoded_key;
             
         } 
         appendCSVHeader(headers,output);
         for(size_t i = 0; i < data.size(); i++) {
             output[0] << "\n";
-            Json::Value jv = json_binder.encodeToJsonValue(*(data[i]));
+            Json::Value jv = json_binder.encode(*(data[i]));
             this->appendCSVLine(headers,jv,output);
         }
     }

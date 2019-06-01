@@ -179,7 +179,7 @@ TEST(JsonROM, baisc){
      std::string csv_str = cppbind::CSVBind().encodeToStr<Music>(all_musics);
      printf("csv_str=\n[%s]\n", csv_str.c_str());
 
-     printf("all_music.json = ^ %s ^\n", JsonBind().toJsonStr(all_musics).c_str());
+     printf("all_music.json = ^ %s ^\n", JsonBind().encodeToStr(all_musics).c_str());
 
 
      ClassRegister class_register;

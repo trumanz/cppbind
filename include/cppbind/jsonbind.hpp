@@ -104,35 +104,29 @@ public:
 
 //Encode Interface
 public:
-    //to JsonValue; !!!
     template<typename T>
-    void  encodeToJsonValue(T&e, Json::Value* jv){
+    Json::Value encode(T&e){
+         Json::Value jv;
+         this->encode(e,&jv);
+         return jv;
+    }
+    template<typename T>
+    void  encode(T&e, Json::Value* jv){
          encoder.encodeToJson(&e, jv);
     }
     template<typename T>
-    Json::Value  encodeToJsonValue(T&e){
-         Json::Value jv;
-         this->encodeToJsonValue(e,&jv);
-         return jv;
-    }
-    //to ostream
-    template<typename T>
     void encode(T&e, std::ostream *out){
         Json::Value jv;
-        this->encodeToJsonValue(e,&jv);
+        this->encode(e,&jv);
         Json::StyledStreamWriter writer;//TODO, performance ?
         writer.write(*out, jv);
     }
-
-    //to string
     template<typename T>
-    std::string toJsonStr(T&e){
+    std::string encodeToStr(T&e){
          std::stringstream ss;
          this->encode(e, &ss);
          return ss.str();
     }
-
-
 };
 
 

@@ -24,7 +24,7 @@ TEST(JsonROM, unknown_member){
      std::string message;
      try {
        std::stringstream ss("{\"x\": 1, \"y\":2}");
-       XObj* x = JsonBind().decodeIStream2Point<XObj>(ss);
+       XObj* x = JsonBind().decode<XObj>(ss);
        delete x;
      }  catch ( ParseErrorException e) {
              message =  e.what();

@@ -49,7 +49,7 @@ public:
               bind->DecodeJson((Json::Value*)&json_parameter, e);
               parameter =  boost::shared_ptr<typename ObjT::Data4Bind>(e);
          } else {
-             parameter = cppbind::JsonBind().decode<typename ObjT::Data4Bind>(json_parameter);
+             parameter = boost::shared_ptr<typename ObjT::Data4Bind>(cppbind::JsonBind().decode<typename ObjT::Data4Bind>(json_parameter));
          }
          //ObjT* p = new ObjT(*(parameter.get()));
          Json::Value  _property;

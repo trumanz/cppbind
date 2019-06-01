@@ -32,70 +32,40 @@ public:
     JsonBind(){
     }
     template<typename ObjT>
-    void regTable(const std::map<std::string, ObjT*> *table)
-    {   
-        decoder.regTable(table);
-    } 
+    void regTable(const std::map<std::string, ObjT*> *table) { decoder.regTable(table);} 
     template<typename ObjT, typename FTable>
-    void regTable(boost::shared_ptr<FTable> ft){
-        decoder.regTable<ObjT, FTable>(ft);
-    }
-
+    void regTable(boost::shared_ptr<FTable> ft){ decoder.regTable<ObjT, FTable>(ft);}
     void regClassRegister(ClassRegisterBase* _class_reg){
         encoder.regClassRegister(_class_reg);
         decoder.regClassRegister(_class_reg);
     }
-    void IgnoreUnknownKey(){
-        decoder.IgnoreUnknownKey();
-    }
+    void IgnoreUnknownKey(){ decoder.IgnoreUnknownKey();}
 public:
     //decode API; v2
     template<typename T>
     T* decodeJsonString(const std::string& jv);
 public:
-    //decode API, !!!
     template<typename T>
-    T* decodeJV2Point(const Json::Value& root){
-         T* e = NULL;
-         e = new T;
+    T* decode(std::istream &is){
+         Json::Value root = decodeIStream2JsonValue(is);
+         return decode<T>(root);
+    }
+    template<typename T>
+    T* decode(const Json::Value& root){
+         T* e = new T;
          decoder.DecodeJson((Json::Value*)&root, e);
          return e;
     }
-
-    template<typename T>
-    T* decodeIStream2Point(std::istream &is){
-         Json::Value root = decodeIStream2JsonValue(is);
-         return decodeJV2Point<T>(root);
-    }
-
-    template<typename T>
-    boost::shared_ptr<T> decode(std::istream &is){
-        T* e = this->decodeIStream2Point<T>(is);
-        return boost::shared_ptr<T>(e);
-    }
-
-    template<typename T>
-    boost::shared_ptr<T> decode(const Json::Value& root){
-         T* e = this->decodeJV2Point<T>(root);
-         return boost::shared_ptr<T>(e);
-    }
-
-    template<typename T>
-    T* decode2(const Json::Value& root){
-        return this->decodeJV2Point<T>(root);
-    }
-
     template<typename T>
     T* decodeFile(const char * file_name){
         Json::Value root = decodeFile2JsonValue(file_name);
-        T* x;
         try{
-            x = decodeJV2Point<T>(root);
+            return decode<T>(root);
         }catch (cppbind::ParseErrorException& e){
             e.addParentNodeName(file_name);
             throw e;
         }
-        return x;
+        return NULL;
     }
 
     Json::Value decodeIStream2JsonValue(std::istream &is){
@@ -166,7 +136,7 @@ T* JsonBind::decodeJsonString(const std::string& jv)
 {
     std::stringstream ss;
     ss <<jv;
-    return this->decodeIStream2Point<T>(ss);
+    return this->decode<T>(ss);
 }
 
 }

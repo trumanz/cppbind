@@ -42,7 +42,7 @@ TEST(foregin_key, decode){
     map<string, Hometown*> foreign_table;
     foreign_table["ShanDong"] = new Hometown("ShanDong");
     jb.regTable((const map<string, Hometown*>*)&foreign_table);
-    Customer* c = jb.decode<Customer>(jv.c_str());
+    Customer* c = jb.decode<Customer>(jv);
     ASSERT_EQ(c->ht->name, "ShanDong");
 };
 

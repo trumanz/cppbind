@@ -10,7 +10,7 @@ public:
     bool ignore_unknown_key;
 public:
     JsonDecodeBinder(){ ignore_unknown_key = false; }
-    void IgnoreUnknownKey(){ ignore_unknown_key = true;}
+    void ignoreUnknownNode(){ ignore_unknown_key = true;}
 
     template<typename T>
     void DecodeJson(Json::Value* jv, T* e) { this->decode(*jv, e); }    

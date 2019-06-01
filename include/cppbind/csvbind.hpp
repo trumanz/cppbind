@@ -31,7 +31,7 @@ public:
     }
     void IgnoreUnknownKey() {
         this->ignore_unknown_filed = true;
-        this->json_binder.IgnoreUnknownKey();
+        this->json_binder.ignoreUnknownNode();
     }
 
     template<typename T>

@@ -39,25 +39,32 @@ public:
         encoder.regClassRegister(_class_reg);
         decoder.regClassRegister(_class_reg);
     }
-    void IgnoreUnknownKey(){ decoder.IgnoreUnknownKey();}
+    void ignoreUnknownNode(){ decoder.ignoreUnknownNode();}
 public:
-    //decode API; v2
     template<typename T>
-    T* decode(const std::string& jv);
+    T* decode(const std::string& json_str) {
+      std::stringstream ss(json_str);
+      return this->decode<T>(ss);
+    }
     template<typename T>
-    T* decode(std::istream &is){
+    T* decode(const char* json_str) {
+      std::stringstream ss(json_str);
+      return this->decode<T>(ss);
+    }
+    template<typename T>
+    T* decode(std::istream &is) {
          Json::Value root = decode(is);
          return decode<T>(root);
     }
     template<typename T>
-    T* decode(const Json::Value& root){
+    T* decode(const Json::Value& root) {
          T* e = new T;
          decoder.DecodeJson((Json::Value*)&root, e);
          return e;
     }
     template<typename T>
     T* decodeFile(const std::string& file_name){
-        Json::Value root = decode(file_name);
+        Json::Value root = decodeFile(file_name);
         try{
             return decode<T>(root);
         }catch (cppbind::ParseErrorException& e){
@@ -129,14 +136,6 @@ public:
 };
 
 
-
-template<typename T>
-T* JsonBind::decode(const std::string& jv)
-{
-    std::stringstream ss;
-    ss <<jv;
-    return this->decode<T>(ss);
-}
 
 }
 

@@ -43,8 +43,7 @@ public:
 public:
     //decode API; v2
     template<typename T>
-    T* decodeJsonString(const std::string& jv);
-public:
+    T* decode(const std::string& jv);
     template<typename T>
     T* decode(std::istream &is){
          Json::Value root = decodeIStream2JsonValue(is);
@@ -57,7 +56,7 @@ public:
          return e;
     }
     template<typename T>
-    T* decodeFile(const char * file_name){
+    T* decodeFile(const std::string& file_name){
         Json::Value root = decodeFile2JsonValue(file_name);
         try{
             return decode<T>(root);
@@ -79,7 +78,7 @@ public:
          }
          return root;
     }
-    Json::Value decodeFile2JsonValue(std::string file_name) {
+    Json::Value decodeFile2JsonValue(const std::string& file_name) {
         Json::Value jv;
         try{
             std::fstream fs(file_name.c_str(), std::fstream::in);
@@ -132,7 +131,7 @@ public:
 
 
 template<typename T>
-T* JsonBind::decodeJsonString(const std::string& jv)
+T* JsonBind::decode(const std::string& jv)
 {
     std::stringstream ss;
     ss <<jv;

@@ -42,7 +42,7 @@ TEST(foregin_key, decode){
     map<string, Hometown*> foreign_table;
     foreign_table["ShanDong"] = new Hometown("ShanDong");
     jb.regTable((const map<string, Hometown*>*)&foreign_table);
-    Customer* c = jb.decodeJsonString<Customer>(jv.c_str());
+    Customer* c = jb.decode<Customer>(jv.c_str());
     ASSERT_EQ(c->ht->name, "ShanDong");
 };
 
@@ -63,7 +63,7 @@ TEST(foregin_key, decode_with_foregin_factory){
 
     boost::shared_ptr<ForeginTable> ftable(new ForeginTable());
     jb.regTable<Hometown, ForeginTable>(ftable);
-    Customer* c = jb.decodeJsonString<Customer>(jv.c_str());
+    Customer* c = jb.decode<Customer>(jv.c_str());
     ASSERT_EQ(c->ht->name, "ShanDong");
     ASSERT_EQ(ftable->foreign_table.size(), 1);
     ASSERT_EQ(ftable->foreign_table["ShanDong"]->name, "ShanDong");

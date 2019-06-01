@@ -189,7 +189,7 @@ TEST(JsonROM, baisc){
      binder.regTable(&music_table);
      binder.regClassRegister(&class_register);
 
-     boost::shared_ptr<Me> me = binder.decode<Me>(ifs);
+     boost::shared_ptr<Me> me(binder.decode<Me>(ifs));
 
      printf("decode ME sucess\n");
      //basic type

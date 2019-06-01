@@ -46,7 +46,7 @@ public:
     T* decode(const std::string& jv);
     template<typename T>
     T* decode(std::istream &is){
-         Json::Value root = decodeIStream2JsonValue(is);
+         Json::Value root = decode(is);
          return decode<T>(root);
     }
     template<typename T>
@@ -57,7 +57,7 @@ public:
     }
     template<typename T>
     T* decodeFile(const std::string& file_name){
-        Json::Value root = decodeFile2JsonValue(file_name);
+        Json::Value root = decode(file_name);
         try{
             return decode<T>(root);
         }catch (cppbind::ParseErrorException& e){
@@ -67,7 +67,7 @@ public:
         return NULL;
     }
 
-    Json::Value decodeIStream2JsonValue(std::istream &is){
+    Json::Value decode(std::istream &is){
          Json::Value root;
          Json::Reader reader;
          bool parsingSuccessful = reader.parse(is, root);
@@ -78,14 +78,14 @@ public:
          }
          return root;
     }
-    Json::Value decodeFile2JsonValue(const std::string& file_name) {
+    Json::Value decodeFile(const std::string& file_name) {
         Json::Value jv;
         try{
             std::fstream fs(file_name.c_str(), std::fstream::in);
             if(!fs) {
                 throw ParseErrorException("Can not open file [" + file_name + "]");
             }
-            jv =  this->decodeIStream2JsonValue(fs);
+            jv =  this->decode(fs);
         }catch (ParseErrorException& e){
             e.addParentNodeName(file_name);
             throw e;

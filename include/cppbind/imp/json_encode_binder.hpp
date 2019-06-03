@@ -141,6 +141,34 @@ public: //for std container type
         }
         _jv[0] = jv;
     }
+
+    template<typename KeyT, typename ValueT>
+    void encode(std::multimap<KeyT, ValueT>& e, Json::Value* _jv){
+        for(typename std::multimap<KeyT, ValueT>::iterator it =  e.begin(); it != e.end(); it++) {
+            KeyT k = it->first;
+            Json::Value k_jv;
+            encode(k, &k_jv);
+            Json::Value v_jv;
+            encode(it->second, &v_jv);
+            
+            std::string str_key = k_jv.toStyledString();
+            std::size_t x = str_key.find_last_not_of("\r\n");
+            if(x!= std::string::npos) {
+                str_key = str_key.substr(0, x+1);
+            }
+            if(k_jv.isString()) {
+                assert(str_key.length() >= 2);
+                assert(str_key[0] == '\"');
+                assert(str_key[str_key.length()-1] == '\"');
+                str_key = str_key.substr(1, str_key.length()-2);
+            }
+            Json::Value jv;
+            jv[str_key] = v_jv;
+            _jv->append(jv);
+        }
+    }
+
+
 //CLASS&STRUCT type
 public:
     //call setBind

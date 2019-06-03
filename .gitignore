@@ -4,3 +4,4 @@ se_project_cppbind*
 *.gch
 lib/libcppbind.so
 test/gtest.bin
+doc/

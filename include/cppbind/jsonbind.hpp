@@ -32,9 +32,9 @@ public:
     JsonBind(){
     }
     template<typename ObjT>
-    void regTable(const std::map<std::string, ObjT*> *table) { decoder.regTable(table);} 
+    void regTable(const std::map<std::string, ObjT*> *table) { decoder.regForeignTable(table);} 
     template<typename ObjT, typename FTable>
-    void regTable(boost::shared_ptr<FTable> ft){ decoder.regTable<ObjT, FTable>(ft);}
+    void regTable(boost::shared_ptr<FTable> ft){ decoder.regForeignTable<ObjT, FTable>(ft);}
     void regClassRegister(ClassRegisterBase* _class_reg){
         encoder.regClassRegister(_class_reg);
         decoder.regClassRegister(_class_reg);
@@ -42,31 +42,21 @@ public:
     void ignoreUnknownNode(){ decoder.ignoreUnknownNode();}
 public:
     template<typename T>
-    T* decode(const std::string& json_str) {
-      std::stringstream ss(json_str);
-      return this->decode<T>(ss);
-    }
-    template<typename T>
-    T* decode(const char* json_str) {
-      std::stringstream ss(json_str);
-      return this->decode<T>(ss);
-    }
-    template<typename T>
-    T* decode(std::istream &is) {
-         Json::Value root = decode(is);
-         return decode<T>(root);
-    }
-    template<typename T>
     T* decode(const Json::Value& root) {
          T* e = new T;
-         decoder.DecodeJson((Json::Value*)&root, e);
+         decoder.decode(root, e);
          return e;
     }
     template<typename T>
+    T* decode(const char* json_str) { std::stringstream ss(json_str); return this->decode<T>(ss);}
+    template<typename T>
+    T* decode(const std::string& json_str) {std::stringstream ss(json_str); return this->decode<T>(ss);}
+    template<typename T>
+    T* decode(std::istream &is) { return decode<T>(decode(is));}
+    template<typename T>
     T* decodeFile(const std::string& file_name){
-        Json::Value root = decodeFile(file_name);
         try{
-            return decode<T>(root);
+            return decode<T>(decodeFile(file_name));
         }catch (cppbind::ParseErrorException& e){
             e.addParentNodeName(file_name);
             throw e;

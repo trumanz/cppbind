@@ -10,27 +10,6 @@ public:
     JsonEncodeBinder(){
         binder.init(this, NULL);
     }
-
-
-    template<typename T>
-    void bind(Json::Value *_jv, const std::string& name, T& v){
-          Json::Value jv;
-          encode(v, &jv);
-          _jv[0][name] = jv;
-    }
-
-    template<typename T>
-    void bind(Json::Value *_jv, const std::string& name, T& v, const T& default_value){
-          this->bind(_jv, name,v);
-    }
-
-    template<typename T>
-    void bind(Json::Value *_jv, const std::string& name, boost::shared_ptr<T>& v){
-          if(v.get() != NULL) {
-              this->bind(_jv, name,*(v.get()));
-          }
-    }
-
     template<typename T>
     void bindForeginKey(Json::Value *_jv, const std::string& name, T& v, const T* default_value);
     template<typename T>
@@ -197,7 +176,7 @@ public:
     public:
         template<typename T>
         void call(T&e, JsonEncodeBinder* binder, Json::Value* jv){
-            std::string x = binder->binder_data.str_convert_mgmt.toString(e);
+            std::string x = binder->str_convert_mgmt.toString(e);
             jv[0] = Json::Value(x);
         }
     };
@@ -242,7 +221,7 @@ public:
         this->encode(_e, jv);
     } 
 
-private:
+public:
     void encode(const Json::Value& e, Json::Value* jv){
         jv[0] = e;
     }
@@ -250,7 +229,7 @@ private:
         jv[0] = e;
     }
 //for basic type
-private:  
+public:  
     // bool 
     void encode(const bool e, Json::Value* jv) { jv[0] = Json::Value(e);}
     //int32_t

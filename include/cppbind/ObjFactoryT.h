@@ -46,7 +46,7 @@ public:
          if(bind) {
               typename ObjT::Data4Bind* e = NULL;
               e = new typename ObjT::Data4Bind();
-              bind->DecodeJson((Json::Value*)&json_parameter, e);
+              bind->decode(json_parameter, e);
               parameter =  boost::shared_ptr<typename ObjT::Data4Bind>(e);
          } else {
              parameter = boost::shared_ptr<typename ObjT::Data4Bind>(cppbind::JsonBind().decode<typename ObjT::Data4Bind>(json_parameter));

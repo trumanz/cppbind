@@ -13,38 +13,6 @@ public:
     void ignoreUnknownNode(){ ignore_unknown_key = true;}
 
     template<typename T>
-    void DecodeJson(Json::Value* jv, T* e) { this->decode(*jv, e); }    
-
-    template<typename T>
-    void bind(const Json::Value& _jv, const std::string& name, T& v){
-         const Json::Value& jv = _jv[name];
-         if(!jv.isNull()) {
-                decode(jv, &v);
-         } else  {
-              throw ParseErrorException(std::string("not found"));
-         }
-    }
-    template<typename T>
-    void bind(const Json::Value& _jv, const std::string& name, T& v, const T& default_vaule){
-        const Json::Value& jv = _jv[name];
-        if(!jv.isNull()) {
-               decode(jv, &v);
-        } else  {
-             v = default_vaule;
-        }
-    }
-    template<typename T>
-    void bind(const Json::Value& _jv, const std::string& name, boost::shared_ptr<T>& v){
-        const Json::Value& jv = _jv[name];
-         if(!jv.isNull()) {
-             T  e;
-             bind(_jv, name, e);
-             v = boost::shared_ptr<T>(new T(e));
-         } 
-    }
-
-    
-    template<typename T>
     void bindForeginKey(const Json::Value& _jv, const std::string& name, T& v, const T* default_value);
 
     template<typename T>
@@ -79,10 +47,10 @@ private:
         std::string class_name = members[0];
         Json::Value class_data = jv[class_name];
        
-        if(this->binder_data.class_reg == NULL) {
+        if(this->class_reg == NULL) {
             throw ParseErrorException("no class register");
         }
-        v = this->binder_data.class_reg->createObj<T>(class_name.c_str(), class_data, this);
+        v = this->class_reg->createObj<T>(class_name.c_str(), class_data, this);
     }
 public:
     template<typename T>
@@ -115,7 +83,7 @@ public:
     }
 
 //std container type
-private: 
+public: 
     //vector
     template<typename T>
     void decode(const Json::Value& json, std::vector<T>* e){
@@ -265,7 +233,7 @@ public:
                 printf("error: jv=%s", ss.str().c_str());
                 assert("bug" == NULL);
             }
-            e[0] = binder->binder_data.str_convert_mgmt.fromString<T>(jv.asString());
+            e[0] = binder->str_convert_mgmt.fromString<T>(jv.asString());
          }
 
     };
@@ -292,8 +260,9 @@ public:
            SetBindMemberFunctionCaller, Option2MemberFunctionCaller>::type CallerT;
 
           CallerT().call(json, e, this);
-    } 
-
+    }
+    template<typename AnyOtherT, typename T>
+    void decode(const AnyOtherT x, T* e); //use template to avoid Json::Value implicit contruction
 
 public:
     template<typename T>
@@ -309,11 +278,11 @@ public:
          e[0] = this->getForeignObj<T>(key);
     } 
 
-private:  //for Json type
+public:  //for Json type
     void decode(const Json::Value& json, Json::Value *e){
         e[0] =  json;
     }
-private:  //for basic type
+public:  //for basic type
     void decode(const Json::Value& json, bool*e){
         if(json.isString()) {
             this->JsonStrToBasicType(json,e);

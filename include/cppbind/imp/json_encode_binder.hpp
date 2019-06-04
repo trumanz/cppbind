@@ -7,8 +7,7 @@ class JsonEncodeBinder : public BinderImpBase {
 public:
     Binder binder;
 public:
-    JsonEncodeBinder(){
-        binder.init(this, NULL);
+    JsonEncodeBinder() : binder(this,NULL){
     }
     template<typename T>
     void bindForeginKey(Json::Value *_jv, const std::string& name, T& v, const T* default_value);
@@ -155,8 +154,7 @@ public:
     public:
         template<typename T>
         void call(T&e, JsonEncodeBinder* jbinder, Json::Value* jv){
-            Binder binder;
-            binder.init(jbinder, jv);
+            Binder binder(jbinder, jv);
             e.setBind(&binder, false);
             jbinder->binder.encoded_key = binder.encoded_key;
         }
@@ -216,7 +214,6 @@ public:
 
     template<typename T>
     void encodeToJson(T* e, Json::Value* jv){
-        this->binder.init(this, jv);
         T& _e = *e;
         this->encode(_e, jv);
     } 

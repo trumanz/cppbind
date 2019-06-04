@@ -121,13 +121,12 @@ public:
     Json::Value *json;
     std::set<std::string> decoded_member_key_set;
     std::vector<std::string> encoded_key;
-    Binder() {this->init(NULL, NULL);}
-    void init(BinderImpBase* _binder_imp, Json::Value* jv){
+    Binder(BinderImpBase* _binder_imp, Json::Value* jv){
       binder_imp = _binder_imp;  
       this->json  = jv;
       this->encoded_key.clear();
       this->decoded_member_key_set.clear();
-}
+    }
     /*
     *User code will call bind to build the attibute and name relation. 
     *Because the user code is not template functon, so we must tranfer a fixed type, This Binder type!!

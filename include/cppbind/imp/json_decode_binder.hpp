@@ -195,8 +195,7 @@ public:
     public:
         template<typename T>
         void call(const Json::Value& jv, T*e, JsonDecodeBinder* jbinder){
-            Binder next_binder;
-            next_binder.init(jbinder, (Json::Value*)&jv);
+            Binder next_binder(jbinder, (Json::Value*)&jv);
 
             //std::cout << __FILE__ << __LINE__  <<  jv  << typeid(T).name() << "\n";
             e->setBind(&next_binder, true);

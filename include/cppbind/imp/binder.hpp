@@ -195,9 +195,8 @@ void Binder::bind(const std::string& name, T& v, const T* default_value){
         } else if(json_decode_binder ) {
             decoded_member_key_set.insert(name);
             try{
-              if (this->json->isMember(name)) {
-                const Json::Value& jv = this->json[0][name];
-                json_decode_binder->decode(jv, &v);
+              if (this->json->isMember(name) && !this->json[0][name].isNull()) {
+                json_decode_binder->decode(this->json[0][name], &v);
               } else if(default_value) {
                 v = *default_value;
               } else {
@@ -230,7 +229,7 @@ void Binder::bind(const std::string& name, boost::shared_ptr<T>& v)
     }
   } else if(json_decode_binder) {
     decoded_member_key_set.insert(name);
-    if(this->json->isMember(name)) {
+    if(this->json->isMember(name) && !this->json[0][name].isNull() ) {
       const Json::Value& jv = this->json[0][name];
        T  e;
        json_decode_binder->decode(jv, &e);

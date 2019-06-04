@@ -195,15 +195,14 @@ void Binder::bind(const std::string& name, T& v, const T* default_value){
         } else if(json_decode_binder ) {
             decoded_member_key_set.insert(name);
             try{
-                  const Json::Value& jv = this->json[0][name];
-                    if(!jv.isNull()) {
-                           json_decode_binder->decode(jv, &v);
-                    } else if(default_value) {
-                         v = *default_value;
-                    } else {
-                      throw ParseErrorException(std::string("not found"));
-                    }
-
+              if (this->json->isMember(name)) {
+                const Json::Value& jv = this->json[0][name];
+                json_decode_binder->decode(jv, &v);
+              } else if(default_value) {
+                v = *default_value;
+              } else {
+                throw ParseErrorException(std::string("not found"));
+              }
             }catch (cppbind::ParseErrorException& e){
                  e.addParentNodeName(name);
                  throw e;
@@ -225,20 +224,18 @@ void Binder::bind(const std::string& name, boost::shared_ptr<T>& v)
   if( json_encode_binder) {
     if (v.get()) {
       encoded_key.push_back(name);
-      if(v.get() != NULL) {
-        Json::Value jv;
-        json_encode_binder->encode(v.get()[0], &jv);
-        this->json[0][name] = jv;
-      }
+      Json::Value jv;
+      json_encode_binder->encode(v.get()[0], &jv);
+      this->json[0][name] = jv;
     }
   } else if(json_decode_binder) {
     decoded_member_key_set.insert(name);
+    if(this->json->isMember(name)) {
       const Json::Value& jv = this->json[0][name];
-      if(!jv.isNull()) {
-         T  e;
-         json_decode_binder->decode(jv, &e);
-         v = boost::shared_ptr<T>(new T(e));
-      }
+       T  e;
+       json_decode_binder->decode(jv, &e);
+       v = boost::shared_ptr<T>(new T(e));
+    }
   } else {
     assert("bug" == NULL);
   }

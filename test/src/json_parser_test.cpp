@@ -18,36 +18,6 @@
 using namespace boost::posix_time;
 using namespace cppbind;
 
-#if 0
-class PosixTime : public ptime, public SpecTypeBase {
-public:
-      PosixTime(){
-          this->pattern = "%Y-%m-%d %H:%M:%S";
-      }
-private:
-      virtual int decode(const std::string &str, std::string *errmsg) {
-        //printf("decode %s\n", str.c_str());
-        TimeStr strTime(this->pattern.c_str());
-        ptime pt;
-        int ret = strTime.parser(str, &pt);
-        //printf("ret = %d\n", ret);
-        if(ret != 0) {
-            errmsg[0] += " can not parser [" + str + "]"  + " with pattern "  + pattern;
-            return -1;
-        } else {
-            ptime *this_pt = dynamic_cast<ptime*>(this);
-            this_pt[0] = pt;
-            return 0;
-        }
-    }
-    virtual std::string encode() {
-        TimeStr strTime(this->pattern.c_str());
-        return strTime.format(*this);
-    }
-    std::string pattern;
-};
-#endif
-
 class SexEnum{
 public:
    enum Type {

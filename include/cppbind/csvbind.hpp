@@ -137,8 +137,7 @@ private:
         }
         for(size_t i = 0; i < headers.size(); i++) {
             std::string d = i < data.size() ? data[i] : default_value->at(default_value->size() - (headers.size() -i));
-             jv[headers[i]] = d;
-             assert(jv[headers[i]].asString() == d);
+            if(d.length()> 0)   jv[headers[i]] = d;
         }
         return jv;
     }

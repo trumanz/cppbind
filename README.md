@@ -13,7 +13,18 @@
 5. Support c++ standard tempalte Vector, List and Map.
 6. Support user defined deserialzie and deserialize.
 
-### 功能介绍
+
+
+### 快速入门
+
+
+
+### API
+
+示例代码
+
+
+
 #### 1. setBind::bind函数
 
 示例代码

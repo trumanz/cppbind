@@ -64,6 +64,22 @@ public:
         return NULL;
     }
 
+    template<typename T>
+    T* decodeFile(const std::string& file, const std::string& node_name){
+        Json::Value jv = decodeFile(file);
+        try{
+          if (!jv.isObject()) {
+              throw ParseErrorException("not a object");
+          }
+          Json::Value jv_node = jv.get(node_name, Json::Value());
+          return this->decode<T>(jv_node);
+        } catch (cppbind::ParseErrorException& e) {
+            e.addParentNodeName(file);
+            throw e;
+        }
+        return NULL;
+    }
+
     Json::Value decode(std::istream &is){
          Json::Value root;
          Json::Reader reader;

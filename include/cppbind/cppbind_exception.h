@@ -40,13 +40,6 @@ public:
         this->parse_error_msg = err_msg;
         this->buildErrorStr();
     }
-    //ParseErrorException(const ParseErrorException& e, std::string const& node_name)
-    //{
-    //    this->node_info = e.node_info;
-    //    this->parse_error_msg = e.parse_error_msg;
-    //    this->node_info.insert(this->node_info.begin(), node_name);
-    //    this->buildErrorStr();
-    //}
     void addParentNodeName(std::string const& node_name) {
         this->node_info.insert(this->node_info.begin(), node_name);
         this->buildErrorStr();
@@ -55,13 +48,19 @@ public:
     const char* what() const throw() {
         return this->error_str_buf.c_str();
     }
-    
 };
 
 class ClassMissRegException : public ParseErrorException {
 public:
     ClassMissRegException(std::string class_name) : 
         ParseErrorException(class_name + " miss register"){
+    }
+};
+
+class ForeginKeyMissingException : public ParseErrorException {
+public:
+    ForeginKeyMissingException(std::string obj_name) : 
+        ParseErrorException(obj_name + " foregin key missing"){
     }
 };
 

@@ -104,8 +104,8 @@ class BinderImpBase {
        boost::any any_obj = it->second->getAnyObj(key);
        T* obj = boost::any_cast<T*>(any_obj);
        if (obj == NULL) {
-         printf("can not find foreign obj %s", key.c_str());
-         assert(false); 
+           printf("can not find foreign obj %s", key.c_str());
+           throw ForeginKeyMissingException(key);
        }
        return obj;
      }

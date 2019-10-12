@@ -32,7 +32,7 @@ public:
     typename std::map<std::string, T*>::const_iterator it = table->find(key);
     if(it == table->end()) {
      printf("ERROR, Can not found %s", key.c_str());
-     throw cppbind::ParseErrorException(key, "Foregin key can not found");
+     throw cppbind::ForeginKeyMissingException(key);
     }
     T* x = it->second;
     return x;

@@ -89,6 +89,7 @@ public:
     void decode(const Json::Value& json, std::vector<T>* e){
          std::list<T> v;
          decode(json, &v);
+         e->clear();
          e->insert(e->begin(), v.begin(), v.end());
     }
 
@@ -97,6 +98,7 @@ public:
     void decode(const Json::Value& json, std::vector<T*>* e){
          std::list<T*> v;
          decode(json, &v);
+         e->clear();
          e->insert(e->begin(), v.begin(), v.end());
     }
     template<typename T>
@@ -117,6 +119,7 @@ public:
             if(!json.isArray()) {
                 throw ParseErrorException("should be a list");
             }
+            e->clear();
             for(Json::Value::ArrayIndex i = 0; i  < json.size(); i++) {
                  try { 
                     T tmp;
@@ -136,6 +139,7 @@ public:
             if(!json.isArray()) {
                 throw ParseErrorException("should be a list");
             }
+            e->clear();
 			for(Json::Value::ArrayIndex i = 0; i  < json.size(); i++) {
                  try { 
                     T*  tmp = new T();

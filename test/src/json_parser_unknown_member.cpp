@@ -26,7 +26,7 @@ TEST(JsonROM, unknown_member){
        std::stringstream ss("{\"x\": 1, \"y\":2}");
        XObj* x = JsonBind().decode<XObj>(ss);
        delete x;
-     }  catch ( ParseErrorException e) {
+     }  catch ( ParseErrorException& e) {
              message =  e.what();
      }
      ASSERT_EQ(" unknown json key:[y]", message);

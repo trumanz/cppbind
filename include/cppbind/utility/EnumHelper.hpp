@@ -24,7 +24,7 @@ class EnumHelper {
   }
   std::string valueStr() const {
     int x = value;
-    assert(x < static_cast<int>T::enum_str_info_len);
+    assert(x < static_cast<int>(T::enum_str_info_len));
     return T::enum_str_info[x];
   }
 
@@ -34,7 +34,7 @@ class EnumHelper {
     int x = -1;
     for (size_t i = 0; i < T::enum_str_info_len; i++) {
       if (str == T::enum_str_info[i]) {
-        x = static_cast<int>i;
+        x = static_cast<int>(i);
         break;
       }
     }

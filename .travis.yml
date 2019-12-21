@@ -10,13 +10,6 @@ env:
     - secure: "F+CclAt2gh9HisvqjryNvZkj7NDz86aGSssvk5tjX7ICXR03InvB5ZPuaa8zn8yrsqMk/bmC1R5jJ/EWZ+MsgAvfekEiV2BEZvrAiZtnHd4Z/xUMI3173W2pymKw4+lMR6z8ZZTDGEtPHwPuY8UY3YjYzIKZjU4h8IjGwepECXs3ayaBHK8rgcdZirFcL+Pek5Sy+DCflcOlnpPTPPvkYPz9yw0aOjL3P0d7HVyg02+ok1xg0R/Ct3BXGlzp9Tfelx7LBuOTm4xJI2V4wEFb5VIMSx5th5m7u5sIc+6NyNTcVFx9t2B4WnQv/tQwvC2Pjk+8lngrtvhkj8bpczpkZ9Iy5jGD+jru460t30WK/FYn2MKtIgJv1kyrVvT7+vH8iNGIcEfs3VsYzpMD7fW/v1+neiW9Bq8PsE98mm/R0Uriu3XYo3iufDUvqWMQwZwoBj3fpSycpMNwvr4H4LXBnG/1+i2tk8KBU4eZ3ysMiJV9UG9ZqkK8xmyvqD7azcjUmZbZU0oRNuhQecNyrj8ccz/r9VGr9HMb1Lc8rgdsiXAlVJBEf/BdaqyEZs51Icgs5tt/fXinPMMYvp3boWE+EpIoB117dA4Doey+hrWwjVkwAk+/wQrGCIRZSdmJdLgIRpJxqKNjFpPQDzrtlXFlvxfmW98+uEUCGXGje+LTOEs="
 
 before_script:
--  sudo apt-get update
--  sudo apt-get install -y  libtool  cmake  
--  sudo apt-get install -y libboost-all-dev
--  sudo apt-get install -y libjsoncpp-dev
--  sudo apt-get install -y  bison flex
--  sudo apt-get install -y libgtest-dev
--  sudo apt-get install -y doxygen
 -  sudo ./prep-env.sh
 script:
   - ./run-ci.sh

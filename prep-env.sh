@@ -1,27 +1,16 @@
-﻿#!/bin/sh
+﻿#!/usr/bin/env bash
 
-BASE_DIR=$(pwd)/3pp
-[ -d $BASE_DIR ] || mkdir $BASE_DIR
+set -e 
 
-INSTALL_DIR=$BASE_DIR/installdir
-mkdir  $INSTALL_DIR
+sudo apt-get update
+sudo apt-get install -y  libtool  cmake
+sudo apt-get install -y libboost-all-dev
+sudo apt-get install -y libjsoncpp-dev
+sudo apt-get install -y  bison flex
+sudo apt-get install -y libgtest-dev
+sudo apt-get install -y doxygen
 
-gtest(){
-   if [ -d googletest ]; then
-     echo "user donloaded googletest"
-   else
-     git clone https://github.com/google/googletest.git  \
-     && cd googletest && git checkout  release-1.7.0 \
-     && cmake  -DCMAKE_INSTALL_PREFIX:PATH=$INSTALL_DIR \
-     && make -j4 && make  install
-     if [ $? != 0 ]; then
-        exit $?
-     fi
-  fi
-}
 
-cd $BASE_DIR
-#gtest
 
 cd /usr/src/gtest
 sudo cmake CMakeLists.txt

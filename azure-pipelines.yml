@@ -7,13 +7,11 @@ trigger:
 - master
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: "ubuntu-18.04"
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+- script: ./prep-env.sh
+  displayName: 'prepare env'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+- script: ./run-ci.sh
+  displayName: 'run unit test'

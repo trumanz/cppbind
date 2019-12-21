@@ -13,7 +13,7 @@ class EnumHelper {
   typename T::Type  value;
 
   EnumHelper() {}
-  explicit EnumHelper(typename T::Type v) { this->value = v;}
+  EnumHelper(typename T::Type v) { this->value = v;}
   Json::Value toJsonValue4Bind() {
     return Json::Value(this->toStr4Bind());
   }

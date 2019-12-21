@@ -3,6 +3,7 @@
 | build | status                                                                                        |
 |-------|-----------------------------------------------------------------------------------------------|
 | Travis-CI   | ![alt text](https://travis-ci.org/trumanz/cpp-learning.svg?branch=master "Logo Title Text 1") |
+| Azure-Pipelines   | [![Build Status](https://dev.azure.com/trumanckzhou/trumanckzhou/_apis/build/status/trumanz.cppbind?branchName=master)](https://dev.azure.com/trumanckzhou/trumanckzhou/_build/latest?definitionId=1&branchName=master) |
 
 ## A library for conversion between c++ class object and JSON string
 ### Feature

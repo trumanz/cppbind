@@ -3,15 +3,19 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
+
+
 trigger:
-- master
+  - master
+jobs:
+  - job: "unit_test"
+    pool:
+      vmImage: "ubuntu-18.04"
+    steps:
+      - script: ./prep-env.sh
+        displayName: 'prepare env'
+      - script: ./run-ci.sh
+        displayName: 'run unit test'
+      - script: bash ./sonar-check.sh
+        displayName: 'sonar scan'
 
-pool:
-  vmImage: "ubuntu-18.04"
-
-steps:
-- script: ./prep-env.sh
-  displayName: 'prepare env'
-
-- script: ./run-ci.sh
-  displayName: 'run unit test'

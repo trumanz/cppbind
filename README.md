@@ -4,6 +4,7 @@
 |-------|-----------------------------------------------------------------------------------------------|
 | Travis-CI   | ![alt text](https://travis-ci.org/trumanz/cpp-learning.svg?branch=master "Logo Title Text 1") |
 | Azure-Pipelines   | [![Build Status](https://dev.azure.com/trumanckzhou/trumanckzhou/_apis/build/status/trumanz.cppbind?branchName=master)](https://dev.azure.com/trumanckzhou/trumanckzhou/_build/latest?definitionId=1&branchName=master) |
+| SonarCloud   | [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=trumanz_cppbind&metric=alert_status)](https://sonarcloud.io/dashboard?id=trumanz_cppbind) |
 
 ## A library for conversion between c++ class object and JSON string
 ### Feature

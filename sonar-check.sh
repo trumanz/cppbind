@@ -13,6 +13,12 @@ rm $HOME/.sonar/sonar-scanner.zip
 export PATH=$SONAR_SCANNER_HOME/bin:$PATH
 export SONAR_SCANNER_OPTS="-server"
 
+#download build wrapper 
+curl -sSLo build-wrapper-linux-x86.zip   https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip
+unzip  build-wrapper-linux-x86.zip
+
+./build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir bw-outputs   ./run-unit-test.sh
+
 sonar-scanner \
   -Dsonar.projectKey=trumanz_cppbind \
   -Dsonar.organization=trumanz \

@@ -16,6 +16,13 @@ jobs:
         displayName: 'prepare env'
       - script: ./run-unit-test.sh
         displayName: 'run unit test'
+
+  - job: "sonar_scan"
+    pool:
+      vmImage: "ubuntu-18.04"
+    steps:
+      - script: ./prep-env.sh
+        displayName: 'prepare env'
       - script: bash ./sonar-check.sh
         displayName: 'sonar scan'
 

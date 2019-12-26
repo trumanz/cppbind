@@ -6,5 +6,5 @@ set -e
 #make clean
 #make  all
 cd test 
-make clean
+#make clean
 make test

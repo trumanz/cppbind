@@ -88,7 +88,7 @@ public:
     }
 
     template<typename T>
-    std::vector<T*> decode(const std::string& csv_content){
+    std::vector<T*> decode(const std::string& csv_content) {
         std::stringstream ss;
         ss << csv_content;
         return this->decode<T>(ss);

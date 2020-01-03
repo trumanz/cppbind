@@ -132,6 +132,9 @@ public:
     *Because the user code is not template functon, so we must tranfer a fixed type, This Binder type!!
     *and this will use EncodeBinder or DecodeBinder  to do the real work.
     */
+
+    template<typename T>
+    void bind(T& v, const T* default_value = NULL);
     template<typename T>
     void bind(const std::string& name, T& v, const T* default_value = NULL);
     template<typename T>
@@ -182,6 +185,35 @@ private:
 
 
 namespace cppbind {
+
+
+template<typename T>
+void Binder::bind(T& v, const T* default_value) {
+  JsonEncodeBinder* json_encode_binder = dynamic_cast<JsonEncodeBinder*>(binder_imp);
+  JsonDecodeBinder* json_decode_binder = dynamic_cast<JsonDecodeBinder*>(binder_imp);
+        if( json_encode_binder ) {
+            Json::Value jv;
+            json_encode_binder->encode(v, &jv);
+            this->json[0] = jv;
+        } else if(json_decode_binder ) {
+            try{
+              if (!this->json[0].isNull()) {
+                json_decode_binder->decode(this->json[0], &v);
+              } else if(default_value) {
+                v = *default_value;
+              } else {
+                throw ParseErrorException(std::string("not found"));
+              }
+            }catch (cppbind::ParseErrorException& e){
+                 throw e;
+            } catch (std::exception &e) {
+                 throw cppbind::ParseErrorException("", e.what());
+            }
+        } 
+         else {
+            assert("bug" == NULL);
+        }
+}
 
 template<typename T>
 void Binder::bind(const std::string& name, T& v, const T* default_value){

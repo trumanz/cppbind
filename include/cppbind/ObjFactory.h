@@ -9,6 +9,7 @@ namespace cppbind{
 class JsonDecodeBinder;
 class ObjFactory{
 public:
+    virtual ~ObjFactory(){}
     //any is a point
     virtual Object* createObj(const std::string& obj_name, const Json::Value& json_parameter, JsonDecodeBinder* bind = NULL) const = 0;
    // virtual boost::any createObj(const boost::any& any_parameter) const = 0;

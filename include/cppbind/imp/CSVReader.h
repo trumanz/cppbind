@@ -23,14 +23,17 @@ public:
     std::vector<std::string> cells;
     unsigned int line_no;
     std::string original_line;
-
 };
 
 class CSVReader{
+private:
+    const std::string dropped_delims;
+    const bool trim;
 public:
     std::vector<std::string> headers;
     std::vector<CSVRow> rows;
     virtual ~CSVReader(){}
+    CSVReader(const std::string _dropped_delims=",", bool _trim = false) : dropped_delims(_dropped_delims), trim(_trim){}
 public:
    void readFile(const char *filename){
        std::ifstream _in(filename);
@@ -58,9 +61,15 @@ protected:
     CSVRow row;
     row.line_no = line_no;
     row.original_line = line;
-    boost::char_separator<char> sep(",", "",boost::keep_empty_tokens);
+    boost::char_separator<char> sep(this->dropped_delims.c_str(), "", boost::keep_empty_tokens);
     boost::tokenizer< boost::char_separator<char> > tok(line,sep);
-    row.cells.assign(tok.begin(), tok.end());
+    for (auto it = tok.begin(); it != tok.end(); it++) {
+        if (this->trim) {
+            row.cells.push_back( boost::algorithm::trim_copy(*it) );
+        } else {
+            row.cells.push_back(*it);
+        }
+    }
     return row;
 }
 

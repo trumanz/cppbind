@@ -25,8 +25,8 @@ public:
      boost::shared_ptr<CSVReader> csv;
      JsonBind json_binder;
 public:
-    CSVBind(){
-        csv = boost::shared_ptr<CSVReader>(new CSVReader());
+    CSVBind(const std::string _dropped_delims=",", bool _trim = false){
+        csv = boost::shared_ptr<CSVReader>(new CSVReader(_dropped_delims, _trim));
         ignore_unknown_filed = false;
     }
     void IgnoreUnknownKey() {

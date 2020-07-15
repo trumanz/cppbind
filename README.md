@@ -6,14 +6,14 @@
 | Azure-Pipelines   | [![Build Status](https://dev.azure.com/trumanckzhou/trumanckzhou/_apis/build/status/trumanz.cppbind?branchName=master)](https://dev.azure.com/trumanckzhou/trumanckzhou/_build/latest?definitionId=1&branchName=master) |
 | SonarCloud   | [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=trumanz_cppbind&metric=alert_status)](https://sonarcloud.io/dashboard?id=trumanz_cppbind) |
 
-## A library for conversion between c++ class object and JSON string
-### Feature
-1. Serialize a c++ object to JSON string.
-2. Deserialize a JSON string to c++ object.
-3. Support optional node when serialize and deserialize.
-4. Support nested Class object.
-5. Support c++ standard tempalte Vector, List and Map.
-6. Support user defined deserialzie and deserialize.
+## A Header-Only libirary for conversion between C++ Class Object and JSON/CSV Data.
+### Features
+1. Data-binding C++ Class Object to and from JSON/CSV. Not oly 
+2. Type of a Class member variable could be primitive type, other Class type or C++ standard container template(vector, list, map, set).
+3. Class memeber variable could be  optional, predefined default value.
+4. Foreigner table support. 
+5. Dynamic type decode support.
+6. User defined serialization and deserialization behavior.
 
 
 ## Documentation
@@ -21,9 +21,7 @@
 [trumanz.github.io/cppbind/](https://trumanz.github.io/cppbind/)
 
 
-
-### 快速入门
-
+### Quick start
 
 
 ### API

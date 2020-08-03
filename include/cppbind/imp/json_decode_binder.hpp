@@ -125,7 +125,7 @@ public:
                     T tmp;
                     decode(json[i], &tmp);
                     e->push_back(tmp);
-                 } catch  (ParseErrorException e) {
+                 } catch  (ParseErrorException& e) {
 					 std::stringstream ss;
 					 ss << "[" << i << "]";
                      e.addParentNodeName(ss.str());

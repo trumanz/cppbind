@@ -11,7 +11,7 @@
 namespace cppbind{
 
 class ClassRegisterBase {
-private:
+protected:
    std::map<std::string, boost::shared_ptr<ObjFactory> > obj_factories;
 public:
    void regClassWithFactory(const std::string name, boost::shared_ptr<ObjFactory> obj_factory){

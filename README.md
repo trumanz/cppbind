@@ -1,12 +1,26 @@
-# cppbind
+README.md
 
-| build | status                                                                                        |
-|-------|-----------------------------------------------------------------------------------------------|
-| Travis-CI   | ![alt text](https://travis-ci.org/trumanz/cpp-learning.svg?branch=master "Logo Title Text 1") |
-| Azure-Pipelines   | [![Build Status](https://dev.azure.com/trumanckzhou/trumanckzhou/_apis/build/status/trumanz.cppbind?branchName=master)](https://dev.azure.com/trumanckzhou/trumanckzhou/_build/latest?definitionId=1&branchName=master) |
-| SonarCloud   | [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=trumanz_cppbind&metric=alert_status)](https://sonarcloud.io/dashboard?id=trumanz_cppbind) |
+# CppBind
 
-## A Header-Only libirary for conversion between C++ Class Object and JSON/CSV Data.
+
+
+[![apipeline](https://dev.azure.com/trumanckzhou/trumanckzhou/_apis/build/status/trumanz.cppbind?branchName=master)](https://dev.azure.com/trumanckzhou/trumanckzhou/_build/latest?definitionId=1&branchName=master)
+[![sonar](https://sonarcloud.io/api/project_badges/measure?project=trumanz_cppbind&metric=alert_status)](https://sonarcloud.io/dashboard?id=trumanz_cppbind) 
+
+
+CppBind is a C++ header-only library that allow mapping JSON/CSV values to/from C++ Class object. It's not a json/csv parser, it use [JsonCPP](https://github.com/open-source-parsers/jsoncpp) as low level parser. This project is inspried by Java [Jackson](https://github.com/FasterXML/jackson).
+
+
+## Documentation
+[CppBind documentation](http://trumanz.github.io/cppbind/) is generated using Doxygen.
+
+## Using CppBind in your project
+Just download and compile your project with cppbind;
+```bash
+git clone  https://github.com/trumanz/cppbind
+g++  -I path/to/cppbind  example.cpp  -o  example
+```
+
 ### Features
 1. Data-binding C++ Class Object to and from JSON/CSV. Not oly 
 2. Type of a Class member variable could be primitive type, other Class type or C++ standard container template(vector, list, map, set).

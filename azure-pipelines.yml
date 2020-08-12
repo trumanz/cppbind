@@ -26,10 +26,4 @@ jobs:
       - script: bash ./sonar-check.sh
         displayName: 'sonar scan'
 
-  - job: "doxy build"
-    pool:
-      vmImage: "ubuntu-18.04"
-    steps:
-      - script: bash ./sonar-check.sh
-        displayName: 'sonar scan'
 

@@ -12,7 +12,7 @@ env:
 before_script:
 -  sudo ./prep-env.sh
 script:
-  - ./run-ci.sh
+  - python ./run-test.py
   - doxygen doxygen.cfg
 
 # Generate and deploy documentation

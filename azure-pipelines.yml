@@ -14,7 +14,7 @@ jobs:
     steps:
       - script: ./prep-env.sh
         displayName: 'prepare env'
-      - script: ./run-unit-test.sh
+      - script: python ./run-test.py
         displayName: 'run unit test'
 
   - job: "sonar_scan"
@@ -23,6 +23,13 @@ jobs:
     steps:
       - script: ./prep-env.sh
         displayName: 'prepare env'
+      - script: bash ./sonar-check.sh
+        displayName: 'sonar scan'
+
+  - job: "doxy build"
+    pool:
+      vmImage: "ubuntu-18.04"
+    steps:
       - script: bash ./sonar-check.sh
         displayName: 'sonar scan'
 

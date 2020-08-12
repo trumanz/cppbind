@@ -1,26 +1,19 @@
 sudo: required
 dist: bionic
-
 language: cpp
-
 compiler: gcc
-
-env:
-  global:
-    - secure: "F+CclAt2gh9HisvqjryNvZkj7NDz86aGSssvk5tjX7ICXR03InvB5ZPuaa8zn8yrsqMk/bmC1R5jJ/EWZ+MsgAvfekEiV2BEZvrAiZtnHd4Z/xUMI3173W2pymKw4+lMR6z8ZZTDGEtPHwPuY8UY3YjYzIKZjU4h8IjGwepECXs3ayaBHK8rgcdZirFcL+Pek5Sy+DCflcOlnpPTPPvkYPz9yw0aOjL3P0d7HVyg02+ok1xg0R/Ct3BXGlzp9Tfelx7LBuOTm4xJI2V4wEFb5VIMSx5th5m7u5sIc+6NyNTcVFx9t2B4WnQv/tQwvC2Pjk+8lngrtvhkj8bpczpkZ9Iy5jGD+jru460t30WK/FYn2MKtIgJv1kyrVvT7+vH8iNGIcEfs3VsYzpMD7fW/v1+neiW9Bq8PsE98mm/R0Uriu3XYo3iufDUvqWMQwZwoBj3fpSycpMNwvr4H4LXBnG/1+i2tk8KBU4eZ3ysMiJV9UG9ZqkK8xmyvqD7azcjUmZbZU0oRNuhQecNyrj8ccz/r9VGr9HMb1Lc8rgdsiXAlVJBEf/BdaqyEZs51Icgs5tt/fXinPMMYvp3boWE+EpIoB117dA4Doey+hrWwjVkwAk+/wQrGCIRZSdmJdLgIRpJxqKNjFpPQDzrtlXFlvxfmW98+uEUCGXGje+LTOEs="
-
 before_script:
--  sudo ./prep-env.sh
+- sudo ./prep-env.sh
 script:
-  - python ./run-test.py
-  - doxygen doxygen.cfg
-
-# Generate and deploy documentation
+- python ./run-test.py
+- doxygen doxygen.cfg
 deploy:
   provider: pages
   skip_cleanup: true
   local_dir: doc/html
-  github_token: $GH_REPO_TOKEN
+  github_token: "$GH_REPO_TOKEN"
   on:
     branch: master
- 
+env:
+  global:
+    secure: K0Z8tXboTJQZbYxGY5FspmtiTJoXCPmRQn1+NfHds5M14LRryEaGgUp7wtSXfjl3QGWgyoX8qTfVUzlmTCj+OldM2CCu3ubY3qyKcEf0T+QhEaYxLX94+qrlppEvCrCcKLveluNWui2o+FeZXxXG2eSw++MlDpYDk4K0iO56P2uUSY6xoFt+yQSHAtApAyn0M2QUMjXplHWKv7AWPe2L+lRHjeNKxj4vfVmZ+3kC5wxVA7RFFB1Mwq54m6N0wXx5UwLrt9Lw6kGIMwxRDFwRpU9ap25F1tLjFqd9V7eEr+W2z/JkvKj6sBgN7S7W1tJyLUhzwQKbFORkmq+fzSPB0/Ft1wyAFuXDJuf3EMYr1+6JyvkIZnytG2bn3KULJcXOnqs1aagNw59tjDGJtrdTQQ8UvXvG1aINMX2Cr1muBCmEhhHscttErCCP+DPqtusc9ORuL3RQr9cYfPM0RTl23jfcACksxDgkZ92ogeS2q/bhNN1PEdmtG3Yqv+tW5Acdl78MMXP+dDnui773hQ2XATBsXCm7DUDXlcOOvKeE5BmShJmq6fnaW77uUdNKrO7t9ytnSkXY2+7LYfnfqolLzrrFByKnuYWkHccxyvCot9OsqWTNeM/OFgyCgxL4BSCYf6WCkfFZjjBvNlVBWEoWPmqn4hLa16bveRgtMYSdj+8=

@@ -1,5 +1,3 @@
-README.md
-
 # CppBind
 
 
@@ -22,7 +20,7 @@ git clone  https://github.com/trumanz/cppbind
 g++  -I path/to/cppbind  example.cpp  -o  example
 ```
 
-### Features
+## Features
 1. Data-binding C++ Class Object to and from JSON/CSV. Not oly 
 2. Type of a Class member variable could be primitive type, other Class type or C++ standard container template(vector, list, map, set).
 3. Class memeber variable could be  optional, predefined default value.
@@ -30,6 +28,100 @@ g++  -I path/to/cppbind  example.cpp  -o  example
 5. Dynamic type decode support.
 6. User defined serialization and deserialization behavior.
 
+
+## Why I write this library
+I feel boring work when I am working on a C++ project which have plenty of configuration write by Json. I saw Java [Jackson](https://github.com/FasterXML/jackson) could easily mapping Json and Object, but C++ can not do that since it do not have reflection mechanism,  But C++ have template which let compiler auto generate useful codes by variable type.
+
+
+## CppBind vs Bare JsonCpp
+
+There is an simple example to show how cppbind simplfy codes. Here is the conclusion at beginning,   
+| | CppBind |  Bare JsonCpp |
+| :---- | :-----|:--------|
+| Coding works | 5 lines | 40 lines |
+
+
+Let's consider parse below JSON data to be A C++ Class Object.
+JSON Data
+```javascript
+{
+  "name" : "Bruce"
+  "bornDate" : "2020-01-01",
+  "skillsScore" : { 
+     "football" : 8, 
+      "music" : 7 
+  }
+}
+```
+With CppBind
+```c++
+class Person {
+public:
+    std::string name;
+    boost::gregorian::date born_date;
+    boost::shared_ptr< std::map<std::string, int> > optional_skills_score;
+    void setBind(Binder *binder, bool load){
+          binder->bind("name", name);
+          binder->bind("bornDate", born_date);
+          binder->bind("skillsScore", optional_skills_score);
+    }
+};
+Person* parsePerson(std::istream &json_input){
+  return JsonBind().decode<Student>(json_str);
+}
+```
+Bare JsonCpp
+```c++
+class Person {
+public:
+   std::string name;
+   boost::gregorian::date born_date;
+   boost::shared_ptr< std::map<std::string, int> > optional_skills_score;
+}
+Person* parsePerson(std::istream &json_input)
+{
+    Json::Value root;
+    Json::Reader reader;
+    bool parsingSuccessful = reader.parse(json_input, root);
+    Person *p = new Person();
+    //parse name
+    Json::Value jv_name = root["name"];
+    if (!jv_name.isNull()) {
+        p->name = jv_name.asString()
+    } else {
+        delete p;
+        return NULL;
+    }
+    //parse born date, this code missing data pattern check
+    Json::Value jv_born_date = root["bornDate"]
+    if (!jv_name.isNull()) {
+        std::istringstream ss(jv_name.asString());
+        boost::gregorian::date d;
+        ss >> d;
+        p->born_date.reset(new boost::gregorian::date(d));
+    }
+    //parse optonal skill score map
+    Json::Value jv_skill_score = root["skillsScore"]
+    if (!skill_score.isNull()) {
+        if (!jv_skill_score.isObject()) {
+            delete p;
+            return NULL;
+        }
+        p->optional_skills_score.reset(new std::map<std::string, int>());
+        Json::Value::Members keys = jv_skill_score.getMemberNames();
+        for (Json::Value::Members::iterator it = keys.begin(); 
+            it != keys.end(); it++) {
+
+            std::string key_str = *it;
+            Json::Value jv_value = jv_skill_score[*it];
+            int score = jv_value.asInt();
+            p->optional_skills_score->insert({ key_str, score });
+
+        }
+    }
+    return p;
+}
+```
 
 ## Documentation
 
@@ -48,61 +140,6 @@ g++  -I path/to/cppbind  example.cpp  -o  example
 #### 1. setBind::bind函数
 
 示例代码
-
-```c++
-
-class Student {
-public:
-    std::string name;
-    int age;  
-    std::string address;
-    std::vector<std::string>  likes;
-    boost::shared_ptr<boost::gregorian::date> born_date;
-    void setBind(Binder *binder, bool load){
-          binder->bind("name", name);
-          binder->bind("age", age);
-          binder->bind("likes", likes);
-          binder->bind("bornDate", born_date);
-          binder->bind("address", address, std::string("unknown"));
-    }
-    std::string toStr()const{
-       std::stringstream ss;
-       ss << "name:" << name;
-       ss << ", age:" << age;
-       ss << ",born: " << born_date;
-       ss << ",address:" << address;
-       ss << ", likes:";
-       for (size_t i = 0 ; i < likes.size();i++) {
-         if (i > 0) ss <<",";
-         ss<< likes[i];
-       }
-       return ss.str();
-    }
-};
-
-int main(){
-  std::string json_str = "{\"name\" : \"Bruce\", \"age\": 18, \"likes\" : [\"football\", \"music\"] }";
-  //decode
-  Student* student = JsonBind().decode<Student>(json_str);
-  printf("Decoded student:%s\n",  student->toStr().c_str());
-  //encode
-  std::string str = JsonBind().encodeToStr(*student);
-  printf("Encoded Student Json String: %s\n", str.c_str());
-  delete student;
-}
-```
-
-运行结果：
-
-```shell
-Decoded Student C++ Object:name:Bruce, age:18,born: 0,address:unknown, likes:football,music
-Encoded Student Json String: {
-        "address" : "unknown",
-        "age" : 18,
-        "likes" : [ "football", "music" ],
-        "name" : "Bruce"
-}
-```
 
 setBind函数：自定义类Student，并实现成员函数setBind， 函数实现为为调用binder->bind将json node名称值与成员变量建立联系；
 

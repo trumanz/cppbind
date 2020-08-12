@@ -1,6 +1,6 @@
-﻿#!/usr/bin/env bash
+﻿#!/bin/bash
 
-set -e 
+set -xeuo  pipefail
 
 
 export SONAR_SCANNER_VERSION=4.2.0.1873
@@ -17,7 +17,7 @@ export SONAR_SCANNER_OPTS="-server"
 curl -sSLo build-wrapper-linux-x86.zip   https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip
 unzip  build-wrapper-linux-x86.zip
 
-./build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir bw-outputs   ./run-unit-test.sh
+./build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir bw-outputs  python ./run-test.py
 
 sonar-scanner \
   -Dsonar.projectKey=trumanz_cppbind \

@@ -131,7 +131,7 @@ private:
             for(size_t i = 0; i < max_num; i++) {
                 std::string h = i < headers.size() ? headers[i] : std::string("");
                 std::string d = i < data.size() ? data[i] : std::string("");
-                printf("%lu, [%s] : [%s]\n", i, h.c_str(), d.c_str());
+                printf("%zu, [%s] : [%s]\n", i, h.c_str(), d.c_str());
             }
             assert(false);
         }

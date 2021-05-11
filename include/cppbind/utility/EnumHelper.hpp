@@ -3,7 +3,7 @@
 
 #include <assert.h>
 #include <string>
-#include "jsoncpp/json/json.h"
+#include "json/json.h"
 
 namespace  cppbind {
 

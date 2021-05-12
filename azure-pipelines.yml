@@ -5,8 +5,9 @@
 
 
 
-trigger:
-  - master
+#trigger:
+#  - master
+
 jobs:
   - job: "unit_test"
     pool:
@@ -26,4 +27,7 @@ jobs:
       - script: bash ./sonar-check.sh
         displayName: 'sonar scan'
 
-
+  - templaete: azure-devops/build-ubuntu-vcpkg.yml
+    parameters:
+      name: 'Ubuntu_1604_Vcpkg'
+      image: 'Ubuntu 18.04'

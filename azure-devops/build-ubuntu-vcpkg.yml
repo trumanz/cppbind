@@ -13,7 +13,8 @@ jobs:
       sudo apt install g++-9 -y
       git submodule update --init vcpkg
       ./vcpkg/bootstrap-vcpkg.sh
-      ./vcpkg/vcpkg install jsoncpp boost-date-time --vcpkg-root ./vcpkg
+      ./vcpkg/vcpkg integrate install
+      ./vcpkg/vcpkg install gtest jsoncpp boost-system boost-date-time --vcpkg-root ./vcpkg
     displayName: Vcpkg install dependencies
   - script: |
       mkdir build.debug

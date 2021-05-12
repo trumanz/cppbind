@@ -27,7 +27,7 @@ jobs:
       - script: bash ./sonar-check.sh
         displayName: 'sonar scan'
 
-  - templaete: azure-devops/build-ubuntu-vcpkg.yml
+  - template: azure-devops/build-ubuntu-vcpkg.yml
     parameters:
       name: 'Ubuntu_1604_Vcpkg'
       image: 'Ubuntu 18.04'

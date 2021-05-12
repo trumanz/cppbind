@@ -14,7 +14,7 @@ jobs:
       git submodule update --init vcpkg
       ./vcpkg/bootstrap-vcpkg.sh
       ./vcpkg/vcpkg integrate install
-      ./vcpkg/vcpkg install gtest jsoncpp boost-system boost-date-time --vcpkg-root ./vcpkg
+      ./vcpkg/vcpkg install gtest jsoncpp boost-tti boost-date-time --vcpkg-root ./vcpkg
     displayName: Vcpkg install dependencies
   - script: |
       mkdir build.debug

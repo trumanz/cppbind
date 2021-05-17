@@ -6,7 +6,7 @@
 #include <string>
 #include <sstream>
 #include <fstream>      // std::ifstream
-#include <jsoncpp/json/json.h>
+#include "json/json.h"
 #include <cppbind/jsonbind.hpp>
 #include <cppbind/csvbind.hpp>
 #include <cppbind/ObjFactoryT.h>

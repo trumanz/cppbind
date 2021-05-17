@@ -7,7 +7,7 @@
 #include <string>
 #include <sstream>
 #include <fstream>      // std::ifstream
-#include <jsoncpp/json/json.h>
+#include <json/json.h>
 #include <assert.h>
 #include <list>
 #include <boost/shared_ptr.hpp>

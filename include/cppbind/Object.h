@@ -2,7 +2,7 @@
 #define _CPPBIND_Object_H
 #include <assert.h>
 #include <typeinfo>
-#include <jsoncpp/json/json.h>
+#include <json/json.h>
 namespace cppbind{
 
 class Object{

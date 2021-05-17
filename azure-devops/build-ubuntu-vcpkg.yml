@@ -13,7 +13,8 @@ jobs:
       sudo apt install g++-9 -y
       git submodule update --init vcpkg
       ./vcpkg/bootstrap-vcpkg.sh
-      ./vcpkg/vcpkg install boost-system boost-date-time --vcpkg-root ./vcpkg
+      ./vcpkg/vcpkg integrate install
+      ./vcpkg/vcpkg install gtest jsoncpp boost-tti boost-any boost-date-time --vcpkg-root ./vcpkg
     displayName: Vcpkg install dependencies
   - script: |
       mkdir build.debug
@@ -29,9 +30,5 @@ jobs:
       cmakeArgs: '-DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake ..'
   - script: |
       cd build.debug
-      ninja
-    displayName: 'Run Unit Test'
-  - script: |
-      cd build.debug/Release/Binaries
-      ./cppbind_test
+      make && cd  ../test/ &&   ../build.debug/cppbind_test
     displayName: 'Run Unit Test'

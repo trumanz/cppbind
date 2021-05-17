@@ -204,3 +204,6 @@ class MyObj{
 ```
 
 ```
+
+CI refered by 
+https://github.com/microsoft/cpprestsdk/blob/master/azure-pipelines.yml

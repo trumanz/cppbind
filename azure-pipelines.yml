@@ -9,7 +9,7 @@
 #  - master
 
 jobs:
-  - job: "unit_test"
+  - job: "Ubuntu_1804_Apt_Makefile_Test"
     pool:
       vmImage: "ubuntu-18.04"
     steps:
@@ -31,3 +31,27 @@ jobs:
     parameters:
       name: 'Ubuntu_1604_Vcpkg'
       image: 'Ubuntu 18.04'
+
+
+  - job: MacOS_Vcpkg
+    pool:
+        vmImage: 'macOS-latest'
+    steps:
+        - script: git submodule update --init vcpkg
+          displayName: Checkout vcpkg submodule
+        - script: |
+            ./vcpkg/bootstrap-vcpkg.sh
+            ./vcpkg/vcpkg integrate install
+            ./vcpkg/vcpkg install gtest jsoncpp boost-tti boost-any boost-date-time --vcpkg-root ./vcpkg
+          displayName: Vcpkg install dependencies
+        - script: |
+            mkdir build.debug
+          displayName: Make Build Directories
+        - task: CMake@1
+          inputs:
+            workingDirectory: 'build.debug'
+            cmakeArgs: '-DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake ..'
+        - script: |
+            cd build.debug
+            make && cd  ../test/ &&   ../build.debug/cppbind_test
+          displayName: 'Run Unit Test'

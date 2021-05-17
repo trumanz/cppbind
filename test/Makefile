@@ -2,6 +2,7 @@ CC = g++
 LD = $(CC)
 CFLAGS =   -I./ 
 CFLAGS +=  -I../include
+CFLAGS +=  -I/usr/include/jsoncpp/
 CFLAGS += -c  -g -O0  -Wall 
 
 LDFLAGS = -L../ # -lcppbind

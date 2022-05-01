@@ -2,7 +2,7 @@
 
 
 
-[![azure-pipeline](https://dev.azure.com/trumanz-dev/trumanz-github/_apis/build/status/trumanz.cppbind?branchName=master)](https://dev.azure.com/trumanckzhou/trumanckzhou/_build/latest?definitionId=1&branchName=master)
+[![azure-pipeline](https://dev.azure.com/trumanz-dev/trumanz-github/_apis/build/status/trumanz.cppbind?branchName=master)](https://dev.azure.com/trumanz-dev/trumanz-github/_build/latest?definitionId=1&branchName=master)
 [![sonar](https://sonarcloud.io/api/project_badges/measure?project=trumanz_cppbind&metric=alert_status)](https://sonarcloud.io/dashboard?id=trumanz_cppbind) 
 
 

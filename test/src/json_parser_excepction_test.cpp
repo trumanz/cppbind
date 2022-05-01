@@ -57,6 +57,7 @@ TEST(JsonROM, child_child_not_exist_message){
      std::string message;
      try {
        std::ifstream ifs("./sample_data/me.json",  std::ifstream::in);
+       ASSERT_EQ(ifs.is_open(), true);
        Me3* me = JsonBind().decode<Me3>(ifs);
        delete me;
      }  catch ( ParseErrorException& e) {

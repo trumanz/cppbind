@@ -16,7 +16,7 @@ endfunction()
 add_source_files(${CMAKE_CURRENT_SOURCE_DIR}/test/src *.cpp  CPP_FILES)
 
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 14)
 
 add_executable(cppbind_test ${CPP_FILES})
 

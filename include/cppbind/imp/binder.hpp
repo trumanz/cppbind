@@ -299,7 +299,7 @@ void Binder::bindDynamicTypeImp(const std::string& name, T &v, Json::Value* defa
     } else if(json_decode_binder ) {
         try{
           decoded_member_key_set.insert(name);
-          json_decode_binder->bindDynamicType(*json, name,v, default_value );
+            json_decode_binder->decodeDynamicType(*json, name, v, default_value);
         } catch(ParseErrorException& e) {
             e.addParentNodeName(name);
             throw e;
@@ -325,7 +325,7 @@ void Binder::bindDynamicTypeImp(const std::string& name, boost::shared_ptr<T> &v
     } else if(json_decode_binder ) {
         try{
           decoded_member_key_set.insert(name);
-          json_decode_binder->bindDynamicType(*json, name,v, default_value );
+            json_decode_binder->decodeDynamicType(*json, name, v, default_value);
         } catch(ParseErrorException& e) {
             e.addParentNodeName(name);
             throw e;

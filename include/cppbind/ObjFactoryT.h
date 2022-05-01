@@ -3,7 +3,7 @@
 
 
 #include "ObjFactory.h"
-#include <cppbind/jsonbind.hpp>
+#include <cppbind/JsonBind.hpp>
 
 namespace cppbind{
 

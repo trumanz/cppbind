@@ -14,13 +14,15 @@ class EnumHelper {
 
   EnumHelper() {}
   EnumHelper(typename T::Type v) { this->value = v;}
-  Json::Value toJsonValue4Bind() {
-    return Json::Value(this->toStr4Bind());
-  }
-  void fromJsonValue4Bind(const Json::Value& jv) {
-    assert(jv.isString());
-    std::string str = jv.asString();
-    this->fromStr4Bind(str);
+
+  void setBind(Binder *binder, bool load){
+      if(load == true) {
+          assert(binder->json->isString());
+          std::string str = binder->json->asString();
+          this->fromStr4Bind(str);
+      } else {
+          binder->json[0] = Json::Value(this->valueStr());
+      }
   }
   std::string valueStr() const {
     int x = value;
@@ -29,7 +31,6 @@ class EnumHelper {
   }
 
  private:
-  std::string toStr4Bind() { return valueStr(); }
   void fromStr4Bind(const std::string& str) {
     int x = -1;
     for (size_t i = 0; i < T::enum_str_info_len; i++) {

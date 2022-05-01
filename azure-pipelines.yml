@@ -9,29 +9,29 @@
 #  - master
 
 jobs:
-  - job: "unit_test"
+  - job: "Unit_Test_Ubuntu_1804_Apt"
     pool:
       vmImage: "ubuntu-18.04"
     steps:
-      - script: ./prep-env.sh
+      - script: ./devops/prep-env.sh
         displayName: 'prepare env'
-      - script: python ./run-test.py
+      - script: cd test && make test
         displayName: 'run unit test'
 
-  - job: "sonar_scan"
+  - job: "Sonar_Scan"
     pool:
       vmImage: "ubuntu-18.04"
     steps:
-      - script: ./prep-env.sh
+      - script: ./devops/prep-env.sh
         displayName: 'prepare env'
       - script: bash ./sonar-check.sh
         displayName: 'sonar scan'
 
-  - template: azure-devops/build-ubuntu-vcpkg.yml
+  - template: devops/build-ubuntu-vcpkg.yml
     parameters:
-      name: 'Ubuntu_1604_Vcpkg'
+      name: 'Unit_Test_Ubuntu_1604_Vcpkg'
       image: 'Ubuntu 18.04'
-  - template: azure-devops/build-ubuntu-vcpkg.yml
+  - template: devops/build-ubuntu-vcpkg.yml
     parameters:
-      name: 'Ubuntu_2004_Vcpkg'
+      name: 'Unit_Test_Ubuntu_2004_Vcpkg'
       image: 'Ubuntu 20.04'

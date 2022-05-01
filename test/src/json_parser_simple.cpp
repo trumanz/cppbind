@@ -48,6 +48,37 @@ public:
     }
 };
 
+// https://en.cppreference.com/w/cpp/language/types
+/*
+TEST(parsr, fundamental_type_parse) {
+    int x  = cppbind::decode_str("1")
+}
+ */
+
+TEST(parse, primary_type){
+    std::string json_str = "{\"name\" : \"Bruce\", \"age\": 18, \"likes\" : [\"football\", \"music\"] }";
+    //decode
+    Student* student = JsonBind().decode<Student>(json_str);
+    printf("Decoded Student C++ Object:%s\n",  student->toStr().c_str());
+
+    ASSERT_EQ(student->name, "Bruce");
+    ASSERT_EQ(student->age, 18);
+    ASSERT_EQ(student->likes.size(), 2);
+    ASSERT_EQ(student->likes[0], "football");
+    ASSERT_EQ(student->likes[1], "music");
+    //encode
+    std::string str = JsonBind().encodeToStr(*student);
+    printf("Encoded Student Json String: %s\n", str.c_str());
+    Json::Value jv;
+    Json::Reader().parse(str, jv);
+    ASSERT_EQ(jv["name"].asString(), "Bruce");
+    ASSERT_EQ(jv["age"].asInt(), 18);
+    ASSERT_EQ(jv["likes"][0].asString(), "football");
+    ASSERT_EQ(jv["likes"][1].asString(), "music");
+    delete student;
+};
+
+
 TEST(parse, simple){
   std::string json_str = "{\"name\" : \"Bruce\", \"age\": 18, \"likes\" : [\"football\", \"music\"] }";
   //decode

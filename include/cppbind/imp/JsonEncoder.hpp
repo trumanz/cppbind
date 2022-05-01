@@ -3,11 +3,11 @@
 
 namespace  cppbind {
 
-class JsonEncodeBinder : public BinderImpBase {
+class JsonEncoder : public BinderImpBase {
 public:
     Binder binder;
 public:
-    JsonEncodeBinder() : binder(this,NULL){
+    JsonEncoder() : binder(this, NULL){
     }
     template<typename T>
     void bindForeginKey(Json::Value *_jv, const std::string& name, T& v, const T* default_value);
@@ -153,7 +153,7 @@ public:
     class SetBindMemberFunctionCaller{
     public:
         template<typename T>
-        void call(T&e, JsonEncodeBinder* jbinder, Json::Value* jv){
+        void call(T&e, JsonEncoder* jbinder, Json::Value* jv){
             Binder binder(jbinder, jv);
             e.setBind(&binder, false);
             jbinder->binder.encoded_key = binder.encoded_key;
@@ -164,7 +164,7 @@ public:
     class ToJsonValue4BindMemberFunctionCaller{
     public:
         template<typename T>
-        void call(T&e, JsonEncodeBinder* binder, Json::Value* jv){
+        void call(T&e, JsonEncoder* binder, Json::Value* jv){
             jv[0] = e.toJsonValue4Bind();
         }
     };
@@ -173,7 +173,7 @@ public:
     class RunTimeBinderCaller{
     public:
         template<typename T>
-        void call(T&e, JsonEncodeBinder* binder, Json::Value* jv){
+        void call(T&e, JsonEncoder* binder, Json::Value* jv){
             std::string x = binder->str_convert_mgmt.toString(e);
             jv[0] = Json::Value(x);
         }
@@ -183,7 +183,7 @@ public:
     class Option2MemberFunctionCaller{
     public:
         template<typename T>
-        void call(T&e, JsonEncodeBinder* binder, Json::Value* jv){
+        void call(T&e, JsonEncoder* binder, Json::Value* jv){
           //if have "Json::Value toJsonValue4Bind()" then call setbind; else call otheres
           typedef typename boost::mpl::if_c<has_member_function_toJsonValue4Bind<Json::Value (T::*) ()>::value, 
               ToJsonValue4BindMemberFunctionCaller, RunTimeBinderCaller>::type CallerT;
@@ -248,7 +248,7 @@ public:
 
 
 template<typename T>
-void JsonEncodeBinder::bindForeginKey(Json::Value *_jv, const std::string& name, T& v, const T* default_value){
+void JsonEncoder::bindForeginKey(Json::Value *_jv, const std::string& name, T& v, const T* default_value){
       Json::Value jv;
       encodeWithForeginKey(v, &jv);
       _jv[0][name] = jv;

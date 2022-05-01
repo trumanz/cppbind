@@ -41,7 +41,7 @@ class ObjFactoryT : public ObjFactory
 public:
     ObjFactoryT() {
     }
-    virtual Object* createObj(const std::string& obj_name, const Json::Value& json_parameter, JsonDecodeBinder* bind = NULL) const {
+    virtual Object* createObj(const std::string& obj_name, const Json::Value& json_parameter, JsonDecoder* bind = NULL) const {
          boost::shared_ptr<typename ObjT::Data4Bind> parameter;
          if(bind) {
               typename ObjT::Data4Bind* e = NULL;

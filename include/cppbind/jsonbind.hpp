@@ -26,8 +26,8 @@ namespace  cppbind {
 class JsonBind{
 
 public:
-JsonEncodeBinder encoder;
-JsonDecodeBinder decoder;
+JsonEncoder encoder;
+JsonDecoder decoder;
 public:
     JsonBind(){
     }

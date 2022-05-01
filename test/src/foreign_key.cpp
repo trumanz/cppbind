@@ -7,7 +7,8 @@
 #include <sstream>
 #include <fstream>      // std::ifstream
 #include "json/json.h"
-#include <cppbind/JsonBind.hpp>
+#include <cppbind/JsonDecoder.hpp>
+#include <cppbind/JsonEncoder.hpp>
 #include <cppbind/csvbind.hpp>
 #include <cppbind/ObjFactoryT.h>
 #include <cppbind/type/timestr.h>
@@ -37,7 +38,7 @@ public:
 };
 
 TEST(foregin_key, decode){
-    cppbind::JsonBind jb;
+    cppbind::JsonDecoder jb;
     std::string jv = "{\"hometown\" : \"ShanDong\"} ";
     map<string, Hometown*> foreign_table;
     foreign_table["ShanDong"] = new Hometown("ShanDong");
@@ -57,7 +58,7 @@ class ForeginTable{
 };
 
 TEST(foregin_key, decode_with_foregin_factory){
-    cppbind::JsonBind jb;
+    cppbind::JsonDecoder jb;
     std::string jv = "{\"hometown\" : \"ShanDong\"} ";
 
 

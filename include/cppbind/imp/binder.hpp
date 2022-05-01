@@ -112,8 +112,8 @@ class BinderImpBase {
 
 };
 
-class JsonEncoder;
-class JsonDecoder;
+class JsonEncoderImp;
+class JsonDecoderImp;
 
 class Binder{
 public:
@@ -179,8 +179,8 @@ private:
 
 }
 
-#include "cppbind/imp/JsonDecoder.hpp"
-#include "cppbind/imp/JsonEncoder.hpp"
+#include "cppbind/imp/JsonDecoderImp.hpp"
+#include "cppbind/imp/JsonEncoderImp.hpp"
 #include "cppbind/imp/CSVDecodeBinder.hpp"
 
 
@@ -189,8 +189,8 @@ namespace cppbind {
 
 template<typename T>
 void Binder::bind(T& v, const T* default_value) {
-  JsonEncoder* json_encode_binder = dynamic_cast<JsonEncoder*>(binder_imp);
-  JsonDecoder* json_decode_binder = dynamic_cast<JsonDecoder*>(binder_imp);
+  JsonEncoderImp* json_encode_binder = dynamic_cast<JsonEncoderImp*>(binder_imp);
+  JsonDecoderImp* json_decode_binder = dynamic_cast<JsonDecoderImp*>(binder_imp);
         if( json_encode_binder ) {
             Json::Value jv;
             json_encode_binder->encode(v, &jv);
@@ -217,8 +217,8 @@ void Binder::bind(T& v, const T* default_value) {
 
 template<typename T>
 void Binder::bind(const std::string& name, T& v, const T* default_value){
-  JsonEncoder* json_encode_binder = dynamic_cast<JsonEncoder*>(binder_imp);
-  JsonDecoder* json_decode_binder = dynamic_cast<JsonDecoder*>(binder_imp);
+  JsonEncoderImp* json_encode_binder = dynamic_cast<JsonEncoderImp*>(binder_imp);
+  JsonDecoderImp* json_decode_binder = dynamic_cast<JsonDecoderImp*>(binder_imp);
         if( json_encode_binder ) {
             encoded_key.push_back(name);
             Json::Value jv;
@@ -250,8 +250,8 @@ void Binder::bind(const std::string& name, T& v, const T* default_value){
 template<typename T>
 void Binder::bind(const std::string& name, boost::shared_ptr<T>& v)
 {
-  JsonEncoder* json_encode_binder = dynamic_cast<JsonEncoder*>(binder_imp);
-  JsonDecoder* json_decode_binder = dynamic_cast<JsonDecoder*>(binder_imp);
+  JsonEncoderImp* json_encode_binder = dynamic_cast<JsonEncoderImp*>(binder_imp);
+  JsonDecoderImp* json_decode_binder = dynamic_cast<JsonDecoderImp*>(binder_imp);
   if( json_encode_binder) {
     if (v.get()) {
       encoded_key.push_back(name);
@@ -274,8 +274,8 @@ void Binder::bind(const std::string& name, boost::shared_ptr<T>& v)
 
 template<typename T>
 void Binder::bindForeginKey(const std::string& name, T& v, const T* default_value){
-  JsonEncoder* json_encode_binder = dynamic_cast<JsonEncoder*>(binder_imp);
-  JsonDecoder* json_decode_binder = dynamic_cast<JsonDecoder*>(binder_imp);
+  JsonEncoderImp* json_encode_binder = dynamic_cast<JsonEncoderImp*>(binder_imp);
+  JsonDecoderImp* json_decode_binder = dynamic_cast<JsonDecoderImp*>(binder_imp);
         if( json_encode_binder ) {
             encoded_key.push_back(name);
             json_encode_binder->bindForeginKey(json, name,v, default_value);
@@ -291,8 +291,8 @@ void Binder::bindForeginKey(const std::string& name, T& v, const T* default_valu
 
 template<typename T>
 void Binder::bindDynamicTypeImp(const std::string& name, T &v, Json::Value* default_value ){
-  JsonEncoder* json_encode_binder = dynamic_cast<JsonEncoder*>(binder_imp);
-  JsonDecoder* json_decode_binder = dynamic_cast<JsonDecoder*>(binder_imp);
+  JsonEncoderImp* json_encode_binder = dynamic_cast<JsonEncoderImp*>(binder_imp);
+  JsonDecoderImp* json_decode_binder = dynamic_cast<JsonDecoderImp*>(binder_imp);
     if( json_encode_binder ) {
         encoded_key.push_back(name);
         json_encode_binder->bindDynamicType(json, name,v);
@@ -314,8 +314,8 @@ void Binder::bindDynamicTypeImp(const std::string& name, T &v, Json::Value* defa
 template<typename T>
 void Binder::bindDynamicTypeImp(const std::string& name, boost::shared_ptr<T> &v, boost::shared_ptr<T> default_value )
 {
-  JsonEncoder* json_encode_binder = dynamic_cast<JsonEncoder*>(binder_imp);
-  JsonDecoder* json_decode_binder = dynamic_cast<JsonDecoder*>(binder_imp);
+  JsonEncoderImp* json_encode_binder = dynamic_cast<JsonEncoderImp*>(binder_imp);
+  JsonDecoderImp* json_decode_binder = dynamic_cast<JsonDecoderImp*>(binder_imp);
     if( json_encode_binder ) {
         encoded_key.push_back(name);
         T* e = v.get();

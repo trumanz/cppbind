@@ -3,7 +3,8 @@
 
 
 #include "ObjFactory.h"
-#include <cppbind/JsonBind.hpp>
+#include <cppbind/JsonDecoder.hpp>
+#include <cppbind/JsonEncoder.hpp>
 
 namespace cppbind{
 
@@ -26,7 +27,7 @@ public:
     virtual Json::Value getJsonValue4Bind() const {
         typename ObjT::Data4Bind data = this->getData4Bind();
         Json::Value jv;
-        jv[obj_gen_name] = cppbind::JsonBind().encode(data);
+        jv[obj_gen_name] = cppbind::JsonEncoder().encode(data);
         return jv;
     }
     std::string getObjGenName() const {
@@ -41,7 +42,7 @@ class ObjFactoryT : public ObjFactory
 public:
     ObjFactoryT() {
     }
-    virtual Object* createObj(const std::string& obj_name, const Json::Value& json_parameter, JsonDecoder* bind = NULL) const {
+    virtual Object* createObj(const std::string& obj_name, const Json::Value& json_parameter, JsonDecoderImp* bind = NULL) const {
          boost::shared_ptr<typename ObjT::Data4Bind> parameter;
          if(bind) {
               typename ObjT::Data4Bind* e = NULL;
@@ -49,7 +50,7 @@ public:
               bind->decode(json_parameter, e);
               parameter =  boost::shared_ptr<typename ObjT::Data4Bind>(e);
          } else {
-             parameter = boost::shared_ptr<typename ObjT::Data4Bind>(cppbind::JsonBind().decode<typename ObjT::Data4Bind>(json_parameter));
+             parameter = boost::shared_ptr<typename ObjT::Data4Bind>(cppbind::JsonDecoder().decode<typename ObjT::Data4Bind>(json_parameter));
          }
          //ObjT* p = new ObjT(*(parameter.get()));
          Json::Value  _property;

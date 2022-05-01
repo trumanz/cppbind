@@ -13,7 +13,8 @@
 #include <list>
 #include <boost/shared_ptr.hpp>
 #include <stdexcept>
-#include "JsonBind.hpp"
+#include "JsonDecoder.hpp"
+#include "JsonEncoder.hpp"
 #include "imp/CSVReader.h"
 namespace  cppbind {
 
@@ -23,7 +24,8 @@ private:
     bool ignore_unknown_filed;
 public:
      boost::shared_ptr<CSVReader> csv;
-     JsonBind json_binder;
+     JsonDecoder json_decoder;
+     JsonEncoder json_encoder;
 public:
     CSVBind(const std::string _dropped_delims=",", bool _trim = false){
         csv = boost::shared_ptr<CSVReader>(new CSVReader(_dropped_delims, _trim));
@@ -31,7 +33,7 @@ public:
     }
     void IgnoreUnknownKey() {
         this->ignore_unknown_filed = true;
-        this->json_binder.ignoreUnknownNode();
+        this->json_decoder.ignoreUnknownNode();
     }
 
     template<typename T>
@@ -45,7 +47,7 @@ public:
         csv->readRows(csv_content);
         for(size_t i = 0; i < csv->rows.size(); i++) {
             Json::Value jv = this->createJsonObject(csv->headers,csv->rows[i].cells, default_value);
-            rc.push_back(json_binder.decode<T>(jv));
+            rc.push_back(json_decoder.decode<T>(jv));
         }
         return rc;
     }
@@ -58,14 +60,13 @@ public:
 
         //try get header from data
         if(headers.size() == 0 && data.size() != 0) {
-            Json::Value jv = json_binder.encode(*(data[0]));
-            headers = json_binder.encoder.binder.encoded_key;
-            
+            Json::Value jv = json_encoder.encode(*(data[0]));
+            headers = json_encoder.encoder.binder.encoded_key;
         } 
         appendCSVHeader(headers,output);
         for(size_t i = 0; i < data.size(); i++) {
             output[0] << "\n";
-            Json::Value jv = json_binder.encode(*(data[i]));
+            Json::Value jv = json_encoder.encode(*(data[i]));
             this->appendCSVLine(headers,jv,output);
         }
     }
@@ -80,11 +81,11 @@ public:
     template<typename ObjT>
     void regTable(const std::map<std::string, ObjT*> *table)
     {   
-        json_binder.regTable(table);
+        json_decoder.regTable(table);
     } 
     template<typename ObjT, typename FTable>
     void regTable(boost::shared_ptr<FTable> ft){
-        json_binder.regTable<ObjT, FTable>(ft);
+        json_decoder.regTable<ObjT, FTable>(ft);
     }
 
     template<typename T>

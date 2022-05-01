@@ -7,7 +7,8 @@
 #include <sstream>
 #include <fstream>      // std::ifstream
 #include "json/json.h"
-#include <cppbind/JsonBind.hpp>
+#include <cppbind/JsonDecoder.hpp>
+#include <cppbind/JsonEncoder.hpp>
 #include <cppbind/csvbind.hpp>
 #include <cppbind/ObjFactoryT.h>
 #include <cppbind/type/timestr.h>
@@ -149,17 +150,20 @@ TEST(JsonROM, baisc){
      std::string csv_str = cppbind::CSVBind().encodeToStr<Music>(all_musics);
      printf("csv_str=\n[%s]\n", csv_str.c_str());
 
-     printf("all_music.json = ^ %s ^\n", JsonBind().encodeToStr(all_musics).c_str());
+     printf("all_music.json = ^ %s ^\n", JsonEncoder().encodeToStr(all_musics).c_str());
 
 
      ClassRegister class_register;
      class_register.regClass<Metro>("Metro");
 
-     JsonBind binder;
-     binder.regTable(&music_table);
-     binder.regClassRegister(&class_register);
+     JsonDecoder json_decoder;
+     JsonEncoder json_encoder;
 
-     boost::shared_ptr<Me> me(binder.decode<Me>(ifs));
+     json_decoder.regTable(&music_table);
+     json_decoder.regClassRegister(&class_register);
+     json_encoder.regClassRegister(&class_register);
+
+    boost::shared_ptr<Me> me(json_decoder.decode<Me>(ifs));
 
      printf("decode ME sucess\n");
      //basic type
@@ -208,10 +212,10 @@ TEST(JsonROM, baisc){
 
      for(int i = 0; i < 10; i++) {
          std::stringstream ss;
-         binder.encode(*(me.get()), &ss);
+         json_encoder.encode(*(me.get()), &ss);
      }
      std::stringstream ss;
-     binder.encode(*(me.get()), &ss);
+    json_encoder.encode(*(me.get()), &ss);
      printf("%s\n", ss.str().c_str());
 
 

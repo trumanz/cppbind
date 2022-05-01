@@ -1,7 +1,7 @@
 //vector
 
 template<typename T>
-void JsonDecoder::decode(const Json::Value& json, std::vector<T>* e){
+void JsonDecoderImp::decode(const Json::Value& json, std::vector<T>* e){
     std::list<T> v;
     decode(json, &v);
     e->clear();
@@ -9,14 +9,14 @@ void JsonDecoder::decode(const Json::Value& json, std::vector<T>* e){
 }
 
 template<typename T>
-void JsonDecoder::decode(const Json::Value& json, std::vector<T*>* e){
+void JsonDecoderImp::decode(const Json::Value& json, std::vector<T*>* e){
     std::list<T*> v;
     decode(json, &v);
     e->clear();
     e->insert(e->begin(), v.begin(), v.end());
 }
 template<typename T>
-void JsonDecoder::decodeWithForeginKey(const Json::Value& json, std::vector<T*>* e){
+void JsonDecoderImp::decodeWithForeginKey(const Json::Value& json, std::vector<T*>* e){
     std::vector<std::string> keys;
     if(!json.isArray()) {
         throw ParseErrorException("should be a list");
@@ -29,7 +29,7 @@ void JsonDecoder::decodeWithForeginKey(const Json::Value& json, std::vector<T*>*
 }
 //list
 template<typename T>
-void JsonDecoder::decode(const Json::Value& json, std::list<T>* e){
+void JsonDecoderImp::decode(const Json::Value& json, std::list<T>* e){
     if(!json.isArray()) {
         throw ParseErrorException("should be a list");
     }
@@ -49,7 +49,7 @@ void JsonDecoder::decode(const Json::Value& json, std::list<T>* e){
 }
 //list
 template<typename T>
-void JsonDecoder::decode(const Json::Value& json, std::list<T*>* e){
+void JsonDecoderImp::decode(const Json::Value& json, std::list<T*>* e){
     if(!json.isArray()) {
         throw ParseErrorException("should be a list");
     }
@@ -69,7 +69,7 @@ void JsonDecoder::decode(const Json::Value& json, std::list<T*>* e){
 }
 //set
 template<typename T>
-void JsonDecoder::decode(const Json::Value& json, std::set<T>* e){
+void JsonDecoderImp::decode(const Json::Value& json, std::set<T>* e){
     std::list<T> v;
     decode(json, &v);
     for(typename std::list<T>::iterator it = v.begin(); it != v.end(); it++) {
@@ -79,7 +79,7 @@ void JsonDecoder::decode(const Json::Value& json, std::set<T>* e){
 
 //map
 template<typename KeyT, typename ValueT>
-void JsonDecoder::decode(const Json::Value& json, std::map<KeyT, ValueT>* e){
+void JsonDecoderImp::decode(const Json::Value& json, std::map<KeyT, ValueT>* e){
 
     if(!json.isObject()) {
         throw ParseErrorException("shoulbe be a object");

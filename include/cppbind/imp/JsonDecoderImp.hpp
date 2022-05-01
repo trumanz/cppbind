@@ -5,12 +5,12 @@
 namespace  cppbind {
 
 
-class JsonDecoder : public BinderImpBase {
+class JsonDecoderImp : public BinderImpBase {
 public:
     //Binder binder;
     bool ignore_unknown_key;
 public:
-    JsonDecoder(){ ignore_unknown_key = false; }
+    JsonDecoderImp(){ ignore_unknown_key = false; }
     void ignoreUnknownNode(){ ignore_unknown_key = true;}
 
     template<typename T>
@@ -57,7 +57,7 @@ private:
     class SetBindMemberFunctionCaller{
     public:
         template<typename T>
-        void call(const Json::Value& jv, T*e, JsonDecoder* jbinder){
+        void call(const Json::Value& jv, T*e, JsonDecoderImp* jbinder){
             Binder next_binder(jbinder, (Json::Value*)&jv);
             //std::cout << __FILE__ << __LINE__  <<  jv  << typeid(T).name() << "\n";
             e->setBind(&next_binder, true);
@@ -78,7 +78,7 @@ private:
     class FromJsonValue4BindMemberFunctionCaller{
     public:
         template<typename T>
-        void call(const Json::Value& jv, T*e, JsonDecoder* binder){
+        void call(const Json::Value& jv, T*e, JsonDecoderImp* binder){
            e->fromJsonValue4Bind(jv);
         }
     };
@@ -87,7 +87,7 @@ private:
     class RunTimeBinderCaller{
     public:
         template<typename T>
-        void call(const Json::Value& jv, T*e, JsonDecoder* binder){
+        void call(const Json::Value& jv, T*e, JsonDecoderImp* binder){
             if(!jv.isString()) {
                 std::stringstream ss; ss<< jv;
                 printf("error: jv=%s", ss.str().c_str());
@@ -101,7 +101,7 @@ private:
     class Option2MemberFunctionCaller{
     public:
         template<typename T>
-        void call(const Json::Value& jv, T*e, JsonDecoder* binder){
+        void call(const Json::Value& jv, T*e, JsonDecoderImp* binder){
           //if have "void fromStr4Bind(const Json::Value&)" then call setbind; else call otheres
           typedef typename boost::mpl::if_c<
                   has_member_function_fromJsonValue4Bind<void (T::*) (const Json::Value&)>::value,
@@ -151,7 +151,7 @@ public:
 #include "JsonDecoder_dynamic_imp.h"
 
 template<typename T>
-void JsonDecoder::bindForeginKey(const Json::Value& _jv, const std::string& name, T& v, const T* default_value){
+void JsonDecoderImp::bindForeginKey(const Json::Value& _jv, const std::string& name, T& v, const T* default_value){
      //printf("filed %s\n", name.c_str());
      if(_jv.isMember(name)) {
          const Json::Value& jv = _jv[name];

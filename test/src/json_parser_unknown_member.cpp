@@ -7,7 +7,8 @@
 #include <sstream>
 #include <fstream>      // std::ifstream
 #include "json/json.h"
-#include "cppbind/JsonBind.hpp"
+#include "cppbind/JsonDecoder.hpp"
+#include "cppbind/JsonEncoder.hpp"
 
 using namespace cppbind;
 
@@ -24,7 +25,7 @@ TEST(JsonROM, unknown_member){
      std::string message;
      try {
        std::stringstream ss("{\"x\": 1, \"y\":2}");
-       XObj* x = JsonBind().decode<XObj>(ss);
+       XObj* x = JsonDecoder().decode<XObj>(ss);
        delete x;
      }  catch ( ParseErrorException& e) {
              message =  e.what();

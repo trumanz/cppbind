@@ -66,7 +66,7 @@ public:
     }
 };
 Person* parsePerson(std::istream &json_input){
-  return JsonBind().decode<Student>(json_str);
+  return JsonDecoder().decode<Student>(json_str);
 }
 ```
 Bare JsonCpp
@@ -142,9 +142,9 @@ Person* parsePerson(std::istream &json_input)
 
 setBind函数：自定义类Student，并实现成员函数setBind， 函数实现为为调用binder->bind将json node名称值与成员变量建立联系；
 
-JsonBind().decode模板函数：解码一个json string为一个C++类对象。
+JsonDecoder().decode模板函数：解码一个json string为一个C++类对象。
 
-JsonBind().encodeToStr模板函数：编码一个C++类对象为一个json string。
+JsonDecoder().encodeToStr模板函数：编码一个C++类对象为一个json string。
 
 binder默认支持绑定的基本类型：
 

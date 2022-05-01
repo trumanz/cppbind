@@ -1,5 +1,5 @@
 template<typename T>
-void JsonDecoder::decodeDynamicType(const Json::Value& _jv, const std::string& name, T*& v, Json::Value* default_value ){
+void JsonDecoderImp::decodeDynamicType(const Json::Value& _jv, const std::string& name, T*& v, Json::Value* default_value ){
     Json::Value jv = _jv[name];
     if(jv.isNull() && default_value != NULL) {
         jv = *default_value;
@@ -8,7 +8,7 @@ void JsonDecoder::decodeDynamicType(const Json::Value& _jv, const std::string& n
 }
 
 template<typename T>
-void JsonDecoder::decodeDynamicType(const Json::Value& _jv, const std::string& name, boost::shared_ptr<T> &v, boost::shared_ptr<T> default_value){
+void JsonDecoderImp::decodeDynamicType(const Json::Value& _jv, const std::string& name, boost::shared_ptr<T> &v, boost::shared_ptr<T> default_value){
     Json::Value jv = _jv[name];
     if(jv.isNull()) {
         v = default_value;
@@ -20,7 +20,7 @@ void JsonDecoder::decodeDynamicType(const Json::Value& _jv, const std::string& n
 }
 
 template<typename T>
-void JsonDecoder::decodeDynamicType(const Json::Value& jv, T*& v){
+void JsonDecoderImp::decodeDynamicType(const Json::Value& jv, T*& v){
     Json::Value::Members  members = jv.getMemberNames();
     if(members.size() != 1) {
         throw ParseErrorException("DynamicType object must have a unique key as it's type");
@@ -34,7 +34,7 @@ void JsonDecoder::decodeDynamicType(const Json::Value& jv, T*& v){
     v = this->class_reg->createObj<T>(class_name.c_str(), class_data, this);
 }
 template<typename T>
-void JsonDecoder::decodeDynamicType(const Json::Value &_jv, const std::string& name, std::vector<T*>& v, Json::Value* default_value){
+void JsonDecoderImp::decodeDynamicType(const Json::Value &_jv, const std::string& name, std::vector<T*>& v, Json::Value* default_value){
     Json::Value jv = _jv[name];
     if(jv.isNull() && default_value != NULL) {
         jv = *default_value;

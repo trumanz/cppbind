@@ -72,7 +72,7 @@ private: // for class type
     public:
         template<typename T>
         void call(T*e, Binder* binder){
-            JsonDecoder* json_decode_binder = dynamic_cast<JsonDecoder*>(binder->binder_imp);
+            JsonDecoderImp* json_decode_binder = dynamic_cast<JsonDecoderImp*>(binder->binder_imp);
             const Json::Value& jv = json_decode_binder->binder->json_to_decode;
             if(!jv.isString()) {
                 assert("bug" == NULL);

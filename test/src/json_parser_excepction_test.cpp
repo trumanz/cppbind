@@ -7,7 +7,8 @@
 #include <sstream>
 #include <fstream>      // std::ifstream
 #include "json/json.h"
-#include "cppbind/JsonBind.hpp"
+#include "cppbind/JsonDecoder.hpp"
+#include "cppbind/JsonEncoder.hpp"
 
 using namespace cppbind;
 
@@ -24,7 +25,7 @@ TEST(JsonROM, child_not_exist_message){
      std::string message;
      try {
        std::ifstream ifs("./sample_data/me.json",  std::ifstream::in);
-       Me2* me = JsonBind().decode<Me2>(ifs);
+       Me2* me = JsonDecoder().decode<Me2>(ifs);
        delete me;
      }  catch ( ParseErrorException& e) {
              message =  e.what();
@@ -58,7 +59,7 @@ TEST(JsonROM, child_child_not_exist_message){
      try {
        std::ifstream ifs("./sample_data/me.json",  std::ifstream::in);
        ASSERT_EQ(ifs.is_open(), true);
-       Me3* me = JsonBind().decode<Me3>(ifs);
+       Me3* me = JsonDecoder().decode<Me3>(ifs);
        delete me;
      }  catch ( ParseErrorException& e) {
              message = e.what();

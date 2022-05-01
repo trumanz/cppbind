@@ -33,7 +33,7 @@ public:
     }
 };
 Person* parsePerson(std::istream &json_input){
-  return JsonBind().decode<Student>(json_str);
+  return JsonDecoder().decode<Student>(json_str);
 }
 ~~~~~~~~~~~~~
 

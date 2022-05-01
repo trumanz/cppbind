@@ -7,7 +7,8 @@
 #include <sstream>
 #include <fstream>
 #include "json/json.h"
-#include <cppbind/JsonBind.hpp>
+#include <cppbind/JsonDecoder.hpp>
+#include <cppbind/JsonEncoder.hpp>
 #include <cppbind/csvbind.hpp>
 #include <cppbind/ObjFactoryT.h>
 #include <cppbind/type/timestr.h>
@@ -58,7 +59,7 @@ TEST(parsr, fundamental_type_parse) {
 TEST(parse, primary_type){
     std::string json_str = "{\"name\" : \"Bruce\", \"age\": 18, \"likes\" : [\"football\", \"music\"] }";
     //decode
-    Student* student = JsonBind().decode<Student>(json_str);
+    Student* student = JsonDecoder().decode<Student>(json_str);
     printf("Decoded Student C++ Object:%s\n",  student->toStr().c_str());
 
     ASSERT_EQ(student->name, "Bruce");
@@ -67,7 +68,7 @@ TEST(parse, primary_type){
     ASSERT_EQ(student->likes[0], "football");
     ASSERT_EQ(student->likes[1], "music");
     //encode
-    std::string str = JsonBind().encodeToStr(*student);
+    std::string str = JsonEncoder().encodeToStr(*student);
     printf("Encoded Student Json String: %s\n", str.c_str());
     Json::Value jv;
     Json::Reader().parse(str, jv);
@@ -85,7 +86,7 @@ TEST(parse, simple){
 
 
 
-  Student* student = JsonBind().decode<Student>(json_str);
+  Student* student = JsonDecoder().decode<Student>(json_str);
   printf("Decoded Student C++ Object:%s\n",  student->toStr().c_str());
   
   ASSERT_EQ(student->name, "Bruce");
@@ -94,7 +95,7 @@ TEST(parse, simple){
   ASSERT_EQ(student->likes[0], "football");
   ASSERT_EQ(student->likes[1], "music");
   //encode
-  std::string str = JsonBind().encodeToStr(*student);
+  std::string str = JsonEncoder().encodeToStr(*student);
   printf("Encoded Student Json String: %s\n", str.c_str());
   Json::Value jv;
   Json::Reader().parse(str, jv);

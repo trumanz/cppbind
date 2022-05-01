@@ -7,15 +7,15 @@ jobs:
   pool:
     vmImage: ${{ parameters.image }}
   steps:
-  - script: |
+  - displayName: install dependency packages
+    script: |
       sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
       sudo apt -y update
       sudo apt install g++-9 -y
-      git submodule update --init vcpkg
-      ./vcpkg/bootstrap-vcpkg.sh
-      ./vcpkg/vcpkg integrate install
-      ./vcpkg/vcpkg install gtest jsoncpp boost-tti boost-any boost-date-time --vcpkg-root ./vcpkg
-    displayName: Vcpkg install dependencies
+      git clone git@github.com:microsoft/vcpkg.git ~ && cd ~/vcpkg && git checkut 2022.04.12
+      ~/vcpkg/bootstrap-vcpkg.sh
+      ~/vcpkg/vcpkg integrate install
+      ~/vcpkg/vcpkg install gtest jsoncpp boost-tti boost-any boost-date-time --vcpkg-root ~/vcpkg
   - script: |
       mkdir build.debug
       mkdir build.release
@@ -23,7 +23,7 @@ jobs:
   - task: CMake@1
     inputs:
       workingDirectory: 'build.debug'
-      cmakeArgs: '-DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake ..'
+      cmakeArgs: '-DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=~/vcpkg/scripts/buildsystems/vcpkg.cmake ..'
   - task: CMake@1
     inputs:
       workingDirectory: 'build.release'

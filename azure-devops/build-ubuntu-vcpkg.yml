@@ -1,21 +1,18 @@
-parameters:
-  name: 'Ubuntu_1604_Vcpkg'
-  image: 'Ubuntu 16.04'
 
 jobs:
 - job: ${{ parameters.name }}
   pool:
     vmImage: ${{ parameters.image }}
   steps:
-  - displayName: install dependency packages
-    script: |
+  - script: |
       sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
       sudo apt -y update
       sudo apt install g++-9 -y
-      git clone git@github.com:microsoft/vcpkg.git ~ && cd ~/vcpkg && git checkut 2022.04.12
+      git clone https://github.com/microsoft/vcpkg.git ~/vcpkg && cd ~/vcpkg && git checkut 2022.04.12
       ~/vcpkg/bootstrap-vcpkg.sh
       ~/vcpkg/vcpkg integrate install
       ~/vcpkg/vcpkg install gtest jsoncpp boost-tti boost-any boost-date-time --vcpkg-root ~/vcpkg
+    displayName: install dependency packages
   - script: |
       mkdir build.debug
       mkdir build.release
@@ -27,7 +24,7 @@ jobs:
   - task: CMake@1
     inputs:
       workingDirectory: 'build.release'
-      cmakeArgs: '-DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake ..'
+      cmakeArgs: '-DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=~/vcpkg/scripts/buildsystems/vcpkg.cmake ..'
   - script: |
       cd build.debug
       make && cd  ../test/ &&   ../build.debug/cppbind_test

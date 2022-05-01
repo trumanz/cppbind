@@ -31,3 +31,7 @@ jobs:
     parameters:
       name: 'Ubuntu_1604_Vcpkg'
       image: 'Ubuntu 18.04'
+  - template: azure-devops/build-ubuntu-vcpkg.yml
+    parameters:
+      name: 'Ubuntu_2004_Vcpkg'
+      image: 'Ubuntu 20.04'

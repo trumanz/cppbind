@@ -23,6 +23,7 @@ public:
 
 class ForeignTableInterface {
 public:
+    virtual ~ForeignTableInterface(){}
     virtual boost::any getAnyObj(std::string key) = 0;
 };
 

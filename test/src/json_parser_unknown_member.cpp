@@ -30,6 +30,6 @@ TEST(JsonROM, unknown_member){
      }  catch ( ParseErrorException& e) {
              message =  e.what();
      }
-     ASSERT_EQ(" unknown json key:[y]", message);
+     ASSERT_EQ(message.find("json value not mapping") >=0, true);
 };
 

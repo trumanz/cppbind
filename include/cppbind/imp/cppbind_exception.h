@@ -64,6 +64,15 @@ public:
     }
 };
 
+    class Util {
+    public:
+        template<typename  T>
+        static void throwExeption(T& e){
+            throw e;
+        }
+    };
+
+
 }
 
 #endif

@@ -3,7 +3,7 @@
 
 namespace  cppbind {
 
-class JsonEncoderImp : public BinderImpBase {
+class JsonEncoderImp : public EnconderDecoderBase {
 public:
     Binder binder;
 public:

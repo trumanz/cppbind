@@ -4,7 +4,7 @@
 namespace  cppbind {
 
 
-class CSVDecodeBinder : public BinderImpBase {
+class CSVDecodeBinder : public EnconderDecoderBase {
 public:
     
     CSVDecodeBinder(const std::vector<std::string>& row){
@@ -87,7 +87,7 @@ private: // for class type
     size_t decode(std::vector<std::string>::iterator begin, std::vector<std::string>::iterator end, T* e){
            std::vector<std::string> x;
            x.insert(x.begin(),  begin, end);
-           Binder binder(boost::shared_ptr<BinderImpBase>(new CSVDecodeBinder(x)));
+           Binder binder(boost::shared_ptr<EnconderDecoderBase>(new CSVDecodeBinder(x)));
            e->setBind(&binder);
            CSVDecodeBinder*  csv_decode_binder  = dynamic_cast<CSVDecodeBinder*>(binder.binder_imp);
           return  csv_decode_binder->used;

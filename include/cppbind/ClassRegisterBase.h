@@ -6,7 +6,7 @@
 #include <boost/noncopyable.hpp>
 #include <boost/algorithm/string/case_conv.hpp>
 #include "ObjFactory.h"
-#include "cppbind_exception.h"
+#include "cppbind/imp/cppbind_exception.h"
 
 namespace cppbind{
 

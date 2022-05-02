@@ -5,24 +5,15 @@
 #ifndef CPPBIND_BINDERIMPBASE_H
 #define CPPBIND_BINDERIMPBASE_H
 
-class BinderImpBase {
-public:
-    StringConverterManager str_convert_mgmt;
+
+class ForeignTableMgmt {
     std::map<std::string, boost::shared_ptr<ForeignTableInterface> > foreign_tables;
-    ClassRegisterBase* class_reg;
-public:
-    BinderImpBase() {
-        this->class_reg = NULL;
-        str_convert_mgmt.addStringConverter<boost::posix_time::ptime,BoostPTimeConverter>();
-        str_convert_mgmt.addStringConverter<boost::posix_time::time_duration,BoostTimeDurationConverter>();
-        str_convert_mgmt.addStringConverter<boost::gregorian::date,BoostGDateConverter>();
-    }
-    virtual ~BinderImpBase() {}
 private:
     template<typename ObjT>
     void regForeignTable(ForeignTableInterface* tabe){
         this->foreign_tables[ typeid(ObjT).name()] =  boost::shared_ptr<ForeignTableInterface>(tabe);
     }
+
 public:
     template<typename ObjT>
     void regForeignTable(const std::map<std::string, ObjT*> *table) {
@@ -32,12 +23,6 @@ public:
     template<typename ObjT, typename TableT>
     void regForeignTable(boost::shared_ptr<TableT> ft){
         this->regForeignTable<ObjT>(new ForeginTableT<ObjT,TableT>(ft));
-    }
-
-public:
-    void regClassRegister(ClassRegisterBase* _class_reg){
-        assert(this->class_reg == NULL);
-        this->class_reg = _class_reg;
     }
     template<typename T>
     T* getForeignObj(std::string key) {
@@ -54,6 +39,25 @@ public:
             throw ForeginKeyMissingException(key);
         }
         return obj;
+    }
+};
+
+class EnconderDecoderBase : public ForeignTableMgmt {
+public:
+    StringConverterManager str_convert_mgmt;
+    ClassRegisterBase* class_reg;
+public:
+    EnconderDecoderBase() {
+        this->class_reg = NULL;
+        str_convert_mgmt.addStringConverter<boost::posix_time::ptime,BoostPTimeConverter>();
+        str_convert_mgmt.addStringConverter<boost::posix_time::time_duration,BoostTimeDurationConverter>();
+        str_convert_mgmt.addStringConverter<boost::gregorian::date,BoostGDateConverter>();
+    }
+    virtual ~EnconderDecoderBase() {}
+public:
+    void regClassRegister(ClassRegisterBase* _class_reg){
+        assert(this->class_reg == NULL);
+        this->class_reg = _class_reg;
     }
 
 };

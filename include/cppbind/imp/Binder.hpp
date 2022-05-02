@@ -13,7 +13,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/tti/has_member_function.hpp>
 #include <stdint.h>
-#include "../cppbind_exception.h"
+#include "cppbind_exception.h"
 #include "cppbind/type/StringConverter.h"
 #include "cppbind/type/BoostPTimeConverter.h"
 #include "cppbind/Object.h"
@@ -25,7 +25,7 @@ BOOST_TTI_HAS_MEMBER_FUNCTION(toJsonValue4Bind)
 
 #include "ForeignTableInterface.h"
 
-#include "BinderImpBase.h"
+#include "EnconderDecoderBase.h"
 
 class JsonEncoderImp;
 class JsonDecoderImp;
@@ -37,7 +37,7 @@ public:
     Json::Value *json;
     std::set<std::string> decoded_member_key_set;
     std::vector<std::string> encoded_key;
-    Binder(BinderImpBase* _binder_imp, Json::Value* jv);
+    Binder(EnconderDecoderBase* _binder_imp, Json::Value* jv);
 
     /*
     *User code will call bind to build the attibute and name relation. 
@@ -98,7 +98,7 @@ private:
 
 namespace cppbind {
 
-inline Binder::Binder(BinderImpBase* _binder_imp, Json::Value* jv){
+inline Binder::Binder(EnconderDecoderBase* _binder_imp, Json::Value* jv){
     this->decoder = nullptr;
     this->encoder = nullptr;
     this->encoder = dynamic_cast<JsonEncoderImp*>(_binder_imp);

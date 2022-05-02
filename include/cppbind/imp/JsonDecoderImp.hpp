@@ -5,7 +5,7 @@
 namespace  cppbind {
 
 
-class JsonDecoderImp : public BinderImpBase {
+class JsonDecoderImp : public EnconderDecoderBase {
 public:
     //Binder binder;
     bool ignore_unknown_key;
@@ -66,7 +66,9 @@ private:
                 for(Json::Value::Members::iterator it = keys.begin(); it != keys.end(); it++) {
                     std::string key_str = *it;
                     if(next_binder.decoded_member_key_set.find(key_str) == next_binder.decoded_member_key_set.end()) {
-                        throw ParseErrorException(std::string("unknown json key:[") + key_str + "]");
+                        auto e =  ParseErrorException(std::string("json value not mapping, please check json key:(")
+                                + key_str + ") within setBind Function of class " + typeid(T).name());
+                        Util::throwExeption(e);
                     }
                 }
 

@@ -91,7 +91,7 @@ private:
 
 }
 
-#include "cppbind/imp/JsonDecoderImp.hpp"
+#include "cppbind/imp/decoder/JsonDecoderImp.hpp"
 #include "cppbind/imp/JsonEncoderImp.hpp"
 #include "cppbind/imp/CSVDecodeBinder.hpp"
 

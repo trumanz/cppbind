@@ -20,7 +20,7 @@
 #include <boost/mpl/if.hpp>
 #include <boost/shared_ptr.hpp>
 #include "ClassRegisterBase.h"
-#include "imp/binder.hpp"
+#include "imp/Binder.hpp"
 
 namespace  cppbind {
 

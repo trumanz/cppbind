@@ -7,10 +7,12 @@ class JsonEncoderImp : public EnconderDecoderBase {
 public:
     Binder binder;
 public:
-    JsonEncoderImp() : binder(this, NULL){
+    JsonEncoderImp() : binder(this, nullptr){
     }
     template<typename T>
-    void bindForeginKey(Json::Value *_jv, const std::string& name, T& v, const T* default_value);
+    void encodeForeignKey(Json::Value *_jv, const std::string& name, T& v, const T* default_value);
+    template<typename T, typename GetKeyCallT>
+    void encodeForeignKey(Json::Value *_jv, const std::string& name, T& v, GetKeyCallT& getkey_call);
     template<typename T>
     void bindDynamicType(Json::Value *_jv, const std::string& name, T*& v){
         //printf("name=%s\n", name.c_str());
@@ -248,10 +250,18 @@ public:
 
 
 template<typename T>
-void JsonEncoderImp::bindForeginKey(Json::Value *_jv, const std::string& name, T& v, const T* default_value){
+void JsonEncoderImp::encodeForeignKey(Json::Value *_jv, const std::string& name, T& v,
+                                      const T* default_value){
       Json::Value jv;
       encodeWithForeginKey(v, &jv);
       _jv[0][name] = jv;
+}
+
+template<typename T, typename GetKeyCallT>
+void JsonEncoderImp::encodeForeignKey(Json::Value *_jv, const std::string& name, T& v,
+                                     GetKeyCallT& getkey_call)
+{
+     _jv[0][name] = getkey_call();
 }
  
 

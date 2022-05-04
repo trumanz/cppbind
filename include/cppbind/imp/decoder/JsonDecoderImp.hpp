@@ -14,7 +14,7 @@ public:
     void ignoreUnknownNode(){ ignore_unknown_key = true;}
 
     template<typename T>
-    void bindForeginKey(const Json::Value& _jv, const std::string& name, T& v, const T* default_value);
+    void decodeForeignKey(const Json::Value& _jv, const std::string& name, T& v, const T* default_value);
     //Dynamic type
     template<typename T>
     void decodeDynamicType(const Json::Value& _jv, const std::string& name, T*& v, Json::Value* default_value );
@@ -153,7 +153,7 @@ public:
 #include "cppbind/imp/decoder/JsonDecoder_dynamic_imp.h"
 
 template<typename T>
-void JsonDecoderImp::bindForeginKey(const Json::Value& _jv, const std::string& name, T& v, const T* default_value){
+void JsonDecoderImp::decodeForeignKey(const Json::Value& _jv, const std::string& name, T& v, const T* default_value){
      //printf("filed %s\n", name.c_str());
      if(_jv.isMember(name)) {
          const Json::Value& jv = _jv[name];

@@ -17,9 +17,9 @@ public:
         binder->bind("name", name);
         binder->bind("address", address);
     }
-    std::string getKeyStr() {
-        return id;
-    }
+    //std::string getKeyStr() {
+    //    return id;
+    //}
 
     static  Json::Value genJsonValueForTest(int id,
                                             const std::string& name,

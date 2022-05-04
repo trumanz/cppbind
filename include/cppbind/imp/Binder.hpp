@@ -30,6 +30,11 @@ BOOST_TTI_HAS_MEMBER_FUNCTION(toJsonValue4Bind)
 class JsonEncoderImp;
 class JsonDecoderImp;
 
+//
+class BinderParameter {
+
+};
+
 class Binder{
 public:
     JsonEncoderImp* encoder;
@@ -56,13 +61,15 @@ public:
 
 //foreign key
 public:
-    template<typename T>
-    void bindForeginKey(const std::string& name, T& v) { bindForeginKey(name,v, (const T*)NULL);}
+    //template<typename T>
+    //void encodeForeignKey(const std::string& name, T& v) { decodeForeignKey(name,v, (const T*)NULL);}
     template<typename T>
     void bindForeginKey(const std::string& name, T& v, const T& default_value) { bindForeginKey(name,v,&default_value);}
-private:
+//private:
     template<typename T>
-    void bindForeginKey(const std::string& name, T& v, const T* default_value);
+    void bindForeginKey(const std::string& name, T& v, const T* default_value = nullptr);
+    template<typename T, typename GetKey_CallT>
+    void bindForeginKey(const std::string& name, T& v, GetKey_CallT& call);
 public:
     template<typename T>
     void bindDynamicType(const std::string& name, std::vector<T*>& v, Json::Value* default_value = NULL) { bindDynamicTypeImp(name, v, default_value);}
@@ -193,12 +200,28 @@ void Binder::bindForeginKey(const std::string& name, T& v, const T* default_valu
   JsonDecoderImp* json_decode_binder = decoder;
         if( json_encode_binder ) {
             encoded_key.push_back(name);
-            json_encode_binder->bindForeginKey(json, name,v, default_value);
+            json_encode_binder->encodeForeignKey(json, name, v, default_value);
         } else if(json_decode_binder ) {
             decoded_member_key_set.insert(name);
-            json_decode_binder->bindForeginKey(*json, name,v, default_value);
+            json_decode_binder->decodeForeignKey(*json, name, v, default_value);
         } 
          else {
+            assert("bug" == NULL);
+        }
+}
+
+template<typename T, typename GetKey_CallT>
+    void Binder::bindForeginKey(const std::string& name, T& v, GetKey_CallT& call){
+        JsonEncoderImp* json_encode_binder = encoder;
+        JsonDecoderImp* json_decode_binder = decoder;
+        if( json_encode_binder ) {
+            encoded_key.push_back(name);
+            json_encode_binder->encodeForeignKey(json, name, v, call);
+        } else if(json_decode_binder ) {
+            decoded_member_key_set.insert(name);
+            json_decode_binder->decodeForeignKey(*json, name, v, (T *) nullptr);
+        }
+        else {
             assert("bug" == NULL);
         }
 }

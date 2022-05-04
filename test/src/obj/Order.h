@@ -13,7 +13,8 @@ public:
     CustomerX* customer;
     void setBind(Binder *binder, bool load){
         binder->bind("id", id);
-        binder->bindForeginKey("customer", customer);
+        auto getKey = [=]() { return this->customer->id;};
+        binder->bindForeginKey("customer", customer, getKey);
     }
     //std::map<Product*, int>  product_count;
 };

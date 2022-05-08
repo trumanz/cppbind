@@ -6,7 +6,7 @@
 #include "cppbind/object/ObjFactoryT.h"
 #include "ClassRegisterBase.h"
 
-namespace cppbind{
+namespace cppbind{ namespace dynamic {
 
 class ClassRegister : public ClassRegisterBase {
 public:
@@ -19,8 +19,7 @@ public:
 
 };
 
-
-}
+}}
 
 #endif
 

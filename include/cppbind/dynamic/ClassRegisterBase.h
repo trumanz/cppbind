@@ -10,6 +10,7 @@
 
 namespace cppbind{
 using namespace object;
+    namespace dynamic {
 class ClassRegisterBase {
 protected:
    std::map<std::string, boost::shared_ptr<ObjFactory> > obj_factories;
@@ -66,7 +67,7 @@ private:
 };
 
 
-}
+} }
 
 #endif
 

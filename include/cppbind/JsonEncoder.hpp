@@ -19,7 +19,7 @@
 #include <boost/tti/has_member_function.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/shared_ptr.hpp>
-#include "ClassRegisterBase.h"
+#include "cppbind/dynamic/ClassRegisterBase.h"
 #include "imp/Binder.hpp"
 
 namespace  cppbind {

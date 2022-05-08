@@ -7,6 +7,7 @@
 
 #include "../foreign/ForeignTableMgmt.h"
 namespace cppbind{
+using namespace dynamic;
 class EnconderDecoderBase : public cppbind::foreign::ForeignTableMgmt {
 public:
     converter::StringConverterManager str_convert_mgmt;

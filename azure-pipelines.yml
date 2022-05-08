@@ -39,23 +39,22 @@ jobs:
           sshKeySecureFile: 'id_rsa_azure-github-pipeline'
       - script: |
           sudo apt-get install -y doxygen
-          doxygen doxygen.cfg
+        displayName: "Install dependency packages"
+      - script: |
+          bash ./docs/build-doc.sh
         displayName: "Doxygen generating docs"
       - script: |
           git config user.email "trumanzck@outlook.com"
           git config user.name "Truman Zhou"
-          doxygen doxygen.cfg
           git checkout  gh-pages
-          for f in $(ls |grep -v doc); do rm -rf $f; done
-          mv doc/html/* ./
-          rm -rf doc
+          for f in $(ls |grep -v docs); do rm -rf $f; done
+          mv docs/doxygen-doc/html/* ./
+          rm -rf docs
           for f in $(find ./ -type f ); do git add  $f; done
           git commit -a --amend -m "Update doc"
           git remote set-url --push origin git@github.com:trumanz/cppbind.git
           git push --force
         displayName: "Push to gh-pages branch"
-
-
 
 
   - template: devops/build-ubuntu-vcpkg.yml

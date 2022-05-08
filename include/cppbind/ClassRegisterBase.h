@@ -5,11 +5,11 @@
 #include <typeinfo>
 #include <boost/noncopyable.hpp>
 #include <boost/algorithm/string/case_conv.hpp>
-#include "ObjFactory.h"
+#include "cppbind/object/ObjFactory.h"
 #include "cppbind/exception/cppbind_exception.h"
 
 namespace cppbind{
-
+using namespace object;
 class ClassRegisterBase {
 protected:
    std::map<std::string, boost::shared_ptr<ObjFactory> > obj_factories;

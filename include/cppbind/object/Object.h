@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <typeinfo>
 #include <json/json.h>
-namespace cppbind{
+namespace cppbind { namespace object {
 
 class Object{
 public:
@@ -18,7 +18,7 @@ public:
 };
 
 
-}
+}}
 
 
 #endif

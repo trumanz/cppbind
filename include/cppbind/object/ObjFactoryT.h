@@ -2,11 +2,11 @@
 #define _CPPBIND_ObjFactoryT_H
 
 
-#include "ObjFactory.h"
-#include <cppbind/JsonDecoder.hpp>
-#include <cppbind/JsonEncoder.hpp>
+#include "cppbind/object/ObjFactory.h"
+#include "cppbind/JsonDecoder.hpp"
+#include "cppbind/JsonEncoder.hpp"
 
-namespace cppbind{
+namespace cppbind{ namespace object {
 
 
 template<typename ObjT>
@@ -66,7 +66,7 @@ public:
 };
 
 
-}
+}}
 
 #endif
 

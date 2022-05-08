@@ -3,10 +3,12 @@
 #include <typeinfo>
 #include <boost/noncopyable.hpp>
 #include <boost/any.hpp>
-#include "Object.h"
+#include "cppbind/object/Object.h"
 namespace cppbind{
+    class JsonDecoderImp;
 
-class JsonDecoderImp;
+    namespace object {
+
 class ObjFactory{
 public:
     virtual ~ObjFactory(){}
@@ -18,7 +20,7 @@ public:
 };
 
 
-}
+}}
 
 #endif
 

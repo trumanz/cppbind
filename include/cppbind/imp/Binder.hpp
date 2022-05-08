@@ -16,7 +16,7 @@
 #include "cppbind/exception/cppbind_exception.h"
 #include "cppbind/converter//StringConverter.h"
 #include "cppbind/converter/BoostPTimeConverter.h"
-#include "cppbind/Object.h"
+#include "cppbind/object/Object.h"
 #include "cppbind/foreign/ForeignTableInterface.h"
 #include "EnconderDecoderBase.h"
 
@@ -31,11 +31,6 @@ BOOST_TTI_HAS_MEMBER_FUNCTION(toJsonValue4Bind)
 
 class JsonEncoderImp;
 class JsonDecoderImp;
-
-//
-class BinderParameter {
-
-};
 
 class Binder{
 public:

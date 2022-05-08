@@ -2,8 +2,8 @@
 #define _CPPBIND_CLASS__REGISTER_H
 #include <typeinfo>
 #include <boost/noncopyable.hpp>
-#include "ObjFactory.h"
-#include "ObjFactoryT.h"
+#include "cppbind/object/ObjFactory.h"
+#include "cppbind/object/ObjFactoryT.h"
 #include "ClassRegisterBase.h"
 
 namespace cppbind{

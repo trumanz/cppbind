@@ -4,7 +4,7 @@
 #include <iostream>
 #include "gtest/gtest.h"
 #include "boost/date_time/posix_time/posix_time.hpp" 
-#include "cppbind/type/timestr.h"
+#include "cppbind/converter//timestr.h"
 
 using namespace cppbind;
 
@@ -16,7 +16,7 @@ TEST(boost_datetime, ptime_parse_format) {
    std::string str;
    int ret;
     
-   TimeStr tf("%Y-%m-%d %H:%M:%S");
+   converter::TimeStr tf("%Y-%m-%d %H:%M:%S");
 
    //wrong month 13
    ret = tf.parser("2004-13-21 12:45:33", &pt);
@@ -53,8 +53,8 @@ TEST(boost_datetime, duration_parse_format) {
    time_duration td;
    std::string str;
    int ret;
-    
-   TimeStr tf("%H:%M:%S");
+
+    converter::TimeStr tf("%H:%M:%S");
 
    //wrong duraton 13
    ret = tf.parser("2004-03-21 12:45:33", &td);

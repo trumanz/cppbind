@@ -11,7 +11,7 @@
 #include <cppbind/JsonEncoder.hpp>
 #include <cppbind/csvbind.hpp>
 #include <cppbind/ObjFactoryT.h>
-#include <cppbind/type/timestr.h>
+#include <cppbind/converter/timestr.h>
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include <cppbind/utility/EnumHelper.hpp>
 #include <cppbind/ClassRegister.h>

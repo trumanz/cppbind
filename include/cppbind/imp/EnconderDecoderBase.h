@@ -44,14 +44,14 @@ public:
 
 class EnconderDecoderBase : public ForeignTableMgmt {
 public:
-    StringConverterManager str_convert_mgmt;
+    converter::StringConverterManager str_convert_mgmt;
     ClassRegisterBase* class_reg;
 public:
     EnconderDecoderBase() {
         this->class_reg = NULL;
-        str_convert_mgmt.addStringConverter<boost::posix_time::ptime,BoostPTimeConverter>();
-        str_convert_mgmt.addStringConverter<boost::posix_time::time_duration,BoostTimeDurationConverter>();
-        str_convert_mgmt.addStringConverter<boost::gregorian::date,BoostGDateConverter>();
+        str_convert_mgmt.addStringConverter<boost::posix_time::ptime,converter::BoostPTimeConverter>();
+        str_convert_mgmt.addStringConverter<boost::posix_time::time_duration,converter::BoostTimeDurationConverter>();
+        str_convert_mgmt.addStringConverter<boost::gregorian::date,converter::BoostGDateConverter>();
     }
     virtual ~EnconderDecoderBase() {}
 public:

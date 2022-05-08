@@ -11,7 +11,7 @@
 #include <cppbind/JsonEncoder.hpp>
 #include <cppbind/csvbind.hpp>
 #include <cppbind/ObjFactoryT.h>
-#include <cppbind/type/timestr.h>
+#include <cppbind/converter//timestr.h>
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include <cppbind/utility/EnumHelper.hpp>
 #include <cppbind/ClassRegister.h>
@@ -170,7 +170,7 @@ TEST(JsonROM, baisc){
      ASSERT_EQ(me->name ,"truman");
      ASSERT_EQ(me->age ,30);
      ASSERT_EQ(me->sex.value , SexEnum::MALE );
-     TimeStr tf("%Y-%m-%d %H:%M:%S");
+     converter::TimeStr tf("%Y-%m-%d %H:%M:%S");
      printf("born: %s\n",  tf.format(me->born).c_str());
 
      //optional 

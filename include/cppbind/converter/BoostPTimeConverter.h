@@ -5,6 +5,7 @@
 
 namespace cppbind{
 
+namespace converter {
 
 class BoostPTimeConverter{
 public:
@@ -58,6 +59,8 @@ class BoostTimeDurationConverter {
         return dur;
     }
 };
+
+}
 
 }
 

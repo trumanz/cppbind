@@ -14,8 +14,8 @@
 #include <boost/tti/has_member_function.hpp>
 #include <stdint.h>
 #include "cppbind_exception.h"
-#include "cppbind/type/StringConverter.h"
-#include "cppbind/type/BoostPTimeConverter.h"
+#include "cppbind/converter//StringConverter.h"
+#include "cppbind/converter/BoostPTimeConverter.h"
 #include "cppbind/Object.h"
 namespace  cppbind {
 

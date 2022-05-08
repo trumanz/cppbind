@@ -7,7 +7,7 @@
 #include <assert.h>
 #include <boost/shared_ptr.hpp>
 namespace cppbind{
-
+namespace converter {
 class StringConverter{
 public:
     virtual std::string toString(boost::any any) = 0;
@@ -70,7 +70,7 @@ public:
     };
 };
 
-
+}
 }
 
 

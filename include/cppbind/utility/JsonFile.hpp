@@ -8,7 +8,7 @@
 #include <jsoncpp/json/json.h>
 #include <boost/filesystem.hpp>
 #include <boost/regex.hpp>
-#include "cppbind/imp/cppbind_exception.h"
+#include "cppbind/exception/cppbind_exception.h"
 namespace  cppbind {
 
 

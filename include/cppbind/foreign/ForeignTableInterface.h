@@ -15,7 +15,7 @@ public:
         typename std::map<std::string, T*>::const_iterator it = table->find(key);
         if(it == table->end()) {
             printf("ERROR, Can not found %s", key.c_str());
-            throw ForeginKeyMissingException(key);
+            throw exception::ForeginKeyMissingException(key);
         }
         T* x = it->second;
         return x;

@@ -79,7 +79,7 @@ namespace  cppbind {
         T *decodeFile(const std::string &file_name) {
             try {
                 return decode<T>(decodeFile(file_name));
-            } catch (ParseErrorException &e) {
+            } catch (exception::ParseErrorException &e) {
                 e.addParentNodeName(file_name);
                 throw e;
             }
@@ -91,11 +91,11 @@ namespace  cppbind {
             Json::Value jv = decodeFile(file);
             try {
                 if (!jv.isObject()) {
-                    throw ParseErrorException("not a object");
+                    throw exception::ParseErrorException("not a object");
                 }
                 Json::Value jv_node = jv.get(node_name, Json::Value());
                 return this->decode<T>(jv_node);
-            } catch (ParseErrorException &e) {
+            } catch (exception::ParseErrorException &e) {
                 e.addParentNodeName(file);
                 throw e;
             }
@@ -109,7 +109,7 @@ namespace  cppbind {
             if (!parsingSuccessful) {
                 std::string err_msg = reader.getFormattedErrorMessages();
                 printf("Failed to parse, %s\n", err_msg.c_str());
-                throw ParseErrorException(err_msg);
+                throw exception::ParseErrorException(err_msg);
             }
             return root;
         }
@@ -119,14 +119,14 @@ namespace  cppbind {
             try {
                 std::fstream fs(file_name.c_str(), std::fstream::in);
                 if (!fs) {
-                    throw ParseErrorException("Can not open file [" + file_name + "]");
+                    throw exception::ParseErrorException("Can not open file [" + file_name + "]");
                 }
                 jv = this->decode(fs);
-            } catch (ParseErrorException &e) {
+            } catch (exception::ParseErrorException &e) {
                 e.addParentNodeName(file_name);
                 throw e;
             } catch (std::runtime_error &e) {
-                throw ParseErrorException(file_name, e.what());
+                throw exception::ParseErrorException(file_name, e.what());
             }
             return jv;
         }

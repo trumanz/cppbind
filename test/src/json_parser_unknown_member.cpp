@@ -27,7 +27,7 @@ TEST(JsonROM, unknown_member){
        std::stringstream ss("{\"x\": 1, \"y\":2}");
        XObj* x = JsonDecoder().decode<XObj>(ss);
        delete x;
-     }  catch ( ParseErrorException& e) {
+     }  catch ( exception::ParseErrorException& e) {
              message =  e.what();
      }
      ASSERT_EQ(message.find("json value not mapping") >=0, true);

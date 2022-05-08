@@ -39,7 +39,7 @@ public:
         T* obj = boost::any_cast<T*>(any_obj);
         if (obj == NULL) {
             printf("can not find foreign obj %s", key.c_str());
-            throw ForeginKeyMissingException(key);
+            throw exception::ForeginKeyMissingException(key);
         }
         return obj;
     }

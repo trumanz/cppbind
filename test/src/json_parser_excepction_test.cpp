@@ -27,7 +27,7 @@ TEST(JsonROM, child_not_exist_message){
        std::ifstream ifs("./sample_data/me.json",  std::ifstream::in);
        Me2* me = JsonDecoder().decode<Me2>(ifs);
        delete me;
-     }  catch ( ParseErrorException& e) {
+     }  catch ( exception::ParseErrorException& e) {
              message =  e.what();
      }
      ASSERT_EQ("not_existed not found", message);
@@ -61,7 +61,7 @@ TEST(JsonROM, child_child_not_exist_message){
        ASSERT_EQ(ifs.is_open(), true);
        Me3* me = JsonDecoder().decode<Me3>(ifs);
        delete me;
-     }  catch ( ParseErrorException& e) {
+     }  catch ( exception::ParseErrorException& e) {
              message = e.what();
      }
      ASSERT_EQ("skills.R.language_not_exist not found", message);

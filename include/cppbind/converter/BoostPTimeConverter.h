@@ -1,7 +1,7 @@
 ﻿#ifndef __CPPBIND__BoostPTimeCoverter_
 #define __CPPBIND__BoostPTimeCoverter_
 #include "timestr.h"
-#include "cppbind/imp/cppbind_exception.h"
+#include "cppbind/exception/cppbind_exception.h"
 
 namespace cppbind{
 
@@ -18,7 +18,7 @@ public:
         boost::posix_time::ptime pt;
         int rc = strTime.parser(str, &pt);
         if(rc != 0) {
-            throw ParseErrorException(std::string("cant not parse [") +  str + "] as time");
+            throw exception::ParseErrorException(std::string("cant not parse [") +  str + "] as time");
         }
         return pt;
     }
@@ -36,7 +36,7 @@ public:
         boost::gregorian::date gd;
         int rc = strTime.parser(str, &gd);
         if(rc != 0) {
-            throw ParseErrorException(std::string("cant not parse [") +  str + "] as date");
+            throw exception::ParseErrorException(std::string("cant not parse [") +  str + "] as date");
         }
         return gd;
     }
@@ -54,7 +54,7 @@ class BoostTimeDurationConverter {
         boost::posix_time::time_duration dur;
         int rc = strTime.parser(str, &dur);
         if(rc != 0) {
-            throw ParseErrorException(std::string("cant not parse [") +  str + "] as duration");
+            throw exception::ParseErrorException(std::string("cant not parse [") +  str + "] as duration");
         }
         return dur;
     }

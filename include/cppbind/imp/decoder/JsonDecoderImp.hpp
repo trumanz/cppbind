@@ -66,9 +66,9 @@ private:
                 for(Json::Value::Members::iterator it = keys.begin(); it != keys.end(); it++) {
                     std::string key_str = *it;
                     if(next_binder.decoded_member_key_set.find(key_str) == next_binder.decoded_member_key_set.end()) {
-                        auto e =  ParseErrorException(std::string("json value not mapping, please check json key:(")
+                        auto e =  exception::ParseErrorException(std::string("json value not mapping, please check json key:(")
                                 + key_str + ") within setBind Function of class " + typeid(T).name());
-                        Util::throwExeption(e);
+                        exception::Util::throwExeption(e);
                     }
                 }
 
@@ -159,7 +159,7 @@ void JsonDecoderImp::decodeForeignKey(const Json::Value& _jv, const std::string&
          const Json::Value& jv = _jv[name];
          try {
             decodeWithForeginKey(jv, &v);
-         } catch (ParseErrorException& e) {
+         } catch (exception::ParseErrorException& e) {
              e.addParentNodeName(name);
              throw e;
          }
@@ -167,7 +167,7 @@ void JsonDecoderImp::decodeForeignKey(const Json::Value& _jv, const std::string&
          v = *default_value;
 
      }else  {
-          throw ParseErrorException(name, "not found");
+          throw exception::ParseErrorException(name, "not found");
      }
 }
 

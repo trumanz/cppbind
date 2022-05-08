@@ -6,7 +6,7 @@
 #include <boost/noncopyable.hpp>
 #include <boost/algorithm/string/case_conv.hpp>
 #include "ObjFactory.h"
-#include "cppbind/imp/cppbind_exception.h"
+#include "cppbind/exception/cppbind_exception.h"
 
 namespace cppbind{
 
@@ -58,7 +58,7 @@ private:
        std::map<std::string, boost::shared_ptr<ObjFactory> >::const_iterator it  = obj_factories.find(reg_name);
        if(it == obj_factories.end()) {
            printf("ERROR can not find class '%s'\n", name.c_str());
-           throw ClassMissRegException(name);
+           throw exception::ClassMissRegException(name);
        }
        boost::shared_ptr<ObjFactory> obj_factory = it->second;
        return obj_factory.get();

@@ -13,7 +13,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/tti/has_member_function.hpp>
 #include <stdint.h>
-#include "cppbind_exception.h"
+#include "cppbind/exception/cppbind_exception.h"
 #include "cppbind/converter//StringConverter.h"
 #include "cppbind/converter/BoostPTimeConverter.h"
 #include "cppbind/Object.h"
@@ -130,12 +130,12 @@ void Binder::bind(T& v, const T* default_value) {
               } else if(default_value) {
                 v = *default_value;
               } else {
-                throw ParseErrorException(std::string("not found"));
+                throw exception::ParseErrorException(std::string("not found"));
               }
-            }catch (ParseErrorException& e){
+            }catch (exception::ParseErrorException& e){
                  throw e;
             } catch (std::exception &e) {
-                 throw ParseErrorException("", e.what());
+                 throw exception::ParseErrorException("", e.what());
             }
         } 
          else {
@@ -158,13 +158,13 @@ void Binder::bind(const std::string& name, T& v, const T* default_value){
               } else if(default_value) {
                 v = *default_value;
               } else {
-                throw ParseErrorException(std::string("not found"));
+                throw exception::ParseErrorException(std::string("not found"));
               }
-            }catch (ParseErrorException& e){
+            }catch (exception::ParseErrorException& e){
                  e.addParentNodeName(name);
                  throw e;
             } catch (std::exception &e) {
-                 throw ParseErrorException(name, e.what());
+                 throw exception::ParseErrorException(name, e.what());
             }
         } 
          else {
@@ -240,7 +240,7 @@ void Binder::bindDynamicTypeImp(const std::string& name, T &v, Json::Value* defa
         try{
           decoded_member_key_set.insert(name);
             json_decode_binder->decodeDynamicType(*json, name, v, default_value);
-        } catch(ParseErrorException& e) {
+        } catch(exception::ParseErrorException& e) {
             e.addParentNodeName(name);
             throw e;
         }
@@ -266,7 +266,7 @@ void Binder::bindDynamicTypeImp(const std::string& name, boost::shared_ptr<T> &v
         try{
           decoded_member_key_set.insert(name);
             json_decode_binder->decodeDynamicType(*json, name, v, default_value);
-        } catch(ParseErrorException& e) {
+        } catch(exception::ParseErrorException& e) {
             e.addParentNodeName(name);
             throw e;
         }

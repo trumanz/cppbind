@@ -17,15 +17,17 @@
 #include "cppbind/converter//StringConverter.h"
 #include "cppbind/converter/BoostPTimeConverter.h"
 #include "cppbind/Object.h"
+#include "cppbind/foreign/ForeignTableInterface.h"
+#include "EnconderDecoderBase.h"
+
 namespace  cppbind {
 
 BOOST_TTI_HAS_MEMBER_FUNCTION(setBind)
 BOOST_TTI_HAS_MEMBER_FUNCTION(fromJsonValue4Bind)
 BOOST_TTI_HAS_MEMBER_FUNCTION(toJsonValue4Bind)
 
-#include "ForeignTableInterface.h"
 
-#include "EnconderDecoderBase.h"
+
 
 class JsonEncoderImp;
 class JsonDecoderImp;
@@ -130,10 +132,10 @@ void Binder::bind(T& v, const T* default_value) {
               } else {
                 throw ParseErrorException(std::string("not found"));
               }
-            }catch (cppbind::ParseErrorException& e){
+            }catch (ParseErrorException& e){
                  throw e;
             } catch (std::exception &e) {
-                 throw cppbind::ParseErrorException("", e.what());
+                 throw ParseErrorException("", e.what());
             }
         } 
          else {
@@ -158,11 +160,11 @@ void Binder::bind(const std::string& name, T& v, const T* default_value){
               } else {
                 throw ParseErrorException(std::string("not found"));
               }
-            }catch (cppbind::ParseErrorException& e){
+            }catch (ParseErrorException& e){
                  e.addParentNodeName(name);
                  throw e;
             } catch (std::exception &e) {
-                 throw cppbind::ParseErrorException(name, e.what());
+                 throw ParseErrorException(name, e.what());
             }
         } 
          else {

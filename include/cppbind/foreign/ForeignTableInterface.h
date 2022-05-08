@@ -4,6 +4,7 @@
 
 #ifndef CPPBIND_FOREIGNTABLEINTERFACE_H
 #define CPPBIND_FOREIGNTABLEINTERFACE_H
+namespace cppbind { namespace foreign {
 
 template<typename T>
 class SimpleMapTable{
@@ -14,7 +15,7 @@ public:
         typename std::map<std::string, T*>::const_iterator it = table->find(key);
         if(it == table->end()) {
             printf("ERROR, Can not found %s", key.c_str());
-            throw cppbind::ForeginKeyMissingException(key);
+            throw ForeginKeyMissingException(key);
         }
         T* x = it->second;
         return x;
@@ -42,4 +43,5 @@ public:
     }
 };
 
+}}
 #endif //CPPBIND_TEST_FOREIGNTABLEINTERFACE_H

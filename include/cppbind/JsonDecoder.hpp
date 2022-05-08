@@ -79,7 +79,7 @@ namespace  cppbind {
         T *decodeFile(const std::string &file_name) {
             try {
                 return decode<T>(decodeFile(file_name));
-            } catch (cppbind::ParseErrorException &e) {
+            } catch (ParseErrorException &e) {
                 e.addParentNodeName(file_name);
                 throw e;
             }
@@ -95,7 +95,7 @@ namespace  cppbind {
                 }
                 Json::Value jv_node = jv.get(node_name, Json::Value());
                 return this->decode<T>(jv_node);
-            } catch (cppbind::ParseErrorException &e) {
+            } catch (ParseErrorException &e) {
                 e.addParentNodeName(file);
                 throw e;
             }
@@ -126,7 +126,7 @@ namespace  cppbind {
                 e.addParentNodeName(file_name);
                 throw e;
             } catch (std::runtime_error &e) {
-                throw cppbind::ParseErrorException(file_name, e.what());
+                throw ParseErrorException(file_name, e.what());
             }
             return jv;
         }

@@ -24,11 +24,15 @@
 
 namespace  cppbind {
 
+    /*!
+       JsonDecoder for decode json to c++ object.
+     */
     class JsonDecoder {
 
     public:
         JsonDecoderImp decoder;
     public:
+        //! JsonDecoder constructor
         JsonDecoder() {
         }
 
@@ -45,6 +49,10 @@ namespace  cppbind {
         void ignoreUnknownNode() { decoder.ignoreUnknownNode(); }
 
     public:
+        /** Decode json object to C++ object
+         * \param root - the json object needs to decode
+         * \return object point to type T
+        */
         template<typename T>
         T *decode(const Json::Value &root) {
             T *e = new T;

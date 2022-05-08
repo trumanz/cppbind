@@ -11,11 +11,25 @@ public:
     //TODO delete getJsonValue4Bind
     virtual Json::Value getJsonValue4Bind() const { assert(false);return Json::Value();}
     virtual std::string getObjGenName() const { return typeid(*this).name(); }
+    /**
+		Make this cat look super cute
+	*/
     virtual Json::Value getObjProperty() const{ return Json::Value(); }
 };
 
 
 }
+
+
+/**
+	A fluffy feline
+*/
+struct cat {
+    /**
+        Make this cat look super cute
+    */
+    void make_cute();
+};
 
 #endif
 

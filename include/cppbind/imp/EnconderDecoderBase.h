@@ -8,6 +8,7 @@
 #include "../foreign/ForeignTableMgmt.h"
 namespace cppbind{
 using namespace dynamic;
+namespace imp{
 class EnconderDecoderBase : public cppbind::foreign::ForeignTableMgmt {
 public:
     converter::StringConverterManager str_convert_mgmt;
@@ -27,5 +28,5 @@ public:
     }
 
 };
-}
+}}
 #endif //CPPBIND_TEST_BINDERIMPBASE_H

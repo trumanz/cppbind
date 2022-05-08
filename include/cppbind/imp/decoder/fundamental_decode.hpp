@@ -2,7 +2,7 @@
 
 //https://en.cppreference.com/w/cpp/language/types
 
-namespace  cppbind {
+namespace  cppbind {  namespace imp {
 class FundamentalType {
 public:
   template<typename T>
@@ -19,4 +19,4 @@ public:
     }
 }
 };
-}
+}}

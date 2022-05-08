@@ -5,8 +5,10 @@
 #include <boost/any.hpp>
 #include "cppbind/object/Object.h"
 namespace cppbind{
-    class JsonDecoderImp;
-
+    namespace imp{
+      class JsonDecoderImp;
+    }
+    using namespace imp;
     namespace object {
 
 class ObjFactory{

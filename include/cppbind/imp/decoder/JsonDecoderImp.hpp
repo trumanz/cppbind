@@ -2,8 +2,7 @@
 #define __JSON_DECODE_BINDER_H__
 
 #include "cppbind/imp/decoder/fundamental_decode.hpp"
-namespace  cppbind {
-
+namespace  cppbind { namespace imp {
 
 class JsonDecoderImp : public EnconderDecoderBase {
 public:
@@ -171,6 +170,6 @@ void JsonDecoderImp::decodeForeignKey(const Json::Value& _jv, const std::string&
      }
 }
 
-}
+} }
 
 #endif

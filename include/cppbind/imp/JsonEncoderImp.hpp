@@ -1,7 +1,7 @@
 ﻿#ifndef __JSON_ENCODE_BINDER_H__
 #define __JSON_ENCODE_BINDER_H__
 
-namespace  cppbind {
+namespace  cppbind { namespace imp {
 
 class JsonEncoderImp : public EnconderDecoderBase {
 public:
@@ -265,6 +265,6 @@ void JsonEncoderImp::encodeForeignKey(Json::Value *_jv, const std::string& name,
 }
  
 
-}
+} }
 
 #endif

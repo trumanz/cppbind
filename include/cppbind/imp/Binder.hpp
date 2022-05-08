@@ -26,11 +26,11 @@ BOOST_TTI_HAS_MEMBER_FUNCTION(setBind)
 BOOST_TTI_HAS_MEMBER_FUNCTION(fromJsonValue4Bind)
 BOOST_TTI_HAS_MEMBER_FUNCTION(toJsonValue4Bind)
 
-
-
-
-class JsonEncoderImp;
-class JsonDecoderImp;
+namespace imp {
+  class JsonEncoderImp;
+  class JsonDecoderImp;
+}
+using namespace  imp;
 
 class Binder{
 public:
@@ -101,7 +101,7 @@ private:
 
 
 namespace cppbind {
-
+using namespace imp;
 inline Binder::Binder(EnconderDecoderBase* _binder_imp, Json::Value* jv){
     this->decoder = nullptr;
     this->encoder = nullptr;

@@ -20,8 +20,8 @@ set(CMAKE_CXX_STANDARD 14)
 
 add_executable(cppbind_test ${CPP_FILES})
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/)
-
+#include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/)
+target_include_directories(cppbind_test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include/)
 
 find_package(GTest CONFIG REQUIRED)
 target_link_libraries(cppbind_test PRIVATE GTest::gmock GTest::gtest GTest::gmock_main GTest::gtest_main)

@@ -12,7 +12,7 @@
 #define snprintf _snprintf
 #endif
 
-namespace cppbind {
+namespace cppbind { namespace util {
 class TimeFormat {
 public:
     bool parse(const std::string& timeStr, boost::gregorian::date *gdOut){
@@ -41,7 +41,7 @@ public:
 
 };
 
-}
+} }
 #endif
 
 

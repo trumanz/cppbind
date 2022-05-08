@@ -9,7 +9,7 @@
 #include <boost/filesystem.hpp>
 #include <boost/regex.hpp>
 #include "cppbind/exception/cppbind_exception.h"
-namespace  cppbind {
+namespace  cppbind { namespace util{
 
 
 
@@ -123,6 +123,6 @@ private:
 };
 
 
-}
+}}
 
 #endif

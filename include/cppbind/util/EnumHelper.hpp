@@ -5,7 +5,7 @@
 #include <string>
 #include "json/json.h"
 
-namespace  cppbind {
+namespace  cppbind { namespace util {
 
 template<typename T>
 class EnumHelper {
@@ -55,6 +55,6 @@ class EnumHelper {
   }
 };
 
-}  // namespace cppbind
+}}  // namespace cppbind::util
 
 #endif

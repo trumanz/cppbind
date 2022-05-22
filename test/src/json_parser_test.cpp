@@ -137,8 +137,10 @@ public:
 
 TEST(JsonROM, baisc){
 
-     std::ifstream ifs("./sample_data/me.json",  std::ifstream::in);
-     std::ifstream music_csv("./sample_data/music.csv",  std::ifstream::in);
+    auto path1 = std::filesystem::path(__FILE__).parent_path().parent_path()/"sample_data/me.json";
+    auto path2 = std::filesystem::path(__FILE__).parent_path().parent_path()/"sample_data/music.csv";
+     std::ifstream ifs(path1,  std::ifstream::in);
+     std::ifstream music_csv(path2,  std::ifstream::in);
 
      cppbind::CSVBind music_csv_binder;
      std::vector<Music*> all_musics =music_csv_binder.decode<Music>(music_csv);

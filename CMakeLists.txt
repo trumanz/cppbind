@@ -32,7 +32,7 @@ target_link_libraries(cppbind_test PRIVATE
         GTest::gmock GTest::gtest
         GTest::gmock_main GTest::gtest_main
         Boost::filesystem)
-target_link_libraries(cppbind_test PRIVATE jsoncpp)
+target_link_libraries(cppbind_test PRIVATE jsoncpp_static)
 
 
 # create directory for gcov coverage reports

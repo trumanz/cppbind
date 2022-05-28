@@ -8,10 +8,10 @@ jobs:
       sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
       sudo apt -y update
       sudo apt install g++-9 -y
-      git clone https://github.com/microsoft/vcpkg.git ~/vcpkg && cd ~/vcpkg && git checkut 2022.04.12
+      git clone https://github.com/microsoft/vcpkg.git ~/vcpkg && cd ~/vcpkg && git checkout 2022.04.12
       ~/vcpkg/bootstrap-vcpkg.sh
       ~/vcpkg/vcpkg integrate install
-      ~/vcpkg/vcpkg install gtest jsoncpp boost-tti boost-any boost-date-time --vcpkg-root ~/vcpkg
+      ~/vcpkg/vcpkg install gtest jsoncpp boost-tti boost-any boost-date-time boost-filesystem --vcpkg-root ~/vcpkg
     displayName: install dependency packages
   - script: |
       mkdir build.debug
@@ -27,5 +27,5 @@ jobs:
       cmakeArgs: '-DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=~/vcpkg/scripts/buildsystems/vcpkg.cmake ..'
   - script: |
       cd build.debug
-      make && cd  ../test/ &&   ../build.debug/cppbind_test
+      make cppbind_test
     displayName: 'Run Unit Test'

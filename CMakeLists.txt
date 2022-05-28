@@ -9,7 +9,7 @@ find_package(GTest CONFIG REQUIRED)
 find_package(jsoncpp CONFIG REQUIRED)
 find_package(Boost REQUIRED COMPONENTS filesystem)
 
-set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} --coverage -g -O0")
+set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} --coverage -g -O0  -fno-inline")
 set(CMAKE_CXX_STANDARD 14)
 
 function(add_source_files dir regex_name dst)
@@ -47,7 +47,7 @@ add_custom_target(run_test ALL
 
 # run gcov to generate report
 add_custom_target(compute_coverage ALL
-        COMMAND gcovr --sonarqube coverage.xml -r ${CMAKE_CURRENT_SOURCE_DIR}/
+        COMMAND gcovr --sonarqube coverage.xml  --exclude-throw-branches -r ${CMAKE_CURRENT_SOURCE_DIR}/
         DEPENDS run_test
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/coverage
         )

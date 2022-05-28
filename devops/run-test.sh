@@ -1,5 +1,5 @@
 ﻿set -xeuo pipefail
-
+sed -i 's/jsoncpp_static/jsoncpp/g'  CMakeLists.txt
 mkdir build
 cd build   
 cmake .. 

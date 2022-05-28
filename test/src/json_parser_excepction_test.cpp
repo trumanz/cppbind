@@ -9,7 +9,6 @@
 #include "json/json.h"
 #include "cppbind/JsonDecoder.hpp"
 #include "cppbind/JsonEncoder.hpp"
-#include <filesystem>
 #include <boost/filesystem.hpp>
 
 using namespace cppbind;

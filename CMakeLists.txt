@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.10.2)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
+
 project(cppbind_test)
 set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
@@ -31,7 +32,7 @@ target_link_libraries(cppbind_test PRIVATE
         GTest::gmock GTest::gtest
         GTest::gmock_main GTest::gtest_main
         Boost::filesystem)
-target_link_libraries(cppbind_test PRIVATE jsoncpp_static)
+target_link_libraries(cppbind_test PRIVATE jsoncpp)
 
 
 # create directory for gcov coverage reports
@@ -46,7 +47,7 @@ add_custom_target(run_test ALL
 
 # run gcov to generate report
 add_custom_target(compute_coverage ALL
-        COMMAND gcov -o ${CMAKE_BINARY_DIR}/CMakeFiles/cppbind_test.dir/test/src ${PROJECT_SOURCE_DIR}/src/*.cpp
+        COMMAND gcovr --sonarqube coverage.xml -r ${CMAKE_CURRENT_SOURCE_DIR}/
         DEPENDS run_test
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/coverage
         )

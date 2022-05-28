@@ -9,23 +9,20 @@
 #  - master
 
 jobs:
-  - job: "Unit_Test_Ubuntu_1804_Apt"
+  - job: "Unit_Test_Ubuntu_2004_Apt"
     pool:
-      vmImage: "ubuntu-18.04"
+      vmImage: "ubuntu-20.04"
     steps:
       - script: ./devops/prep-env.sh
         displayName: 'prepare env'
-      - script: cd test && make test
+      - script: ./devops/run-test.sh
         displayName: 'run unit test'
 
-  - job: "Sonar_Scan"
-    pool:
-      vmImage: "ubuntu-18.04"
-    steps:
-      - script: ./devops/prep-env.sh
-        displayName: 'prepare env'
-      - script: bash ./sonar-check.sh
-        displayName: 'sonar scan'
+  - template: devops/build-ubuntu-vcpkg.yml
+    parameters:
+      name: 'Unit_Test_Ubuntu_2004_Vcpkg'
+      image: 'Ubuntu 20.04'
+
 
   - job: "Publish_Doc_As_GitHub_Page"
     pool:
@@ -56,13 +53,11 @@ jobs:
           git push --force
         displayName: "Push to gh-pages branch"
 
-
-  - template: devops/build-ubuntu-vcpkg.yml
-    parameters:
-      name: 'Unit_Test_Ubuntu_1604_Vcpkg'
-      image: 'Ubuntu 18.04'
-
-  - template: devops/build-ubuntu-vcpkg.yml
-    parameters:
-      name: 'Unit_Test_Ubuntu_2004_Vcpkg'
-      image: 'Ubuntu 20.04'
+  - job: "Sonar_Scan"
+    pool:
+      vmImage: "ubuntu-20.04"
+    steps:
+      - script: ./devops/prep-env.sh
+        displayName: 'prepare env'
+      - script: bash ./sonar-check.sh
+        displayName: 'sonar scan'

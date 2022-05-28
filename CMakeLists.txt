@@ -9,7 +9,8 @@ find_package(GTest CONFIG REQUIRED)
 find_package(jsoncpp CONFIG REQUIRED)
 find_package(Boost REQUIRED COMPONENTS filesystem)
 
-set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} --coverage -g -O0  -fno-inline")
+set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -g -O0  -fno-inline")
+#set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} --coverage -g -O0  -fno-inline")
 set(CMAKE_CXX_STANDARD 14)
 
 function(add_source_files dir regex_name dst)

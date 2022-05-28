@@ -10,6 +10,7 @@
 #include "cppbind/JsonDecoder.hpp"
 #include "cppbind/JsonEncoder.hpp"
 #include <filesystem>
+#include <boost/filesystem.hpp>
 
 using namespace cppbind;
 
@@ -25,11 +26,11 @@ public:
 TEST(JsonROM, child_not_exist_message){
      std::string message;
      try {
-         std::filesystem::path path = __FILE__;
+         boost::filesystem::path path = __FILE__;
          path = path.parent_path().parent_path()/"sample_data/me.json";
 
        //std::ifstream ifs("./sample_data/me.json",  std::ifstream::in);
-         std::ifstream ifs(path,  std::ifstream::in);
+         std::ifstream ifs(path.c_str(),  std::ifstream::in);
        Me2* me = JsonDecoder().decode<Me2>(ifs);
        delete me;
      }  catch ( exception::ParseErrorException& e) {
@@ -62,9 +63,9 @@ public:
 TEST(JsonROM, child_child_not_exist_message){
      std::string message;
      try {
-         std::filesystem::path path = __FILE__;
+         boost::filesystem::path path = __FILE__;
          path = path.parent_path().parent_path()/"sample_data/me.json";
-         std::ifstream ifs(path,  std::ifstream::in);
+         std::ifstream ifs(path.c_str(),  std::ifstream::in);
       // ASSERT_EQ(ifs.is_open(), true) << "test";
        ASSERT_TRUE(ifs.is_open()) <<  "Path:" <<  path ;
        Me3* me = JsonDecoder().decode<Me3>(ifs);

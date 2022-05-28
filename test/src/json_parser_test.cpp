@@ -15,6 +15,7 @@
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include <cppbind/util/EnumHelper.hpp>
 #include "cppbind/dynamic/ClassRegister.h"
+#include <boost/filesystem.hpp>
 
 using namespace boost::posix_time;
 using namespace cppbind;
@@ -137,10 +138,10 @@ public:
 
 TEST(JsonROM, baisc){
 
-    auto path1 = std::filesystem::path(__FILE__).parent_path().parent_path()/"sample_data/me.json";
-    auto path2 = std::filesystem::path(__FILE__).parent_path().parent_path()/"sample_data/music.csv";
-     std::ifstream ifs(path1,  std::ifstream::in);
-     std::ifstream music_csv(path2,  std::ifstream::in);
+    auto path1 = boost::filesystem::path(__FILE__).parent_path().parent_path()/"sample_data/me.json";
+    auto path2 = boost::filesystem::path(__FILE__).parent_path().parent_path()/"sample_data/music.csv";
+     std::ifstream ifs(path1.string(),  std::ifstream::in);
+     std::ifstream music_csv(path2.string(),  std::ifstream::in);
 
      cppbind::CSVBind music_csv_binder;
      std::vector<Music*> all_musics =music_csv_binder.decode<Music>(music_csv);

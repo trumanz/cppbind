@@ -32,7 +32,7 @@ private:
 public:
     std::vector<std::string> headers;
     std::vector<CSVRow> rows;
-    virtual ~CSVReader(){}
+    virtual ~CSVReader() = default;
     CSVReader(const std::string _dropped_delims=",", bool _trim = false) : dropped_delims(_dropped_delims), trim(_trim){}
 public:
    void readFile(const char *filename){

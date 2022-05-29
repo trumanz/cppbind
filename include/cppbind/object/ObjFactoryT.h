@@ -40,8 +40,7 @@ template<typename ObjT>
 class ObjFactoryT : public ObjFactory
 {
 public:
-    ObjFactoryT() {
-    }
+
     virtual Object* createObj(const std::string& obj_name, const Json::Value& json_parameter, JsonDecoderImp* bind = nullptr) const {
          boost::shared_ptr<typename ObjT::Data4Bind> parameter;
          if(bind) {

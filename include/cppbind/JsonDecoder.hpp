@@ -32,9 +32,6 @@ namespace  cppbind {
     public:
         JsonDecoderImp decoder;
     public:
-        //! JsonDecoder constructor
-        JsonDecoder() {
-        }
 
         template<typename ObjT>
         void regTable(const std::map<std::string, ObjT *> *table) { decoder.regForeignTable(table); }

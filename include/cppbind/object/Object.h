@@ -7,7 +7,7 @@ namespace cppbind { namespace object {
 
 class Object{
 public:
-    virtual ~Object(){}
+    virtual ~Object() = default;
     //TODO delete getJsonValue4Bind
     virtual Json::Value getJsonValue4Bind() const { assert(false);return Json::Value();}
     virtual std::string getObjGenName() const { return typeid(*this).name(); }

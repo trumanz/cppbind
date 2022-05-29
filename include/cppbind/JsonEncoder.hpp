@@ -29,9 +29,7 @@ namespace  cppbind {
  public:
      JsonEncoderImp encoder;
  public:
-     JsonEncoder() {
-     }
-
+   
      void regClassRegister(ClassRegisterBase *_class_reg) {
          encoder.regClassRegister(_class_reg);
      }

@@ -38,7 +38,7 @@ typedef EnumHelper<SexEnum> SexType;
 
 class Vehicle : public Object{
 public:
-    virtual ~Vehicle(){}
+    virtual ~Vehicle() = default;
 
 };
 class Metro : public Vehicle{
@@ -78,7 +78,6 @@ public:
 
 class Contact {
 public:
-    Contact(){}
     std::string email;
     std::string phone;
     void setBind(Binder *binder, bool load){

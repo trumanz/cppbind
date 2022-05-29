@@ -13,7 +13,7 @@ namespace cppbind{
 
 class ObjFactory{
 public:
-    virtual ~ObjFactory(){}
+    virtual ~ObjFactory() = default;
     //any is a point
     virtual Object* createObj(const std::string& obj_name, const Json::Value& json_parameter, JsonDecoderImp* bind = nullptr) const = 0;
    // virtual boost::any createObj(const boost::any& any_parameter) const = 0;

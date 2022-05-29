@@ -12,7 +12,7 @@ class StringConverter{
 public:
     virtual std::string toString(boost::any any) = 0;
     virtual boost::any  fromString(const std::string& str) = 0;
-    virtual ~StringConverter(){}
+    virtual ~StringConverter() = default;
 };
 
 

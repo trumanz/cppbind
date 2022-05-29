@@ -24,7 +24,7 @@ public:
 
 class ForeignTableInterface {
 public:
-    virtual ~ForeignTableInterface(){}
+    virtual ~ForeignTableInterface() = default;
     virtual boost::any getAnyObj(std::string key) = 0;
 };
 

@@ -23,7 +23,7 @@ using namespace std;
 class Hometown : public Object{
 public:
    std::string name;
-   Hometown(){}
+   Hometown() = default;
    Hometown(const std::string& _name){this->name = _name;}
    std::string getKeyStr() const  { return name;}
    void setKeyStr(const std::string& _name){this->name = _name;}

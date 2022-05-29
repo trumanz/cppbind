@@ -12,7 +12,7 @@ class EnumHelper {
  public:
   typename T::Type  value;
 
-  EnumHelper() {}
+  EnumHelper()  = default;
   EnumHelper(typename T::Type v) { this->value = v;}
 
   void setBind(Binder *binder, bool load){

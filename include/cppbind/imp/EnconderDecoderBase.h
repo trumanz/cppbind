@@ -20,7 +20,7 @@ public:
         str_convert_mgmt.addStringConverter<boost::posix_time::time_duration,converter::BoostTimeDurationConverter>();
         str_convert_mgmt.addStringConverter<boost::gregorian::date,converter::BoostGDateConverter>();
     }
-    virtual ~EnconderDecoderBase() {}
+    virtual ~EnconderDecoderBase() = default;
 public:
     void regClassRegister(ClassRegisterBase* _class_reg){
         assert(this->class_reg == nullptr);

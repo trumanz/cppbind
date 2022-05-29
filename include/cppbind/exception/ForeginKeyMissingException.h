@@ -13,6 +13,8 @@ public:
     }
 
     //ForeginKeyMissingException(const ForeginKeyMissingException& obj) noexcept = default;
+    //ForeginKeyMissingException(const ForeginKeyMissingException& obj) noexcept = default;
+   // ForeginKeyMissingException& operator=(const ForeginKeyMissingException& obj) noexcept = default;
 };
 
 }}

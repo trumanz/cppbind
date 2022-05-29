@@ -25,15 +25,14 @@ class ParseErrorException : public std::exception
          error_str_buf += " " + this->parse_error_msg;
      }
  public:
-     ~ParseErrorException() override = default;
+     //~ParseErrorException() override = default;
+     ParseErrorException() noexcept = default;
      ParseErrorException(std::string const& node_name, const std::string& err_msg) noexcept
      {
          this->node_info.insert(this->node_info.begin(), node_name);
          this->parse_error_msg = err_msg;
          this->buildErrorStr();
      }
-
-
     explicit ParseErrorException(const std::string& err_msg) noexcept
      {
          this->parse_error_msg = err_msg;

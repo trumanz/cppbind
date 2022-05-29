@@ -13,6 +13,7 @@ public:
             ParseErrorException(class_name + " miss register")  {
     }
     //ClassMissRegException(const ClassMissRegException& obj) noexcept = default;
+    //ClassMissRegException& operator=(const ClassMissRegException& obj) noexcept = default;
 
 };
 

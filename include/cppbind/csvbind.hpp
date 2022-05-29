@@ -47,7 +47,9 @@ public:
         csv->readRows(csv_content);
         for(size_t i = 0; i < csv->rows.size(); i++) {
             Json::Value jv = this->createJsonObject(csv->headers,csv->rows[i].cells, default_value);
-            rc.push_back(json_decoder.decode<T>(jv));
+            auto e = json_decoder.decode<T>(jv);
+            rc.push_back(e.get());
+            e.release();
         }
         return rc;
     }

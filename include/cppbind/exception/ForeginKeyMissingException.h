@@ -8,9 +8,11 @@ namespace  cppbind { namespace exception {
 
 class ForeginKeyMissingException : public ParseErrorException {
 public:
-    ForeginKeyMissingException(std::string obj_name) :
+    ForeginKeyMissingException(std::string obj_name) noexcept :
     ParseErrorException(obj_name + " foregin key missing") {
     }
+
+    ForeginKeyMissingException(const ForeginKeyMissingException& obj) noexcept = default;
 };
 
 }}

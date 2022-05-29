@@ -59,7 +59,7 @@ TEST(parsr, fundamental_type_parse) {
 TEST(parse, primary_type){
     std::string json_str = "{\"name\" : \"Bruce\", \"age\": 18, \"likes\" : [\"football\", \"music\"] }";
     //decode
-    Student* student = JsonDecoder().decode<Student>(json_str);
+    auto student = JsonDecoder().decode<Student>(json_str);
     printf("Decoded Student C++ Object:%s\n",  student->toStr().c_str());
 
     ASSERT_EQ(student->name, "Bruce");
@@ -76,7 +76,6 @@ TEST(parse, primary_type){
     ASSERT_EQ(jv["age"].asInt(), 18);
     ASSERT_EQ(jv["likes"][0].asString(), "football");
     ASSERT_EQ(jv["likes"][1].asString(), "music");
-    delete student;
 };
 
 
@@ -84,9 +83,7 @@ TEST(parse, simple){
   std::string json_str = "{\"name\" : \"Bruce\", \"age\": 18, \"likes\" : [\"football\", \"music\"] }";
   //decode
 
-
-
-  Student* student = JsonDecoder().decode<Student>(json_str);
+  auto student = JsonDecoder().decode<Student>(json_str);
   printf("Decoded Student C++ Object:%s\n",  student->toStr().c_str());
   
   ASSERT_EQ(student->name, "Bruce");
@@ -103,5 +100,4 @@ TEST(parse, simple){
   ASSERT_EQ(jv["age"].asInt(), 18);
   ASSERT_EQ(jv["likes"][0].asString(), "football");
   ASSERT_EQ(jv["likes"][1].asString(), "music");
-  delete student;
 };

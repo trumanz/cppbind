@@ -9,9 +9,10 @@ namespace  cppbind { namespace exception {
 
 class ClassMissRegException : public ParseErrorException {
 public:
-    ClassMissRegException(std::string class_name) :
-            ParseErrorException(class_name + " miss register"){
+    explicit ClassMissRegException(std::string class_name) noexcept :
+            ParseErrorException(class_name + " miss register")  {
     }
+    ClassMissRegException(const ClassMissRegException& obj) noexcept = default;
 };
 
 } }

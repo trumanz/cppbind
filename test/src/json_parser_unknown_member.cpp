@@ -25,8 +25,7 @@ TEST(JsonROM, unknown_member){
      std::string message;
      try {
        std::stringstream ss("{\"x\": 1, \"y\":2}");
-       XObj* x = JsonDecoder().decode<XObj>(ss);
-       delete x;
+       auto x = JsonDecoder().decode<XObj>(ss);
      }  catch ( exception::ParseErrorException& e) {
              message =  e.what();
      }

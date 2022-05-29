@@ -34,7 +34,5 @@ TEST(foregin_key_test, decode){
     for(auto c :  *customers) {
         delete c;
     }
-    delete customers;
-    delete order;
 };
 

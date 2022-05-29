@@ -30,8 +30,7 @@ TEST(JsonROM, child_not_exist_message){
 
        //std::ifstream ifs("./sample_data/me.json",  std::ifstream::in);
          std::ifstream ifs(path.c_str(),  std::ifstream::in);
-       Me2* me = JsonDecoder().decode<Me2>(ifs);
-       delete me;
+       auto me = JsonDecoder().decode<Me2>(ifs);
      }  catch ( exception::ParseErrorException& e) {
              message =  e.what();
      }
@@ -67,8 +66,7 @@ TEST(JsonROM, child_child_not_exist_message){
          std::ifstream ifs(path.c_str(),  std::ifstream::in);
       // ASSERT_EQ(ifs.is_open(), true) << "test";
        ASSERT_TRUE(ifs.is_open()) <<  "Path:" <<  path ;
-       Me3* me = JsonDecoder().decode<Me3>(ifs);
-       delete me;
+       auto me = JsonDecoder().decode<Me3>(ifs);
      }  catch ( exception::ParseErrorException& e) {
              message = e.what();
      }

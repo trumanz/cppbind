@@ -17,7 +17,7 @@ class ParseErrorException : public std::exception
      std::string parse_error_msg;
      std::string error_str_buf;
      void buildErrorStr(){
-         error_str_buf = "";
+         this->error_str_buf = "";
          for(size_t i = 0; i < this->node_info.size(); i++) {
              if(i > 0) error_str_buf += ".";
              error_str_buf += node_info[i];
@@ -25,15 +25,16 @@ class ParseErrorException : public std::exception
          error_str_buf += " " + this->parse_error_msg;
      }
  public:
-     virtual ~ParseErrorException() throw (){}
-     ParseErrorException(std::string const& node_name, const std::string err_msg)
+     ~ParseErrorException() override = default;
+     ParseErrorException(std::string const& node_name, const std::string& err_msg) noexcept
      {
          this->node_info.insert(this->node_info.begin(), node_name);
          this->parse_error_msg = err_msg;
          this->buildErrorStr();
      }
 
-     ParseErrorException(const std::string err_msg)
+
+    explicit ParseErrorException(const std::string& err_msg) noexcept
      {
          this->parse_error_msg = err_msg;
          this->buildErrorStr();
@@ -43,7 +44,7 @@ class ParseErrorException : public std::exception
          this->buildErrorStr();
      }
 
-     const char* what() const throw() {
+     const char* what() const noexcept override {
          return this->error_str_buf.c_str();
      }
  };

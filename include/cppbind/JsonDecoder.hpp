@@ -54,29 +54,29 @@ namespace  cppbind {
          * \return object point to type T
         */
         template<typename T>
-        T *decode(const Json::Value &root) {
-            T *e = new T;
-            decoder.decode(root, e);
+        std::unique_ptr<T> decode(const Json::Value &root) {
+            auto e = std::make_unique<T>();
+            decoder.decode(root, e.get());
             return e;
         }
 
         template<typename T>
-        T *decode(const char *json_str) {
+        std::unique_ptr<T> decode(const char *json_str) {
             std::stringstream ss(json_str);
             return this->decode<T>(ss);
         }
 
         template<typename T>
-        T *decode(const std::string &json_str) {
+        std::unique_ptr<T> decode(const std::string &json_str) {
             std::stringstream ss(json_str);
             return this->decode<T>(ss);
         }
 
         template<typename T>
-        T *decode(std::istream &is) { return decode<T>(decode(is)); }
+        std::unique_ptr<T> decode(std::istream &is) { return decode<T>(decode(is)); }
 
         template<typename T>
-        T *decodeFile(const std::string &file_name) {
+        std::unique_ptr<T> decodeFile(const std::string &file_name) {
             try {
                 return decode<T>(decodeFile(file_name));
             } catch (exception::ParseErrorException &e) {

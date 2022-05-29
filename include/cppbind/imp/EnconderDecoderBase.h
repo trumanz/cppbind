@@ -15,7 +15,7 @@ public:
     ClassRegisterBase* class_reg;
 public:
     EnconderDecoderBase() {
-        this->class_reg = NULL;
+        this->class_reg = nullptr;
         str_convert_mgmt.addStringConverter<boost::posix_time::ptime,converter::BoostPTimeConverter>();
         str_convert_mgmt.addStringConverter<boost::posix_time::time_duration,converter::BoostTimeDurationConverter>();
         str_convert_mgmt.addStringConverter<boost::gregorian::date,converter::BoostGDateConverter>();
@@ -23,7 +23,7 @@ public:
     virtual ~EnconderDecoderBase() {}
 public:
     void regClassRegister(ClassRegisterBase* _class_reg){
-        assert(this->class_reg == NULL);
+        assert(this->class_reg == nullptr);
         this->class_reg = _class_reg;
     }
 

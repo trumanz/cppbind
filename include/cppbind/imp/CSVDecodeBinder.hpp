@@ -75,7 +75,7 @@ private: // for class type
             JsonDecoderImp* json_decode_binder = dynamic_cast<JsonDecoderImp*>(binder->binder_imp);
             const Json::Value& jv = json_decode_binder->binder->json_to_decode;
             if(!jv.isString()) {
-                assert("bug" == NULL);
+                assert("bug" == nullptr);
             }
             std::string str = jv.asString();
             e[0] = binder->str_convert_mgmt.fromString<T>(str);

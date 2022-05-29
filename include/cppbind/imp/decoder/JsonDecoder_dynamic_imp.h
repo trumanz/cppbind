@@ -1,7 +1,7 @@
 template<typename T>
 void JsonDecoderImp::decodeDynamicType(const Json::Value& _jv, const std::string& name, T*& v, Json::Value* default_value ){
     Json::Value jv = _jv[name];
-    if(jv.isNull() && default_value != NULL) {
+    if(jv.isNull() && default_value != nullptr) {
         jv = *default_value;
     }
     decodeDynamicType(jv, v);
@@ -13,7 +13,7 @@ void JsonDecoderImp::decodeDynamicType(const Json::Value& _jv, const std::string
     if(jv.isNull()) {
         v = default_value;
     } else {
-        T* tmp_v = NULL;
+        T* tmp_v = nullptr;
         decodeDynamicType(jv, tmp_v);
         v = boost::shared_ptr<T>(tmp_v);
     }
@@ -28,7 +28,7 @@ void JsonDecoderImp::decodeDynamicType(const Json::Value& jv, T*& v){
     std::string class_name = members[0];
     Json::Value class_data = jv[class_name];
 
-    if(this->class_reg == NULL) {
+    if(this->class_reg == nullptr) {
         throw exception::ParseErrorException("no class register");
     }
     v = this->class_reg->createObj<T>(class_name.c_str(), class_data, this);
@@ -36,7 +36,7 @@ void JsonDecoderImp::decodeDynamicType(const Json::Value& jv, T*& v){
 template<typename T>
 void JsonDecoderImp::decodeDynamicType(const Json::Value &_jv, const std::string& name, std::vector<T*>& v, Json::Value* default_value){
     Json::Value jv = _jv[name];
-    if(jv.isNull() && default_value != NULL) {
+    if(jv.isNull() && default_value != nullptr) {
         jv = *default_value;
     }
     if(!jv.isArray()) {

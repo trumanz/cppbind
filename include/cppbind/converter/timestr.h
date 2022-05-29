@@ -21,10 +21,10 @@ private:
    std::string pattern_4_ptime;
    std::string pattern_4_date;
 public:
-    TimeStr(const char *_pattern_4_ptime = NULL, const char* _pattern_4_date = NULL){
+    TimeStr(const char *_pattern_4_ptime = nullptr, const char* _pattern_4_date = nullptr){
         //default "2005-10-15 13:14:15.003400"
-        this->pattern_4_ptime = _pattern_4_ptime != NULL ?  _pattern_4_ptime :  "%Y-%m-%d %H:%M:%S.%f";
-        this->pattern_4_date  = _pattern_4_date  != NULL ?  _pattern_4_date  :  "%Y-%m-%d";
+        this->pattern_4_ptime = _pattern_4_ptime != nullptr ?  _pattern_4_ptime :  "%Y-%m-%d %H:%M:%S.%f";
+        this->pattern_4_date  = _pattern_4_date  != nullptr ?  _pattern_4_date  :  "%Y-%m-%d";
 
         locale_input = std::locale(std::locale::classic(),new boost::posix_time::time_input_facet(this->pattern_4_ptime.c_str()));
         locale_output = std::locale(std::locale::classic(),new boost::posix_time::time_facet(this->pattern_4_ptime.c_str()));

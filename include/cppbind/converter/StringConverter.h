@@ -51,9 +51,9 @@ public:
     template<typename T>
     std::string toString(T& e){
         boost::shared_ptr<StringConverter> converter = this->getStringConverter<T>();
-        if(converter.get() == NULL) {
+        if(converter.get() == nullptr) {
             std::stringstream ss;
-            assert("BUG,  please register converter for T" == NULL);
+            assert("BUG,  please register converter for T" == nullptr);
         }
         return converter->toString(e);
     }
@@ -61,10 +61,10 @@ public:
     template<typename T>
     T fromString(const std::string& str) {
         boost::shared_ptr<StringConverter> converter = this->getStringConverter<T>();
-        if(converter.get() == NULL) {
+        if(converter.get() == nullptr) {
             std::stringstream ss;
             ss << "BUG,  please register converter for " << typeid(T).name();
-            assert(ss.str().c_str() == NULL);
+            assert(ss.str().c_str() == nullptr);
         }
         return boost::any_cast<T>(converter->fromString(str));
     };

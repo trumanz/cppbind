@@ -22,7 +22,7 @@ void JsonDecoderImp::decodeWithForeginKey(const Json::Value& json, std::vector<T
         throw exception::ParseErrorException("should be a list");
     }
     for(Json::Value::ArrayIndex i = 0; i  < json.size(); i++) {
-        T* x = NULL;
+        T* x = nullptr;
         decodeWithForeginKey(json[i], &x);
         e->push_back(x);
     }

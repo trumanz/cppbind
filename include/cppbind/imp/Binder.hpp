@@ -48,9 +48,9 @@ public:
     */
 
     template<typename T>
-    void bind(T& v, const T* default_value = NULL);
+    void bind(T& v, const T* default_value = nullptr);
     template<typename T>
-    void bind(const std::string& name, T& v, const T* default_value = NULL);
+    void bind(const std::string& name, T& v, const T* default_value = nullptr);
     template<typename T>
     void bind(const std::string& name, T& v, const T& default_value) { bind(name,v,&default_value);}
     template<typename T>
@@ -59,7 +59,7 @@ public:
 //foreign key
 public:
     //template<typename T>
-    //void encodeForeignKey(const std::string& name, T& v) { decodeForeignKey(name,v, (const T*)NULL);}
+    //void encodeForeignKey(const std::string& name, T& v) { decodeForeignKey(name,v, (const T*)nullptr);}
     template<typename T>
     void bindForeginKey(const std::string& name, T& v, const T& default_value) { bindForeginKey(name,v,&default_value);}
 //private:
@@ -69,9 +69,9 @@ public:
     void bindForeginKey(const std::string& name, T& v, GetKey_CallT& call);
 public:
     template<typename T>
-    void bindDynamicType(const std::string& name, std::vector<T*>& v, Json::Value* default_value = NULL) { bindDynamicTypeImp(name, v, default_value);}
+    void bindDynamicType(const std::string& name, std::vector<T*>& v, Json::Value* default_value = nullptr) { bindDynamicTypeImp(name, v, default_value);}
     template<typename T>
-    void bindDynamicType(const std::string& name, T &v,  Json::Value* default_value = NULL) { bindDynamicTypeImp(name, v, default_value);}
+    void bindDynamicType(const std::string& name, T &v,  Json::Value* default_value = nullptr) { bindDynamicTypeImp(name, v, default_value);}
     template<typename T>
     void bindDynamicType(const std::string& name, T &v,  Json::Value default_value) { bindDynamicTypeImp(name, v, &default_value);}
     template<typename T>
@@ -134,7 +134,7 @@ void Binder::bind(T& v, const T* default_value) {
             }
         } 
          else {
-            assert("bug" == NULL);
+            assert("bug" == nullptr);
         }
 }
 
@@ -163,7 +163,7 @@ void Binder::bind(const std::string& name, T& v, const T* default_value){
             }
         } 
          else {
-            assert("bug" == NULL);
+            assert("bug" == nullptr);
         }
 }
 
@@ -187,7 +187,7 @@ void Binder::bind(const std::string& name, boost::shared_ptr<T>& v)
        v = boost::shared_ptr<T>(new T(e));
     }
   } else {
-    assert("bug" == NULL);
+    assert("bug" == nullptr);
   }
 }
 
@@ -203,7 +203,7 @@ void Binder::bindForeginKey(const std::string& name, T& v, const T* default_valu
             json_decode_binder->decodeForeignKey(*json, name, v, default_value);
         } 
          else {
-            assert("bug" == NULL);
+            assert("bug" == nullptr);
         }
 }
 
@@ -219,7 +219,7 @@ template<typename T, typename GetKey_CallT>
             json_decode_binder->decodeForeignKey(*json, name, v, (T *) nullptr);
         }
         else {
-            assert("bug" == NULL);
+            assert("bug" == nullptr);
         }
 }
 
@@ -241,7 +241,7 @@ void Binder::bindDynamicTypeImp(const std::string& name, T &v, Json::Value* defa
         }
     } 
      else {
-        assert("bug" == NULL);
+        assert("bug" == nullptr);
     }
 }
 
@@ -267,7 +267,7 @@ void Binder::bindDynamicTypeImp(const std::string& name, boost::shared_ptr<T> &v
         }
     } 
      else {
-        assert("bug" == NULL);
+        assert("bug" == nullptr);
     }
 }
 

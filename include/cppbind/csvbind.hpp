@@ -37,11 +37,11 @@ public:
     }
 
     template<typename T>
-    std::vector<T*> decode(std::istream& csv_content, std::istream*  header_stream = NULL,
-                            const std::vector<std::string> *default_value = NULL){
+    std::vector<T*> decode(std::istream& csv_content, std::istream*  header_stream = nullptr,
+                            const std::vector<std::string> *default_value = nullptr){
 
         std::vector<T*> rc;
-        if(header_stream != NULL) {
+        if(header_stream != nullptr) {
            csv->readRows(csv_content);
         }
         csv->readRows(csv_content);
@@ -96,27 +96,27 @@ public:
     }
     
     template<typename T>
-    std::vector<T*> decodeFile(std::string data_file, const char* header_file = NULL,
-                               const std::vector<std::string> *default_value = NULL){
+    std::vector<T*> decodeFile(std::string data_file, const char* header_file = nullptr,
+                               const std::vector<std::string> *default_value = nullptr){
          std::vector<T*> rc;
          std::ifstream  fs(data_file.c_str());
          if(!fs) {
              printf("Error, Can not open %s\n", data_file.c_str());
-             assert("TODO, throw exception" == NULL);
+             assert("TODO, throw exception" == nullptr);
          }
-         if(header_file != NULL) {
+         if(header_file != nullptr) {
              std::ifstream  fs_header(header_file);
-             if(!fs_header)  assert("TODO, throw exception" == NULL);
+             if(!fs_header)  assert("TODO, throw exception" == nullptr);
              rc = this->decode<T>(fs, &fs_header, default_value);
          } else {
-             rc = this->decode<T>(fs, NULL, default_value);
+             rc = this->decode<T>(fs, nullptr, default_value);
          }
          fs.close();
          return rc;
     }
 private:
     Json::Value createJsonObject(const std::vector<std::string>& headers, const std::vector<std::string>& data,
-                                 const std::vector<std::string> *default_value = NULL){
+                                 const std::vector<std::string> *default_value = nullptr){
         Json::Value jv;
 
         bool data_not_align = false;

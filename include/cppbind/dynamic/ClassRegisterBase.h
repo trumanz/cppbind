@@ -34,14 +34,14 @@ public:
    }
 
    template<typename ClassT>
-   ClassT* createObj(const std::string& name, const Json::Value& json_parameter, JsonDecoderImp* bind = NULL) const {
+   ClassT* createObj(const std::string& name, const Json::Value& json_parameter, JsonDecoderImp* bind = nullptr) const {
        Object* any_obj = this->createAnyObj(name,json_parameter, bind);
        ClassT* rc = dynamic_cast<ClassT*>(any_obj);
-       assert(rc != NULL);
+       assert(rc != nullptr);
        return rc; 
    }
 
-   Object* createAnyObj(const std::string& name, const Json::Value& json_parameter, JsonDecoderImp* bind = NULL) const {
+   Object* createAnyObj(const std::string& name, const Json::Value& json_parameter, JsonDecoderImp* bind = nullptr) const {
        const ObjFactory* of = this->getObjFactory(name);
        Object* any_obj = of->createObj(name, json_parameter, bind);
        return any_obj;

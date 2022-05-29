@@ -44,7 +44,7 @@ public:
       unsigned int line_no = 0;
       while(!csv_content.eof()) {
          std::string  line;
-         if(csv_content.fail()) assert("TODO" == NULL);
+         if(csv_content.fail()) assert("TODO" == nullptr);
          std::getline(csv_content, line);
          line_no++;
          if(line.length() == 0) continue;

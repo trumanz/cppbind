@@ -83,7 +83,7 @@ namespace  cppbind {
                 e.addParentNodeName(file_name);
                 throw e;
             }
-            return NULL;
+            return nullptr;
         }
 
         template<typename T>
@@ -99,7 +99,7 @@ namespace  cppbind {
                 e.addParentNodeName(file);
                 throw e;
             }
-            return NULL;
+            return nullptr;
         }
 
         Json::Value decode(std::istream &is) {

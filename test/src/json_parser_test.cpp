@@ -178,7 +178,7 @@ TEST(JsonROM, baisc){
      printf("born: %s\n",  tf.format(me->born).c_str());
 
      //optional 
-     ASSERT_EQ(me->value_not_exist.get() , (int*)NULL);
+     ASSERT_EQ(me->value_not_exist.get() , (int*)nullptr);
 
      //std string list
      std::list<std::string>  likes = me->likes;
@@ -211,7 +211,7 @@ TEST(JsonROM, baisc){
 
      //dynamicType
      Metro* metro = dynamic_cast<Metro*>(me->vehicle);
-     ASSERT_TRUE(metro != NULL);
+     ASSERT_TRUE(metro != nullptr);
      ASSERT_EQ(3, metro->data.line);
 
      for(int i = 0; i < 10; i++) {

@@ -42,10 +42,10 @@ class ObjFactoryT : public ObjFactory
 public:
     ObjFactoryT() {
     }
-    virtual Object* createObj(const std::string& obj_name, const Json::Value& json_parameter, JsonDecoderImp* bind = NULL) const {
+    virtual Object* createObj(const std::string& obj_name, const Json::Value& json_parameter, JsonDecoderImp* bind = nullptr) const {
          boost::shared_ptr<typename ObjT::Data4Bind> parameter;
          if(bind) {
-              typename ObjT::Data4Bind* e = NULL;
+              typename ObjT::Data4Bind* e = nullptr;
               e = new typename ObjT::Data4Bind();
               bind->decode(json_parameter, e);
               parameter =  boost::shared_ptr<typename ObjT::Data4Bind>(e);

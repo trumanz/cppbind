@@ -92,7 +92,7 @@ private:
             if(!jv.isString()) {
                 std::stringstream ss; ss<< jv;
                 printf("error: jv=%s", ss.str().c_str());
-                assert("bug" == NULL);
+                assert("bug" == nullptr);
             }
             e[0] = binder->str_convert_mgmt.fromString<T>(jv.asString());
          }

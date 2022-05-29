@@ -12,7 +12,8 @@ public:
     explicit ClassMissRegException(std::string class_name) noexcept :
             ParseErrorException(class_name + " miss register")  {
     }
-    ClassMissRegException(const ClassMissRegException& obj) noexcept = default;
+    //ClassMissRegException(const ClassMissRegException& obj) noexcept = default;
+
 };
 
 } }

@@ -12,7 +12,7 @@ public:
     ParseErrorException(obj_name + " foregin key missing") {
     }
 
-    ForeginKeyMissingException(const ForeginKeyMissingException& obj) noexcept = default;
+    //ForeginKeyMissingException(const ForeginKeyMissingException& obj) noexcept = default;
 };
 
 }}

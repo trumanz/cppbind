@@ -199,10 +199,11 @@ class MyObj{
 ```
 
 ```
+## Development
+### macos
 
-```
+refer devops/build-ubuntu-vcpkg.yml
 
-```
 
 CI refered by 
 https://github.com/microsoft/cpprestsdk/blob/master/azure-pipelines.yml
